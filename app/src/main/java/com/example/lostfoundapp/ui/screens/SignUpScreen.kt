@@ -13,11 +13,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.lostfoundapp.data.remote.RetrofitInstance
 import com.example.lostfoundapp.ui.theme.components.CustomInput
 import com.example.lostfoundapp.ui.theme.components.DottedButton
 import com.example.lostfoundapp.ui.theme.components.PasswordInput
 import com.example.lostfoundapp.ui.theme.components.Roboto
 import com.example.lostfoundapp.ui.theme.components.TransparentButton
+import kotlinx.coroutines.launch
 
 @Composable
 fun SignUpScreen() {
@@ -41,6 +43,7 @@ fun SignUpScreen() {
         mutableStateOf("")
     }
 
+    val scope = rememberCoroutineScope()
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -73,7 +76,7 @@ fun SignUpScreen() {
                 }
             )
 
-
+            /*
             Spacer(modifier = Modifier.height(4.dp))
 
             CustomInput(
@@ -93,7 +96,7 @@ fun SignUpScreen() {
                     career = it
                 }
             )
-
+            */
             Spacer(modifier = Modifier.height(4.dp))
             CustomInput(
                 value = email,
@@ -118,16 +121,41 @@ fun SignUpScreen() {
             DottedButton(
                 bgColor = Color(0xFF03A2A6),
                 dotsColor = Color(0xFF0378A6),
-                text = "Login",
+                text = "Create Account",
                 onClick = {
 
+                    scope.launch {
+
+                        try {
+
+                            val response =
+                                RetrofitInstance.api.signup(
+                                    email,
+                                    password,
+                                    fullname
+                                )
+
+                            if(response.success){
+
+                                println("USUARIO CREADO")
+
+                            }else{
+
+                                println("ERROR")
+                            }
+
+                        }catch(e: Exception){
+
+                            println(e.message)
+                        }
+                    }
                 }
             )
 
             Spacer(modifier = Modifier.height(12.dp))
 
             TransparentButton(
-                text = "Create Account",
+                text = "Login",
                 onClick = {
 
                 }

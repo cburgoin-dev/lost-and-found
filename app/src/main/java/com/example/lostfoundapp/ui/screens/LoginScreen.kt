@@ -13,11 +13,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.lostfoundapp.data.remote.RetrofitInstance
 import com.example.lostfoundapp.ui.theme.components.CustomInput
 import com.example.lostfoundapp.ui.theme.components.DottedButton
 import com.example.lostfoundapp.ui.theme.components.PasswordInput
 import com.example.lostfoundapp.ui.theme.components.Roboto
 import com.example.lostfoundapp.ui.theme.components.TransparentButton
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen() {
@@ -29,6 +31,7 @@ fun LoginScreen() {
     var password by remember {
         mutableStateOf("")
     }
+    val scope = rememberCoroutineScope()
 
     Box(
         modifier = Modifier
@@ -80,7 +83,30 @@ fun LoginScreen() {
                 dotsColor = Color(0xFF0378A6),
                 text = "Login",
                 onClick = {
+                    scope.launch {
 
+                        try {
+
+                            val response =
+                                RetrofitInstance.api.login(
+                                    email,
+                                    password
+                                )
+
+                            if(response.success){
+
+                                println("LOGIN CORRECTO")
+
+                            }else{
+
+                                println("DATOS INCORRECTOS")
+                            }
+
+                        }catch(e: Exception){
+
+                            println(e.message)
+                        }
+                    }
                 }
             )
 
