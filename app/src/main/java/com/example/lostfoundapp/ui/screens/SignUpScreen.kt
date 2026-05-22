@@ -1,4 +1,4 @@
-package com.example.lostfoundapp.ui.theme.screens
+package com.example.lostfoundapp.ui.screens
 
 
 import androidx.compose.foundation.background
@@ -13,11 +13,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.lostfoundapp.ui.theme.components.CustomInput
-import com.example.lostfoundapp.ui.theme.components.DottedButton
-import com.example.lostfoundapp.ui.theme.components.PasswordInput
-import com.example.lostfoundapp.ui.theme.components.Roboto
-import com.example.lostfoundapp.ui.theme.components.TransparentButton
+import com.example.lostfoundapp.ui.components.CustomInput
+import com.example.lostfoundapp.ui.components.DottedButton
+import com.example.lostfoundapp.ui.components.PasswordInput
+import com.example.lostfoundapp.ui.components.Roboto
+import com.example.lostfoundapp.ui.components.TransparentButton
 
 @Composable
 fun SignUpScreen() {
