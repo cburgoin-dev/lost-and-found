@@ -28,6 +28,7 @@ fun LoginScreen() {
     var password by remember {
         mutableStateOf("")
     }
+    val scope = rememberCoroutineScope()
 
     Box(
         modifier = Modifier
@@ -79,7 +80,30 @@ fun LoginScreen() {
                 dotsColor = Color(0xFF0378A6),
                 text = "Login",
                 onClick = {
+                    scope.launch {
 
+                        try {
+
+                            val response =
+                                RetrofitInstance.api.login(
+                                    email,
+                                    password
+                                )
+
+                            if(response.success){
+
+                                println("LOGIN CORRECTO")
+
+                            }else{
+
+                                println("DATOS INCORRECTOS")
+                            }
+
+                        }catch(e: Exception){
+
+                            println(e.message)
+                        }
+                    }
                 }
             )
 

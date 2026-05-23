@@ -6,6 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.example.lostfoundapp.ui.screens.ReportItemScreen
 import com.example.lostfoundapp.ui.theme.LostFoundAppTheme
+import com.example.lostfoundapp.ui.theme.screens.LoginScreen
+import com.example.lostfoundapp.ui.theme.screens.SignUpScreen
 
 class MainActivity : ComponentActivity() {
 
