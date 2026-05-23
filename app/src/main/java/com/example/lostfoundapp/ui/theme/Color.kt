@@ -20,3 +20,5 @@ val BackgroundGray = Color(0xFFF8F8F8)
 val BorderGray = Color(0xFFD9D9D9)
 
 val TextGray = Color(0xFF7A7A7A)
+
+val PlaceholderGray = Color(0xFF9E9E9E)
