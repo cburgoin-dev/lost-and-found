@@ -68,6 +68,8 @@ fun CustomInput(
                         )
                     )
                 }
+
+                innerTextField()
             }
         }
     )

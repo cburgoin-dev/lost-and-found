@@ -1,5 +1,6 @@
 package com.example.lostfoundapp.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,7 +14,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -21,6 +21,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+
+import com.example.lostfoundapp.ui.theme.BorderGray
+import com.example.lostfoundapp.ui.theme.PlaceholderGray
 
 @Composable
 fun PasswordInput(
@@ -35,82 +38,81 @@ fun PasswordInput(
         mutableStateOf(false)
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-    ) {
+    BasicTextField(
 
-        BasicTextField(
-            value = value,
-            onValueChange = onValueChange,
+        value = value,
+        onValueChange = onValueChange,
 
-            visualTransformation =
-                if (passwordVisible)
-                    VisualTransformation.None
-                else
-                    PasswordVisualTransformation(),
+        visualTransformation =
+            if (passwordVisible)
+                VisualTransformation.None
+            else
+                PasswordVisualTransformation(),
 
-            textStyle = TextStyle(
-                color = Color.Black,
-                fontSize = 20.sp
-            ),
+        textStyle = TextStyle(
+            color = Color.Black,
+            fontSize = 16.sp
+        ),
 
-            decorationBox = { innerTextField ->
+        decorationBox = { innerTextField ->
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(60.dp)
-                        .clip(RoundedCornerShape(6.dp))
-                        .border(
-                            1.dp,
-                            Color.LightGray,
-                            RoundedCornerShape(8.dp)
-                        )
-                        .padding(horizontal = 16.dp),
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+                    .border(
+                        1.dp,
+                        BorderGray,
+                        RoundedCornerShape(16.dp)
+                    )
+                    .background(
+                        Color.White,
+                        RoundedCornerShape(16.dp)
+                    )
+                    .padding(horizontal = 16.dp),
 
-                    verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                Box(
+                    modifier = Modifier.weight(1f),
+                    contentAlignment = Alignment.CenterStart
                 ) {
 
-                    Box(
-                        modifier = Modifier.weight(1f),
-                        contentAlignment = Alignment.CenterStart
-                    ) {
+                    if (value.isEmpty()) {
 
-                        if (value.isEmpty()) {
-                            BasicText(
-                                text = placeholder,
-                                style = TextStyle(
-                                    color = Color.LightGray,
-                                    fontSize = 20.sp
-                                )
+                        BasicText(
+                            text = placeholder,
+                            style = TextStyle(
+                                color = PlaceholderGray,
+                                fontSize = 16.sp
                             )
-                        }
-
-                        innerTextField()
-                    }
-
-                    IconButton(
-                        onClick = {
-                            passwordVisible = !passwordVisible
-                        }
-                    ) {
-
-                        Icon(
-                            imageVector =
-                                if (passwordVisible)
-                                    Icons.Default.Visibility
-                                else
-                                    Icons.Default.VisibilityOff,
-
-                            contentDescription = "Mostrar contraseña"
                         )
                     }
+
+                    innerTextField()
+                }
+
+                IconButton(
+                    onClick = {
+                        passwordVisible = !passwordVisible
+                    }
+                ) {
+
+                    Icon(
+                        imageVector =
+                            if (passwordVisible)
+                                Icons.Default.Visibility
+                            else
+                                Icons.Default.VisibilityOff,
+
+                        contentDescription = "Mostrar contraseña",
+                        tint = PlaceholderGray
+                    )
                 }
             }
-        )
-    }
+        }
+    )
 }
 
 @Preview(showBackground = true)
@@ -118,7 +120,7 @@ fun PasswordInput(
 fun PasswordInputPreview() {
 
     PasswordInput(
-        value = "jiiojnjjn",
+        value = "",
         placeholder = "Ingresa tu contraseña",
         onValueChange = {}
     )

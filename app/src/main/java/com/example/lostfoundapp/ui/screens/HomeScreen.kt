@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.sp
 import com.example.lostfoundapp.R
 import com.example.lostfoundapp.ui.components.ItemCard
 import com.example.lostfoundapp.ui.components.SquareButton
-import com.example.lostfoundapp.ui.theme.components.Roboto
+
 
 @Composable
 fun HomeScreen() {

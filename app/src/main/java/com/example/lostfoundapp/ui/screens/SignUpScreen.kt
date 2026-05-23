@@ -13,11 +13,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.lostfoundapp.data.remote.RetrofitInstance
 import com.example.lostfoundapp.ui.components.CustomInput
 import com.example.lostfoundapp.ui.components.DottedButton
 import com.example.lostfoundapp.ui.components.PasswordInput
 import com.example.lostfoundapp.ui.components.Roboto
 import com.example.lostfoundapp.ui.components.TransparentButton
+import kotlinx.coroutines.launch
 
 @Composable
 fun SignUpScreen() {
@@ -95,7 +97,7 @@ fun SignUpScreen() {
                 }
             )
             */
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             CustomInput(
                 value = email,
                 placeholder = "Enter your email",
@@ -104,7 +106,7 @@ fun SignUpScreen() {
                 }
             )
 
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             PasswordInput(
                 value = password,
