@@ -23,41 +23,67 @@ import com.example.lostfoundapp.ui.theme.TextGray
 fun DateInput(
     text: String,
     placeholder: String,
+    isError: Boolean = false,
+    errorMessage: String = "Campo obligatorio",
     onClick: () -> Unit
 ) {
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(56.dp)
-            .border(
-                1.dp,
-                BorderGray,
-                RoundedCornerShape(16.dp)
-            )
-            .background(
-                Color.White,
-                RoundedCornerShape(16.dp)
-            )
-            .clickable {
-                onClick()
-            }
-            .padding(horizontal = 16.dp),
+    val borderColor =
+        if(isError)
+            Color.Red
+        else
+            BorderGray
 
-        verticalAlignment = Alignment.CenterVertically
+    Column(
+        modifier = Modifier.fillMaxWidth()
     ) {
 
-        Text(
-            text = text.ifEmpty { placeholder },
-            color = TextGray,
-            fontSize = 16.sp,
-            modifier = Modifier.weight(1f)
-        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+                .border(
+                    1.dp,
+                    borderColor,
+                    RoundedCornerShape(16.dp)
+                )
+                .background(
+                    Color.White,
+                    RoundedCornerShape(16.dp)
+                )
+                .clickable {
+                    onClick()
+                }
+                .padding(horizontal = 16.dp),
 
-        Icon(
-            imageVector = Icons.Outlined.DateRange,
-            contentDescription = null,
-            tint = TextGray
-        )
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Text(
+                text = text.ifEmpty { placeholder },
+                color = TextGray,
+                fontSize = 16.sp,
+                modifier = Modifier.weight(1f)
+            )
+
+            Icon(
+                imageVector = Icons.Outlined.DateRange,
+                contentDescription = null,
+                tint = TextGray
+            )
+        }
+
+        if(isError) {
+
+            Text(
+                text = errorMessage,
+                color = Color.Red,
+                fontSize = 13.sp,
+                modifier = Modifier.padding(
+                    start = 4.dp,
+                    top = 4.dp
+                )
+            )
+        }
     }
 }
