@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.example.lostfoundapp.ui.screens.LoginScreen
-import com.example.lostfoundapp.ui.screens.ReportItemScreen
+
+import com.example.lostfoundapp.navigation.AppNavigation
 import com.example.lostfoundapp.ui.theme.LostFoundAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
 
             LostFoundAppTheme {
 
-                LoginScreen()
+                AppNavigation()
             }
         }
     }
