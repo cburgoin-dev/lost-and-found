@@ -2,6 +2,8 @@ package com.example.lostfoundapp.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
@@ -13,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalDensity
 
 import com.example.lostfoundapp.ui.components.DottedButton
 import com.example.lostfoundapp.ui.components.CustomInput
@@ -26,7 +29,8 @@ import com.example.lostfoundapp.data.model.ReportType
 
 @Composable
 fun ReportItemScreen(
-    reportType: ReportType
+    reportType: ReportType,
+    onBackClick: () -> Unit
 ) {
 
     var hasImage by remember {
@@ -84,6 +88,11 @@ fun ReportItemScreen(
         mutableStateOf(false)
     }
 
+    val isKeyboardVisible =
+        WindowInsets.ime.getBottom(
+            LocalDensity.current
+        ) > 0
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -114,7 +123,7 @@ fun ReportItemScreen(
 
                 BackButton(
                     onClick = {
-
+                        onBackClick()
                     }
                 )
 
@@ -268,56 +277,59 @@ fun ReportItemScreen(
 
         // FIXED BUTTON
 
-        Box(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .background(Color.White)
-                .padding(
-                    horizontal = 20.dp,
-                    vertical = 16.dp
-                )
-        ) {
+        if (!isKeyboardVisible) {
 
-            DottedButton(
-                bgColor = Color(0xFF03A2A6),
-                dotsColor = Color(0xFF0378A6),
-                text = "Publicar reporte",
-                onClick = {
-                    imageError =
-                        reportType == ReportType.FOUND
-                                && !hasImage
+            Box(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+                    .background(Color.White)
+                    .padding(
+                        horizontal = 20.dp,
+                        vertical = 16.dp
+                    )
+            ) {
 
-                    objectNameError =
-                        objectName.isBlank()
+                DottedButton(
+                    bgColor = Color(0xFF03A2A6),
+                    dotsColor = Color(0xFF0378A6),
+                    text = "Publicar reporte",
+                    onClick = {
+                        imageError =
+                            reportType == ReportType.FOUND
+                                    && !hasImage
 
-                    descriptionError =
-                        description.isBlank()
+                        objectNameError =
+                            objectName.isBlank()
 
-                    locationError =
-                        reportType == ReportType.FOUND
-                                && location.isBlank()
+                        descriptionError =
+                            description.isBlank()
 
-                    categoryError =
-                        category.isBlank()
+                        locationError =
+                            reportType == ReportType.FOUND
+                                    && location.isBlank()
 
-                    dateError =
-                        date.isBlank()
+                        categoryError =
+                            category.isBlank()
 
-                    val hasErrors =
-                        imageError ||
-                                objectNameError ||
-                                descriptionError ||
-                                locationError ||
-                                categoryError ||
-                                dateError
+                        dateError =
+                            date.isBlank()
 
-                    if (!hasErrors) {
+                        val hasErrors =
+                            imageError ||
+                                    objectNameError ||
+                                    descriptionError ||
+                                    locationError ||
+                                    categoryError ||
+                                    dateError
 
-                        println("FORMULARIO VÁLIDO")
+                        if (!hasErrors) {
+
+                            println("FORMULARIO VÁLIDO")
+                        }
                     }
-                }
-            )
+                )
+            }
         }
     }
 }
@@ -327,6 +339,7 @@ fun ReportItemScreen(
 fun ReportItemScreenPreview() {
 
     ReportItemScreen(
-        reportType = ReportType.LOST
+        reportType = ReportType.LOST,
+        onBackClick = {}
     )
 }

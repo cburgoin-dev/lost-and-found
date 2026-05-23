@@ -21,7 +21,10 @@ import com.example.lostfoundapp.ui.components.TransparentButton
 import kotlinx.coroutines.launch
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    onLoginClick: () -> Unit,
+    onSignupClick: () -> Unit
+) {
 
     var email by remember {
         mutableStateOf("")
@@ -94,6 +97,8 @@ fun LoginScreen() {
 
                             if(response.success){
 
+                                onLoginClick()
+
                                 println("LOGIN CORRECTO")
 
                             }else{
@@ -114,7 +119,7 @@ fun LoginScreen() {
             TransparentButton(
                 text = "Create Account",
                 onClick = {
-
+                    onSignupClick()
                 }
             )
         }
@@ -123,6 +128,10 @@ fun LoginScreen() {
 
 @Preview
 @Composable
-fun LoginPreview(){
-    LoginScreen()
+fun LoginScreenPreview(){
+
+    LoginScreen(
+        onLoginClick = {},
+        onSignupClick = {}
+    )
 }

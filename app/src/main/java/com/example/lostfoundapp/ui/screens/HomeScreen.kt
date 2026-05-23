@@ -31,7 +31,10 @@ import com.example.lostfoundapp.ui.components.SquareButton
 
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    onLostClick: () -> Unit,
+    onFoundClick: () -> Unit
+) {
 
     Column(
         modifier = Modifier
@@ -90,7 +93,7 @@ fun HomeScreen() {
                     text = "Lost something",
                     bgColor = Color(0xFF3AB8BE),
                     icon = painterResource(R.drawable.ic_launcher_foreground),
-                    onClick = {},
+                    onClick = {onLostClick()},
                     modifier = Modifier.width(150.dp)
                 )
 
@@ -100,7 +103,7 @@ fun HomeScreen() {
                     text = "Found something",
                     bgColor = Color(0xFF8E8E8E),
                     icon = painterResource(R.drawable.ic_launcher_foreground),
-                    onClick = {},
+                    onClick = {onFoundClick()},
                     modifier = Modifier.width(150.dp)
                 )
             }
@@ -147,5 +150,9 @@ fun HomeScreen() {
 @Preview
 @Composable
 fun HomeScreenPreview(){
-    HomeScreen()
+
+    HomeScreen(
+        onLostClick = {},
+        onFoundClick = {}
+    )
 }
