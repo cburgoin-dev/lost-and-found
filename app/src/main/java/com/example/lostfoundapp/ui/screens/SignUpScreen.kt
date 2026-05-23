@@ -123,7 +123,7 @@ fun SignUpScreen() {
                 dotsColor = Color(0xFF0378A6),
                 text = "Create Account",
                 onClick = {
-
+/*
                     scope.launch {
 
                         try {
@@ -148,7 +148,7 @@ fun SignUpScreen() {
 
                             println(e.message)
                         }
-                    }
+                    }*/
                 }
             )
 
