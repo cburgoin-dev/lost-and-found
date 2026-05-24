@@ -98,9 +98,9 @@ fun LoginScreen(
 
                             val token = response.body()
 
-                                onLoginClick()
+                            onLoginClick()
 
-                                println("LOGIN CORRECTO")
+                            Log.d("TOKEN", token ?: "null")
 
                         } else {
 

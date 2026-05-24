@@ -32,4 +32,12 @@ interface ApiService {
         @Field("email") email: String,
         @Field("password") password: String
     ): Response<String>
+
+    @FormUrlEncoded
+    @POST("api/sign-up")
+    suspend fun signup(
+        @Field("name") name: String,
+        @Field("email") email: String,
+        @Field("password") password: String
+    ): Response<String>
 }

@@ -1,6 +1,7 @@
 package com.example.lostfoundapp.ui.screens
 
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicText
@@ -14,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.lostfoundapp.data.remote.RetrofitInstance
+import com.example.lostfoundapp.data.remote.RetrofitInstance.api
 import com.example.lostfoundapp.ui.components.CustomInput
 import com.example.lostfoundapp.ui.components.DottedButton
 import com.example.lostfoundapp.ui.components.PasswordInput
@@ -46,7 +48,7 @@ fun SignUpScreen(
         mutableStateOf("")
     }
 
-    val scope = rememberCoroutineScope()
+    val viewModelScope = rememberCoroutineScope()
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -126,34 +128,49 @@ fun SignUpScreen(
                 dotsColor = Color(0xFF0378A6),
                 text = "Create Account",
                 onClick = {
-/*
-                    scope.launch {
+
+                    viewModelScope.launch {
 
                         try {
 
-                            val response =
-                                RetrofitInstance.api.signup(
-                                    email,
-                                    password,
-                                    fullname
+                            val response = api.signup(
+                                name= fullname,
+                                email= email,
+                                password =password
+                            )
+
+                            Log.d("CODE", response.code().toString())
+
+                            if (response.isSuccessful) {
+
+                                val result = response.body()
+
+                                Log.d(
+                                    "USUARIO CREADO",
+                                    result ?: "Success"
                                 )
-
-                            if(response.success){
-
+                                Log.d(
+                                    "BODY",
+                                    response.body() ?: "null"
+                                )
                                 onSignupSuccess()
 
-                                println("USUARIO CREADO")
+                            } else {
 
-                            }else{
-
-                                println("ERROR")
+                                Log.d(
+                                    "ERROR_BODY",
+                                    response.errorBody()?.string() ?: "No error body"
+                                )
                             }
 
-                        }catch(e: Exception){
+                        } catch (e: Exception) {
 
-                            println(e.message)
+                            Log.d(
+                                "EXCEPTION",
+                                e.message ?: "Unknown error"
+                            )
                         }
-                    }*/
+                    }
                 }
             )
 
