@@ -1,5 +1,6 @@
 package com.example.lostfoundapp.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicText
@@ -13,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.lostfoundapp.data.remote.RetrofitInstance
+import com.example.lostfoundapp.data.remote.RetrofitInstance.api
 import com.example.lostfoundapp.ui.components.CustomInput
 import com.example.lostfoundapp.ui.components.DottedButton
 import com.example.lostfoundapp.ui.components.PasswordInput
@@ -33,7 +35,7 @@ fun LoginScreen(
     var password by remember {
         mutableStateOf("")
     }
-    val scope = rememberCoroutineScope()
+    val viewModelScope = rememberCoroutineScope()
 
     Box(
         modifier = Modifier
@@ -85,30 +87,24 @@ fun LoginScreen(
                 dotsColor = Color(0xFF0378A6),
                 text = "Login",
                 onClick = {
-                    scope.launch {
+                    viewModelScope.launch {
 
-                        try {
+                        val response = api.login(
+                            email = "dev@dev.com",
+                            password = "password"
+                        )
 
-                            val response =
-                                RetrofitInstance.api.login(
-                                    email,
-                                    password
-                                )
+                        if (response.isSuccessful) {
 
-                            if(response.success){
+                            val token = response.body()
 
-                                onLoginClick()
+                            onLoginClick()
 
-                                println("LOGIN CORRECTO")
+                            Log.d("TOKEN", token ?: "null")
 
-                            }else{
+                        } else {
 
-                                println("DATOS INCORRECTOS")
-                            }
-
-                        }catch(e: Exception){
-
-                            println(e.message)
+                            Log.d("LOGIN", "Error")
                         }
                     }
                 }
