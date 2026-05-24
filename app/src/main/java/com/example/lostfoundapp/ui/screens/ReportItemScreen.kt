@@ -16,6 +16,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalContext
+import android.app.DatePickerDialog
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import java.util.Calendar
 
 import com.example.lostfoundapp.ui.components.DottedButton
 import com.example.lostfoundapp.ui.components.CustomInput
@@ -25,7 +31,10 @@ import com.example.lostfoundapp.ui.components.DescriptionInput
 import com.example.lostfoundapp.ui.components.DateInput
 import com.example.lostfoundapp.ui.components.VisibilitySwitch
 import com.example.lostfoundapp.ui.components.BackButton
+import com.example.lostfoundapp.ui.components.SelectionDialog
 import com.example.lostfoundapp.data.model.ReportType
+import com.example.lostfoundapp.data.mock.categories
+import com.example.lostfoundapp.data.mock.locations
 
 @Composable
 fun ReportItemScreen(
@@ -35,6 +44,10 @@ fun ReportItemScreen(
 
     var hasImage by remember {
         mutableStateOf(false)
+    }
+
+    var selectedImageUri by remember {
+        mutableStateOf<Uri?>(null)
     }
 
     var objectName by remember {
@@ -88,10 +101,50 @@ fun ReportItemScreen(
         mutableStateOf(false)
     }
 
+    var showCategoryDialog by remember {
+        mutableStateOf(false)
+    }
+
+    var showLocationDialog by remember {
+        mutableStateOf(false)
+    }
+
     val isKeyboardVisible =
         WindowInsets.ime.getBottom(
             LocalDensity.current
         ) > 0
+
+    val imagePickerLauncher =
+        rememberLauncherForActivityResult(
+            contract =
+                ActivityResultContracts.GetContent()
+        ) { uri ->
+
+            if(uri != null) {
+
+                selectedImageUri = uri
+                hasImage = true
+                imageError = false
+            }
+        }
+
+    val calendar = Calendar.getInstance()
+
+    val datePickerDialog = DatePickerDialog(
+        LocalContext.current,
+
+        { _, year, month, dayOfMonth ->
+
+            date =
+                "$dayOfMonth/${month  + 1}/$year"
+
+            dateError = false
+        },
+
+        calendar.get(Calendar.YEAR),
+        calendar.get(Calendar.MONTH),
+        calendar.get(Calendar.DAY_OF_MONTH)
+    )
 
     Box(
         modifier = Modifier
@@ -160,6 +213,9 @@ fun ReportItemScreen(
                     isError = imageError,
                     onClick = {
 
+                        imagePickerLauncher.launch(
+                            "image/*"
+                        )
                     }
                 )
 
@@ -222,7 +278,7 @@ fun ReportItemScreen(
                             "Dónde lo encontraste",
                     isError = locationError,
                     onClick = {
-
+                        showLocationDialog = true
                     }
                 )
 
@@ -241,7 +297,7 @@ fun ReportItemScreen(
                     placeholder = "Seleccionar categoría",
                     isError = categoryError,
                     onClick = {
-
+                        showCategoryDialog = true
                     }
                 )
 
@@ -260,7 +316,7 @@ fun ReportItemScreen(
                     placeholder = "Seleccionar fecha",
                     isError = dateError,
                     onClick = {
-
+                        datePickerDialog.show()
                     }
                 )
 
@@ -330,6 +386,44 @@ fun ReportItemScreen(
                     }
                 )
             }
+        }
+
+        if (showCategoryDialog) {
+
+            SelectionDialog(
+                title = "Seleccionar categoría",
+                options = categories,
+
+                onDismiss = {
+                    showCategoryDialog = false
+                },
+
+                onOptionSelected = {
+
+                    category = it
+                    categoryError = false
+                    showCategoryDialog = false
+                }
+            )
+        }
+
+        if(showLocationDialog) {
+
+            SelectionDialog(
+                title = "Seleccionar ubicación",
+                options = locations,
+
+                onDismiss = {
+                    showLocationDialog = false
+                },
+
+                onOptionSelected = {
+
+                    location = it
+                    locationError = false
+                    showLocationDialog = false
+                }
+            )
         }
     }
 }
