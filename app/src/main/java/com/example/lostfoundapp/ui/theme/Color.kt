@@ -22,3 +22,11 @@ val BorderGray = Color(0xFFD9D9D9)
 val TextGray = Color(0xFF7A7A7A)
 
 val PlaceholderGray = Color(0xFF9E9E9E)
+
+val DarkOverlay = Color(0xB3122033)
+
+val CardWhite = Color(0xFFF7F7F7)
+
+val GoldAccent = Color(0xFFD4A017)
+
+val PrimaryDarkBlue = Color(0xFF0D2B6B)
