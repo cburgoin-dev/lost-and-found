@@ -23,80 +23,122 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+
 import com.example.lostfoundapp.R
+import com.example.lostfoundapp.ui.theme.FoundBadgeBackground
+import com.example.lostfoundapp.ui.theme.FoundBadgeText
+import com.example.lostfoundapp.ui.theme.LostBadgeBackground
+import com.example.lostfoundapp.ui.theme.LostBadgeText
 
 
 @Composable
 fun ItemCard(
-    descriptionTop: String,
     title: String,
-    descriptionBottom: String,
+    location: String,
+    time: String,
     status: String,
-    statusColor: Color,
+    statusBackground: Color,
+    statusTextColor: Color,
     icon: Painter,
     onClick: () -> Unit,
-
 ) {
 
-    Row(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(22.dp))
             .background(Color.White)
-            .padding(12.dp)
             .clickable{
                 onClick()
-            },
-
-        verticalAlignment = Alignment.CenterVertically
+            }
     ) {
 
-        Image(
-            painter = icon,
-            contentDescription = null,
+        Row(
             modifier = Modifier
-                .height(55.dp)
-        )
+                .fillMaxWidth()
+                .padding(14.dp),
 
-        Spacer(modifier = Modifier.width(12.dp))
-
-        Column(
-            modifier = Modifier.weight(1f)
+            verticalAlignment = Alignment.CenterVertically
         ) {
 
-            Text(
-                text = descriptionTop,
-                color = Color.Gray,
-                fontSize = 14.sp
-            )
+            Box(
+                modifier = Modifier
+                    .size(74.dp)
+                    .clip(RoundedCornerShape(18.dp))
+                    .background(Color(0xFFF3F4F6)),
+                contentAlignment = Alignment.Center
+            ) {
 
-            Text(
-                text = title,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold
-            )
+                Image(
+                    painter = icon,
+                    contentDescription = null,
+                    modifier = Modifier.height(52.dp)
+                )
+            }
 
-            Text(
-                text = descriptionBottom,
-                color = Color.Gray,
-                fontSize = 16.sp
-            )
+            Spacer(modifier = Modifier.width(14.dp))
+
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+
+                Text(
+                    text = title,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.Black,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Text(
+                    text = location,
+                    color = Color(0xFF707070),
+                    fontSize = 15.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                Spacer(modifier = Modifier.height(2.dp))
+
+                Text(
+                    text = time,
+                    color = Color(0xFF9A9A9A),
+                    fontSize = 14.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
         }
 
         Box(
             modifier = Modifier
-                .clip(RoundedCornerShape(50.dp))
-                .background(statusColor)
-                .padding(horizontal = 12.dp, vertical = 4.dp)
+                .align(Alignment.BottomEnd)
+                .padding(
+                    end = 14.dp,
+                    bottom = 14.dp
+                )
+                .clip(RoundedCornerShape(100.dp))
+                .background(statusBackground)
+                .padding(
+                    horizontal = 14.dp,
+                    vertical = 6.dp
+                )
         ) {
 
             Text(
                 text = status,
-                color = Color.White,
-                fontWeight = FontWeight.Bold
+                color = statusTextColor,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 14.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }
@@ -116,22 +158,26 @@ fun ItemCardPreview() {
     ) {
 
         ItemCard(
-            descriptionTop = "top",
-            title= "mid",
-            descriptionBottom="bot",
-            status = "Lost",
-            statusColor = Color(0xFFFFC300),
-            icon= painterResource(R.drawable.ic_launcher_foreground),
+            title = "AirPods Case",
+            location = "Biblioteca Central",
+            time = "10:15 AM",
+            status = "Perdido",
+            statusBackground = LostBadgeBackground,
+            statusTextColor = LostBadgeText,
+            icon = painterResource(R.drawable.ic_launcher_foreground),
             onClick = {}
         )
 
+        Spacer(modifier = Modifier.height(16.dp))
+
         ItemCard(
-            descriptionTop = "horse",
-            title= "race",
-            descriptionBottom="test",
-            status = "Found",
-            statusColor = Color(0xFF2CBEC0),
-            icon=painterResource(R.drawable.ic_launcher_foreground),
+            title = "Credencial UABCS",
+            location = "Edificio A",
+            time = "09:30 AM",
+            status = "Encontrado",
+            statusBackground = FoundBadgeBackground,
+            statusTextColor = FoundBadgeText,
+            icon = painterResource(R.drawable.ic_launcher_foreground),
             onClick = {}
         )
     }

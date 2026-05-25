@@ -12,6 +12,12 @@ sealed class Routes(
 
     object Home : Routes("home")
 
+    object Search : Routes("search")
+
+    object Notifications : Routes("notifications")
+
+    object Profile : Routes("profile")
+
     object ReportLost :
         Routes("report_lost")
 

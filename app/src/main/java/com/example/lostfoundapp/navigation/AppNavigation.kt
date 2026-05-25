@@ -1,7 +1,9 @@
 package com.example.lostfoundapp.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.navigation.compose.*
+import androidx.navigation.compose.currentBackStackEntryAsState
 
 import com.example.lostfoundapp.ui.screens.*
 import com.example.lostfoundapp.data.model.ReportType
@@ -12,9 +14,13 @@ fun AppNavigation() {
     val navController =
         rememberNavController()
 
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+
+    val currentRoute = navBackStackEntry?.destination?.route
+
     NavHost(
         navController = navController,
-        startDestination = Routes.Login.route
+        startDestination = Routes.Home.route
     ) {
 
         composable(
@@ -75,6 +81,30 @@ fun AppNavigation() {
         ) {
 
             HomeScreen(
+                currentRoute = currentRoute,
+
+                onHomeClick = {
+
+                },
+
+                onSearchClick = {
+                    navController.navigate(
+                        Routes.Search.route
+                    )
+                },
+
+                onNotificationsClick = {
+                    navController.navigate(
+                        Routes.Notifications.route
+                    )
+                },
+
+                onProfileClick = {
+                    navController.navigate(
+                        Routes.Profile.route
+                    )
+                },
+
                 onLostClick = {
                     navController.navigate(
                         Routes.ReportLost.route
@@ -85,6 +115,81 @@ fun AppNavigation() {
                     navController.navigate(
                         Routes.ReportFound.route
                     )
+                }
+            )
+        }
+
+        composable(
+            Routes.Search.route
+        ) {
+
+            SearchScreen(
+                currentRoute = currentRoute,
+
+                onHomeClick = {
+                    navController.navigate(Routes.Home.route)
+                },
+
+                onSearchClick = {
+
+                },
+
+                onNotificationsClick = {
+                    navController.navigate(Routes.Notifications.route)
+                },
+
+                onProfileClick = {
+                    navController.navigate(Routes.Profile.route)
+                }
+            )
+        }
+
+        composable(
+            Routes.Notifications.route
+        ) {
+
+            NotificationsScreen(
+                currentRoute = currentRoute,
+
+                onHomeClick = {
+                    navController.navigate(Routes.Home.route)
+                },
+
+                onSearchClick = {
+                    navController.navigate(Routes.Search.route)
+                },
+
+                onNotificationsClick = {
+
+                },
+
+                onProfileClick = {
+                    navController.navigate(Routes.Profile.route)
+                }
+            )
+        }
+
+        composable(
+            Routes.Profile.route
+        ) {
+
+            ProfileScreen(
+                currentRoute = currentRoute,
+
+                onHomeClick = {
+                    navController.navigate(Routes.Home.route)
+                },
+
+                onSearchClick = {
+                    navController.navigate(Routes.Search.route)
+                },
+
+                onNotificationsClick = {
+                    navController.navigate(Routes.Notifications.route)
+                },
+
+                onProfileClick = {
+
                 }
             )
         }

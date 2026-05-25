@@ -30,3 +30,20 @@ val CardWhite = Color(0xFFF7F7F7)
 val GoldAccent = Color(0xFFD4A017)
 
 val PrimaryDarkBlue = Color(0xFF0D2B6B)
+
+val HomeHeaderBlue = Color(0xFF1B3A68)
+val HomeBodyBackground = Color(0xFFF7F8FA)
+
+val LostActionCardBackground = Color(0xFFFBE8EB)
+val LostActionCardForeground = Color(0xFFB93832)
+
+val FoundActionCardBackground = Color(0xFFD9EEFF)
+val FoundActionCardForeground = Color(0xFF163D6B)
+
+val BottomBarDivider = Color(0xFF1B3A68)
+
+val LostBadgeBackground = Color(0xFFFBE8EB)
+val LostBadgeText = Color(0xFFB93832)
+
+val FoundBadgeBackground = Color(0xFFD9EEFF)
+val FoundBadgeText = Color(0xFF163D6B)

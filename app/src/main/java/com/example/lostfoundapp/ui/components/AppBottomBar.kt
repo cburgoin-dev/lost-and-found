@@ -2,65 +2,94 @@ package com.example.lostfoundapp.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Notifications
-import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.Person2
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 
-import com.example.lostfoundapp.ui.theme.AccentBlue
+import com.example.lostfoundapp.navigation.Routes
+import com.example.lostfoundapp.ui.theme.BottomBarDivider
 
 @Composable
 
-fun AppBottomBar() {
+fun AppBottomBar(
+    currentRoute: String?,
+    onHomeClick: () -> Unit,
+    onSearchClick: () -> Unit,
+    onNotificationsClick: () -> Unit,
+    onProfileClick: () -> Unit,
+) {
 
-    Row(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .wrapContentHeight()
-            .navigationBarsPadding()
             .background(Color.White)
-            .padding(
-                horizontal = 24.dp,
-                vertical = 12.dp
-            ),
-
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+            .navigationBarsPadding()
     ) {
 
-        BottomBarItem(
-            label = "Inicio",
-            icon = Icons.Outlined.Home,
-            selected = true
-        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .background(Color.White)
+                .padding(
+                    bottom = 5.dp
+                ),
 
-        BottomBarItem(
-            label = "Buscar",
-            icon = Icons.Outlined.Search,
-            selected = false
-        )
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
 
-        BottomBarItem(
-            label = "Alertas",
-            icon = Icons.Outlined.Notifications,
-            selected = false
-        )
+            BottomBarItem(
+                label = "Inicio",
+                icon = Icons.Filled.Home,
+                selected = currentRoute == Routes.Home.route,
+                onClick = {
+                    onHomeClick()
+                },
+                modifier = Modifier.weight(1f)
+            )
 
-        BottomBarItem(
-            label = "Perfil",
-            icon = Icons.Outlined.Person2,
-            selected = false
-        )
+            BottomBarItem(
+                label = "Buscar",
+                icon = Icons.Outlined.Search,
+                selected = currentRoute == Routes.Search.route,
+                onClick = {
+                    onSearchClick()
+                },
+                modifier = Modifier.weight(1f)
+            )
+
+            BottomBarItem(
+                label = "Alertas",
+                icon = Icons.Filled.Notifications,
+                selected = currentRoute == Routes.Notifications.route,
+                onClick = {
+                    onNotificationsClick()
+                },
+                modifier = Modifier.weight(1f)
+            )
+
+            BottomBarItem(
+                label = "Perfil",
+                icon = Icons.Filled.Person,
+                selected = currentRoute == Routes.Profile.route,
+                onClick = {
+                    onProfileClick()
+                },
+                modifier = Modifier.weight(1f),
+            )
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
     }
 }
