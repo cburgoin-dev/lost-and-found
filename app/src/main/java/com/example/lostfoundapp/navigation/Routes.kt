@@ -8,6 +8,8 @@ sealed class Routes(
 
     object Signup : Routes("signup")
 
+    object ForgotPassword : Routes("forgot_password")
+
     object Home : Routes("home")
 
     object ReportLost :

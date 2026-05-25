@@ -32,6 +32,12 @@ fun AppNavigation() {
                     navController.navigate(
                         Routes.Signup.route
                     )
+                },
+
+                onForgotPasswordClick = {
+                    navController.navigate(
+                        Routes.ForgotPassword.route
+                    )
                 }
             )
         }
@@ -49,6 +55,17 @@ fun AppNavigation() {
                     navController.navigate(
                         Routes.Home.route
                     )
+                }
+            )
+        }
+
+        composable(
+            Routes.ForgotPassword.route
+        ) {
+
+            ForgotPasswordScreen(
+                onBackToLoginClick = {
+                    navController.popBackStack()
                 }
             )
         }

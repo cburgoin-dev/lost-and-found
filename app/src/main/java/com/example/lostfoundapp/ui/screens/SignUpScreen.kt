@@ -92,8 +92,9 @@ fun SignUpScreen(
                 .padding(horizontal = 24.dp),
 
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
         ) {
+
+            Spacer(modifier = Modifier.height(80.dp))
 
             Image(
                 painter = painterResource(R.drawable.uabcs_logo),

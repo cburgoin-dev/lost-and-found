@@ -38,7 +38,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun LoginScreen(
     onLoginClick: () -> Unit,
-    onSignupClick: () -> Unit
+    onSignupClick: () -> Unit,
+    onForgotPasswordClick: () -> Unit
 ) {
 
     var email by remember {
@@ -237,7 +238,7 @@ fun LoginScreen(
                             text = "¿Olvidaste tu contraseña?",
 
                             modifier = Modifier.clickable {
-
+                                onForgotPasswordClick()
                             },
 
                             style = TextStyle(
@@ -275,6 +276,7 @@ fun LoginScreenPreview(){
 
     LoginScreen(
         onLoginClick = {},
-        onSignupClick = {}
+        onSignupClick = {},
+        onForgotPasswordClick = {}
     )
 }
