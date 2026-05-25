@@ -29,7 +29,6 @@ import com.example.lostfoundapp.data.remote.RetrofitInstance.api
 import com.example.lostfoundapp.ui.components.AuthInput
 import com.example.lostfoundapp.ui.components.AuthPasswordInput
 import com.example.lostfoundapp.ui.components.PrimaryButton
-import com.example.lostfoundapp.ui.components.TransparentButton
 import com.example.lostfoundapp.ui.theme.CardWhite
 import com.example.lostfoundapp.ui.theme.DarkOverlay
 import com.example.lostfoundapp.ui.theme.GoldAccent
@@ -97,7 +96,6 @@ fun LoginScreen(
                 style = TextStyle(
                     color = CardWhite.copy(alpha = 0.82f),
                     fontSize = 14.sp,
-                    fontWeight = FontWeight.Medium
                 )
             )
 
