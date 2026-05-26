@@ -18,6 +18,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 import com.example.lostfoundapp.R
+import com.example.lostfoundapp.data.local.SessionManager
 import com.example.lostfoundapp.data.remote.RetrofitInstance.api
 import com.example.lostfoundapp.ui.components.AuthInput
 import com.example.lostfoundapp.ui.components.AuthPasswordInput
@@ -50,7 +52,10 @@ fun LoginScreen(
         mutableStateOf("")
     }
     val viewModelScope = rememberCoroutineScope()
+    val context = LocalContext.current
 
+    val sessionManager =
+        SessionManager(context)
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -214,10 +219,14 @@ fun LoginScreen(
                                 if (response.isSuccessful) {
 
                                     val token = response.body()
+                                    if (token !=null){
+                                        onLoginClick()
+                                        sessionManager.saveToken(
+                                            token = token
+                                        )
+                                        Log.d("TOKEN", token ?: "null")
+                                    }
 
-                                    onLoginClick()
-
-                                    Log.d("TOKEN", token ?: "null")
 
                                 } else {
 

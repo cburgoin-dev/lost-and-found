@@ -18,9 +18,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalContext
 import android.app.DatePickerDialog
+import android.content.Context
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import com.example.lostfoundapp.data.local.SessionManager
 import java.util.Calendar
 
 import com.example.lostfoundapp.ui.components.DottedButton
@@ -35,6 +37,14 @@ import com.example.lostfoundapp.ui.components.SelectionDialog
 import com.example.lostfoundapp.data.model.ReportType
 import com.example.lostfoundapp.data.mock.categories
 import com.example.lostfoundapp.data.mock.locations
+import com.example.lostfoundapp.data.remote.RetrofitInstance.api
+import com.example.lostfoundapp.utils.toRequestBodyText
+import com.example.lostfoundapp.utils.uriToMultipart
+import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
 
 @Composable
 fun ReportItemScreen(
@@ -146,6 +156,15 @@ fun ReportItemScreen(
         calendar.get(Calendar.DAY_OF_MONTH)
     )
 
+    val viewModelScope = rememberCoroutineScope()
+
+    val context = LocalContext.current
+
+    val sessionManager =
+        SessionManager(context)
+
+    val token =
+        sessionManager.getToken()
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -382,6 +401,120 @@ fun ReportItemScreen(
                         if (!hasErrors) {
 
                             println("FORMULARIO VÁLIDO")
+                        }
+
+                        viewModelScope.launch {
+
+                            try {
+
+                                var imagePart:
+                                        MultipartBody.Part? = null
+
+                                selectedImageUri?.let { uri ->
+
+                                    val inputStream =
+                                        context.contentResolver
+                                            .openInputStream(uri)
+
+                                    val file =
+                                        File(
+                                            context.cacheDir,
+                                            "upload_image.jpg"
+                                        )
+
+                                    file.outputStream().use { output ->
+
+                                        inputStream?.copyTo(output)
+                                    }
+
+                                    val requestFile =
+                                        file.asRequestBody(
+                                            "image/*"
+                                                .toMediaTypeOrNull()
+                                        )
+
+                                    imagePart =
+                                        MultipartBody.Part
+                                            .createFormData(
+                                                "picture",
+                                                file.name,
+                                                requestFile
+                                            )
+                                }
+
+                                val token =
+                                    sessionManager.getToken() ?: ""
+
+                                val categoryId =
+                                    when (category) {
+
+                                        "Electrónicos" -> "1"
+                                        "Mochilas" -> "2"
+                                        else -> "1"
+                                    }
+
+                                val locationId =
+                                    when (location) {
+
+                                        "Biblioteca" -> "1"
+                                        "Cafetería" -> "2"
+                                        else -> "1"
+                                    }
+                                println("TOKEN: $token")
+                                val response =
+                                    api.createPost(
+
+                                        token =
+                                            "Bearer $token",
+
+                                        type =
+                                            if (reportType == ReportType.LOST)
+                                                "Perdido"
+                                                    .toRequestBodyText()
+                                            else
+                                                "Encontrado"
+                                                    .toRequestBodyText(),
+
+                                        title =
+                                            objectName
+                                                .toRequestBodyText(),
+
+                                        description =
+                                            description
+                                                .toRequestBodyText(),
+
+                                        locationId =
+                                            locationId
+                                                .toRequestBodyText(),
+
+                                        categoryId =
+                                            categoryId
+                                                .toRequestBodyText(),
+
+                                        incidentDate =
+                                            date
+                                                .toRequestBodyText(),
+
+                                        picture =
+                                            imagePart
+                                    )
+
+
+                                if(response.isSuccessful){
+
+                                    println("POST CREADO")
+
+                                }else{
+
+                                    println(
+                                        response.errorBody()?.string()
+                                    )
+                                }
+
+                            } catch (e: Exception){
+
+                                println(e.message)
+                            }
                         }
                     }
                 )
