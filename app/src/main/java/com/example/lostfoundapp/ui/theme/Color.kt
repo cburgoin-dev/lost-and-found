@@ -47,3 +47,11 @@ val LostBadgeText = Color(0xFFB93832)
 
 val FoundBadgeBackground = Color(0xFFD9EEFF)
 val FoundBadgeText = Color(0xFF163D6B)
+
+val SwitchCheckedTrack = HomeHeaderBlue
+val SwitchUncheckedTrack = Color(0xFFD6D6D6)
+
+val SwitchCheckedThumb = Color.White
+val SwitchUncheckedThumb = Color.White
+
+val ErrorRed = Color(0xFFE53935)

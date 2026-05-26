@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 import com.example.lostfoundapp.ui.theme.BorderGray
+import com.example.lostfoundapp.ui.theme.ErrorRed
 import com.example.lostfoundapp.ui.theme.TextGray
 
 @Composable
@@ -30,7 +31,7 @@ fun DateInput(
 
     val borderColor =
         if(isError)
-            Color.Red
+            ErrorRed
         else
             BorderGray
 
@@ -45,11 +46,11 @@ fun DateInput(
                 .border(
                     1.dp,
                     borderColor,
-                    RoundedCornerShape(16.dp)
+                    RoundedCornerShape(12.dp)
                 )
                 .background(
                     Color.White,
-                    RoundedCornerShape(16.dp)
+                    RoundedCornerShape(12.dp)
                 )
                 .clickable {
                     onClick()
@@ -77,7 +78,7 @@ fun DateInput(
 
             Text(
                 text = errorMessage,
-                color = Color.Red,
+                color = ErrorRed,
                 fontSize = 13.sp,
                 modifier = Modifier.padding(
                     start = 4.dp,

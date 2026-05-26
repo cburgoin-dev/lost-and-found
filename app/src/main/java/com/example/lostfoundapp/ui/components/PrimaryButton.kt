@@ -1,5 +1,6 @@
 package com.example.lostfoundapp.ui.components
 
+import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -20,6 +21,7 @@ import com.example.lostfoundapp.ui.theme.PrimaryDarkBlue
 @Composable
 fun PrimaryButton(
     text: String,
+    backgroundColor: Color = PrimaryDarkBlue,
     onClick: () -> Unit
 ) {
 
@@ -32,7 +34,7 @@ fun PrimaryButton(
                 shape = RoundedCornerShape(32.dp)
             )
             .background(
-                PrimaryDarkBlue,
+                backgroundColor,
                 RoundedCornerShape(32.dp)
             )
             .clickable {

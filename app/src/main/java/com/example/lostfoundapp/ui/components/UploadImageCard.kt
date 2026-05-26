@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CameraAlt
@@ -20,13 +21,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.layout.ContentScale
+import android.net.Uri
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
+import coil.compose.AsyncImage
 
 import com.example.lostfoundapp.ui.theme.BackgroundGray
 import com.example.lostfoundapp.ui.theme.BorderGray
+import com.example.lostfoundapp.ui.theme.ErrorRed
+import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
 import com.example.lostfoundapp.ui.theme.TextGray
 
 @Composable
 fun UploadImageCard(
+    imageUri: Uri? = null,
     isError: Boolean = false,
     errorMessage: String = "Foto obligatoria",
     onClick: () -> Unit
@@ -34,7 +43,7 @@ fun UploadImageCard(
 
     val borderColor =
         if(isError)
-            Color.Red
+            ErrorRed
         else
             BorderGray
 
@@ -45,17 +54,17 @@ fun UploadImageCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(150.dp)
+                .height(165.dp)
                 .border(
                     border = BorderStroke(
                         1.dp,
                         borderColor
                     ),
-                    shape = RoundedCornerShape(16.dp)
+                    shape = RoundedCornerShape(14.dp)
                 )
                 .background(
                     BackgroundGray,
-                    RoundedCornerShape(16.dp)
+                    RoundedCornerShape(14.dp)
                 )
                 .clickable {
                     onClick()
@@ -65,24 +74,75 @@ fun UploadImageCard(
             verticalArrangement = Arrangement.Center
         ) {
 
-            Icon(
-                imageVector = Icons.Outlined.CameraAlt,
-                contentDescription = null,
-                tint = TextGray
-            )
+            if(imageUri != null) {
 
-            Text(
-                text = "Toca para subir foto",
-                color = TextGray,
-                fontSize = 16.sp
-            )
+                Box {
+
+                    AsyncImage(
+                        model = imageUri,
+                        contentDescription = null,
+
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(165.dp),
+
+                        contentScale = ContentScale.Crop
+                    )
+
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .padding(10.dp)
+                            .background(
+                                Color.Black.copy(alpha = 0.45f),
+                                RoundedCornerShape(100.dp)
+                            )
+                            .clickable {
+                                onClick()
+                            }
+                            .padding(
+                                horizontal = 12.dp,
+                                vertical = 6.dp
+                            )
+                    ) {
+
+                        Text(
+                            text = "Cambiar",
+                            color = Color.White,
+                            fontSize = 13.sp
+                        )
+                    }
+                }
+            } else {
+
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+
+                    Icon(
+                        modifier = Modifier.size(42.dp),
+                        imageVector = Icons.Outlined.CameraAlt,
+                        contentDescription = null,
+                        tint = TextGray
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Text(
+                        text = "Toca para subir foto",
+                        color = TextGray,
+                        fontSize = 16.sp
+                    )
+                }
+            }
         }
 
         if(isError) {
 
             Text(
                 text = errorMessage,
-                color = Color.Red,
+                color = ErrorRed,
                 fontSize = 13.sp,
                 modifier = Modifier.padding(
                     start = 4.dp,

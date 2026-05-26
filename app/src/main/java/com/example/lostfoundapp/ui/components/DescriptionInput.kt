@@ -20,6 +20,8 @@ import androidx.compose.ui.unit.sp
 import com.example.lostfoundapp.ui.theme.AccentBlue
 
 import com.example.lostfoundapp.ui.theme.BorderGray
+import com.example.lostfoundapp.ui.theme.ErrorRed
+import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
 import com.example.lostfoundapp.ui.theme.PlaceholderGray
 
 @Composable
@@ -39,8 +41,8 @@ fun DescriptionInput(
 
     val borderColor =
         when {
-            isError -> Color.Red
-            isFocused -> AccentBlue
+            isError -> ErrorRed
+            isFocused -> HomeHeaderBlue
             else -> BorderGray
         }
 
@@ -59,11 +61,11 @@ fun DescriptionInput(
                 .border(
                     1.dp,
                     borderColor,
-                    RoundedCornerShape(16.dp)
+                    RoundedCornerShape(12.dp)
                 )
                 .background(
                     Color.White,
-                    RoundedCornerShape(16.dp)
+                    RoundedCornerShape(12.dp)
                 ),
 
             textStyle = TextStyle(
@@ -100,7 +102,7 @@ fun DescriptionInput(
 
             Text(
                 text = errorMessage,
-                color = Color.Red,
+                color = ErrorRed,
                 fontSize = 13.sp,
                 modifier = Modifier.padding(
                     start = 4.dp,

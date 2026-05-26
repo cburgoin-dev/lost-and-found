@@ -204,26 +204,7 @@ fun LoginScreen(
                     PrimaryButton(
                         text = "Iniciar sesión",
                         onClick = {
-                            viewModelScope.launch {
-
-                                val response = api.login(
-                                    email = "dev@dev.com",
-                                    password = "password"
-                                )
-
-                                if (response.isSuccessful) {
-
-                                    val token = response.body()
-
-                                    onLoginClick()
-
-                                    Log.d("TOKEN", token ?: "null")
-
-                                } else {
-
-                                    Log.d("LOGIN", "Error")
-                                }
-                            }
+                            onLoginClick()
                         }
                     )
 

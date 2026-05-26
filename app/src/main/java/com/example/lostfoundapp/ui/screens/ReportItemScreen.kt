@@ -23,7 +23,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import java.util.Calendar
 
-import com.example.lostfoundapp.ui.components.DottedButton
 import com.example.lostfoundapp.ui.components.CustomInput
 import com.example.lostfoundapp.ui.components.UploadImageCard
 import com.example.lostfoundapp.ui.components.DropdownInput
@@ -35,6 +34,10 @@ import com.example.lostfoundapp.ui.components.SelectionDialog
 import com.example.lostfoundapp.data.model.ReportType
 import com.example.lostfoundapp.data.mock.categories
 import com.example.lostfoundapp.data.mock.locations
+import com.example.lostfoundapp.ui.components.PrimaryButton
+import com.example.lostfoundapp.ui.theme.FoundActionCardForeground
+import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
+import com.example.lostfoundapp.ui.theme.LostActionCardForeground
 
 @Composable
 fun ReportItemScreen(
@@ -162,35 +165,45 @@ fun ReportItemScreen(
 
             // HEADER FIXED
 
-            Row(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(
-                        start = 20.dp,
-                        end = 20.dp,
-                        top = 16.dp
-                    ),
-
-                verticalAlignment = Alignment.CenterVertically
+                    .height(68.dp)
+                    .background(HomeHeaderBlue)
             ) {
 
-                BackButton(
-                    onClick = {
-                        onBackClick()
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 20.dp),
+
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+
+                    BackButton(
+                        onClick = {
+                            onBackClick()
+                        },
+
+                        hasBackground = false,
+                        iconColor = Color.White
+                    )
+
+                    Box(
+                        modifier = Modifier.weight(1f),
+                        contentAlignment = Alignment.Center
+                    ) {
+
+                        Text(
+                            text = "Nuevo reporte",
+                            color = Color.White,
+                            fontSize = 26.sp,
+                            fontWeight = FontWeight.Bold
+                        )
                     }
-                )
 
-                Spacer(modifier = Modifier.width(16.dp))
-
-                Text(
-                    text =
-                        if(reportType == ReportType.LOST)
-                            "Objeto perdido"
-                        else
-                            "Objeto encontrado",
-                    fontSize = 30.sp,
-                    fontWeight = FontWeight.Bold
-                )
+                    Spacer(modifier = Modifier.width(42.dp))
+                }
             }
 
             // SCROLLABLE CONTENT
@@ -204,12 +217,13 @@ fun ReportItemScreen(
                     .padding(
                         start = 20.dp,
                         end = 20.dp,
-                        top = 24.dp,
-                        bottom = 120.dp
+                        top = 28.dp,
+                        bottom = 98.dp
                     )
             ) {
 
                 UploadImageCard(
+                    imageUri = selectedImageUri,
                     isError = imageError,
                     onClick = {
 
@@ -223,7 +237,7 @@ fun ReportItemScreen(
 
                 Text(
                     text = "Nombre del objeto",
-                    fontWeight = FontWeight.SemiBold,
+                    fontWeight = FontWeight.Medium,
                     fontSize = 16.sp
                 )
 
@@ -243,7 +257,7 @@ fun ReportItemScreen(
 
                 Text(
                     text = "Descripción",
-                    fontWeight = FontWeight.SemiBold,
+                    fontWeight = FontWeight.Medium,
                     fontSize = 16.sp
                 )
 
@@ -263,7 +277,7 @@ fun ReportItemScreen(
 
                 Text(
                     text = "Ubicación",
-                    fontWeight = FontWeight.SemiBold,
+                    fontWeight = FontWeight.Medium,
                     fontSize = 16.sp
                 )
 
@@ -286,7 +300,7 @@ fun ReportItemScreen(
 
                 Text(
                     text = "Categoría",
-                    fontWeight = FontWeight.SemiBold,
+                    fontWeight = FontWeight.Medium,
                     fontSize = 16.sp
                 )
 
@@ -305,7 +319,7 @@ fun ReportItemScreen(
 
                 Text(
                     text = "Fecha",
-                    fontWeight = FontWeight.SemiBold,
+                    fontWeight = FontWeight.Medium,
                     fontSize = 16.sp
                 )
 
@@ -346,10 +360,13 @@ fun ReportItemScreen(
                     )
             ) {
 
-                DottedButton(
-                    bgColor = Color(0xFF03A2A6),
-                    dotsColor = Color(0xFF0378A6),
+                PrimaryButton(
                     text = "Publicar reporte",
+                    backgroundColor =
+                        if(reportType == ReportType.LOST)
+                            LostActionCardForeground
+                        else
+                            FoundActionCardForeground,
                     onClick = {
                         imageError =
                             reportType == ReportType.FOUND

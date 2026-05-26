@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -18,27 +19,41 @@ import com.example.lostfoundapp.ui.theme.BackgroundGray
 
 @Composable
 fun BackButton(
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    backgroundColor: Color = BackgroundGray,
+    iconColor: Color = Color.Black,
+    hasBackground: Boolean = true
 ) {
 
     Box(
-        modifier = Modifier
-            .size(42.dp)
-            .background(
-                BackgroundGray,
-                CircleShape
-            )
-            .clickable {
-                onClick()
+        modifier =
+            if (hasBackground) {
+
+                Modifier
+                    .size(42.dp)
+                    .background(
+                        backgroundColor,
+                        CircleShape
+                    )
+                    .clickable {
+                        onClick()
+                    }
+            } else {
+
+                Modifier
+                    .size(42.dp)
+                    .clickable {
+                        onClick()
+                    }
             },
 
         contentAlignment = Alignment.Center
     ) {
 
         Icon(
-            imageVector = Icons.Outlined.ArrowBack,
+            imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
             contentDescription = null,
-            tint = Color.Black
+            tint = iconColor
         )
     }
 }
