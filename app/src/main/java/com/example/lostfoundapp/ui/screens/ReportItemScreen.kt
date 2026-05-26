@@ -146,7 +146,7 @@ fun ReportItemScreen(
         { _, year, month, dayOfMonth ->
 
             date =
-                "$dayOfMonth/${month  + 1}/$year"
+                "$year-${month+1}-$dayOfMonth"
 
             dateError = false
         },
