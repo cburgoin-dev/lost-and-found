@@ -50,59 +50,9 @@ import com.example.lostfoundapp.ui.theme.LostActionCardBackground
 import com.example.lostfoundapp.ui.theme.LostActionCardForeground
 import com.example.lostfoundapp.ui.theme.LostBadgeBackground
 import com.example.lostfoundapp.ui.theme.LostBadgeText
-
-data class HomeItem(
-    val title: String,
-    val location: String,
-    val time: String,
-    val status: String,
-    val statusBackground: Color,
-    val statusTextColor: Color,
-    val imageRes: Int
-)
-
-val homeItems = listOf(
-
-    HomeItem(
-        title = "AirPods Case",
-        location = "Biblioteca Central",
-        time = "10:15 AM",
-        status = "Perdido",
-        statusBackground = LostBadgeBackground,
-        statusTextColor = LostBadgeText,
-        imageRes = R.drawable.airpods_case
-    ),
-
-    HomeItem(
-        title = "Credencial UABCS",
-        location = "Edificio A",
-        time = "09:30 AM",
-        status = "Encontrado",
-        statusBackground = FoundBadgeBackground,
-        statusTextColor = FoundBadgeText,
-        imageRes = R.drawable.student_id
-    ),
-
-    HomeItem(
-        title = "Mochila Negra",
-        location = "Gimnasio",
-        time = "08:45 AM",
-        status = "Perdido",
-        statusBackground = LostBadgeBackground,
-        statusTextColor = LostBadgeText,
-        imageRes = R.drawable.backpack
-    ),
-
-    HomeItem(
-        title = "Botella Térmica",
-        location = "Cafetería",
-        time = "11:20 AM",
-        status = "Encontrado",
-        statusBackground = FoundBadgeBackground,
-        statusTextColor = FoundBadgeText,
-        imageRes = R.drawable.water_bottle
-    )
-)
+import com.example.lostfoundapp.data.mock.mockPosts
+import com.example.lostfoundapp.data.model.ItemPost
+import com.example.lostfoundapp.data.model.ReportType
 
 @Composable
 fun HomeScreen(
@@ -113,7 +63,7 @@ fun HomeScreen(
     currentRoute: String?,
     onHomeClick: () -> Unit,
     onSearchClick: () -> Unit,
-    onItemClick: () -> Unit,
+    onItemClick: (ItemPost) -> Unit,
     onNotificationsClick: () -> Unit,
     onProfileClick: () -> Unit
 ) {
@@ -285,18 +235,32 @@ fun HomeScreen(
                     )
                 }
 
-                items(homeItems) { item ->
+                items(mockPosts) { item ->
 
                     ItemCard(
                         title = item.title,
                         location = item.location,
-                        time = item.time,
-                        status = item.status,
-                        statusBackground = item.statusBackground,
-                        statusTextColor = item.statusTextColor,
-                        icon = painterResource(item.imageRes),
+                        time = item.date,
+                        status =
+                            if(item.reportType == ReportType.LOST)
+                                "Perdido"
+                            else
+                                "Encontrado",
+                        statusBackground =
+                            if(item.reportType == ReportType.LOST)
+                                LostBadgeBackground
+                            else
+                                FoundBadgeBackground,
+                        statusTextColor =
+                            if(item.reportType == ReportType.LOST)
+                                LostBadgeText
+                            else
+                                FoundBadgeText,
+                        icon = painterResource(
+                            item.imageRes ?: R.drawable.airpods_case
+                        ),
                         onClick = {
-                            onItemClick()
+                            onItemClick(item)
                         }
                     )
                 }

@@ -14,7 +14,7 @@ sealed class Routes(
 
     object Search : Routes("search")
 
-    object ItemDetail : Routes("item_detail")
+    object ItemDetail : Routes("item_detail/{itemId}")
 
     object Notifications : Routes("notifications")
 

@@ -14,6 +14,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 import com.example.lostfoundapp.R
+import com.example.lostfoundapp.data.mock.mockPosts
+import com.example.lostfoundapp.data.model.ItemPost
 import com.example.lostfoundapp.data.model.ReportType
 import com.example.lostfoundapp.ui.components.PrimaryButton
 import com.example.lostfoundapp.ui.components.itemdetail.ItemDetailActionsRow
@@ -28,6 +30,7 @@ import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
 
 @Composable
 fun ItemDetailScreen(
+    itemPost: ItemPost,
     onBackClick: () -> Unit
 ) {
 
@@ -42,8 +45,8 @@ fun ItemDetailScreen(
             item {
 
                 ItemHeroSection(
-                    imageRes = R.drawable.airpods_case,
-                    reportType = ReportType.LOST,
+                    imageRes = itemPost.imageRes ?: R.drawable.airpods_case,
+                    reportType = itemPost.reportType,
 
                     onBackClick = onBackClick
                 )
@@ -60,10 +63,10 @@ fun ItemDetailScreen(
                     Spacer(modifier = Modifier.height(24.dp))
 
                     ItemInfoSection(
-                        title = "AirPods Case",
-                        location = "Biblioteca Central",
-                        date = "20 de mayo, 2026",
-                        description = "Estuche blanco de Airpods Pro encontrado en la biblioteca central, cerca de las mesas de estudio. Tiene una pequeña calcomanía azul de la UABCS en la parte trasera. Parece estar en buen estado."
+                        title = itemPost.title,
+                        location = itemPost.location,
+                        date = itemPost.date,
+                        description = itemPost.description
                     )
 
                     Spacer(modifier = Modifier.height(24.dp))
@@ -77,9 +80,9 @@ fun ItemDetailScreen(
                     Spacer(modifier = Modifier.height(24.dp))
 
                     ReporterSection(
-                        reporterName = "Ana Sofía Perez",
-                        reporterImageRes = R.drawable.profile_placeholder,
-                        isAnonymous = false
+                        reporterName = itemPost.reporterName,
+                        reporterImageRes = itemPost.reporterImageRes,
+                        isAnonymous = itemPost.isAnonymous
                     )
 
                     Spacer(modifier = Modifier.height(28.dp))
@@ -120,7 +123,11 @@ fun ItemDetailScreen(
         ) {
 
             PrimaryButton(
-                text = "Reclamar objeto",
+                text =
+                    if(itemPost.reportType == ReportType.LOST)
+                        "Lo encontré"
+                    else
+                        "Reclamar objeto",
                 backgroundColor = FoundActionCardForeground,
                 onClick = {
 
@@ -135,6 +142,7 @@ fun ItemDetailScreen(
 fun ItemDetailScreenPreview() {
 
     ItemDetailScreen(
+        itemPost = mockPosts[0],
         onBackClick = {}
     )
 }
