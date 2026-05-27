@@ -55,3 +55,5 @@ val SwitchCheckedThumb = Color.White
 val SwitchUncheckedThumb = Color.White
 
 val ErrorRed = Color(0xFFE53935)
+
+val DetailSecondaryText = Color(0xFF5F6368)

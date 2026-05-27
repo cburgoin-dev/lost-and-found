@@ -20,7 +20,7 @@ fun AppNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = Routes.Login.route
+        startDestination = Routes.Home.route
     ) {
 
         composable(
@@ -93,6 +93,12 @@ fun AppNavigation() {
                     )
                 },
 
+                onItemClick = {
+                    navController.navigate(
+                        Routes.ItemDetail.route
+                    )
+                },
+
                 onNotificationsClick = {
                     navController.navigate(
                         Routes.Notifications.route
@@ -140,6 +146,17 @@ fun AppNavigation() {
 
                 onProfileClick = {
                     navController.navigate(Routes.Profile.route)
+                }
+            )
+        }
+
+        composable(
+            Routes.ItemDetail.route
+        ) {
+
+            ItemDetailScreen(
+                onBackClick = {
+                    navController.popBackStack()
                 }
             )
         }

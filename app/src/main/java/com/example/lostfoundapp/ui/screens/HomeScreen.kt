@@ -113,6 +113,7 @@ fun HomeScreen(
     currentRoute: String?,
     onHomeClick: () -> Unit,
     onSearchClick: () -> Unit,
+    onItemClick: () -> Unit,
     onNotificationsClick: () -> Unit,
     onProfileClick: () -> Unit
 ) {
@@ -295,7 +296,7 @@ fun HomeScreen(
                         statusTextColor = item.statusTextColor,
                         icon = painterResource(item.imageRes),
                         onClick = {
-
+                            onItemClick()
                         }
                     )
                 }
@@ -330,6 +331,7 @@ fun HomeScreenPreview(){
         currentRoute = Routes.Home.route,
         onHomeClick = {},
         onSearchClick = {},
+        onItemClick = {},
         onNotificationsClick = {},
         onProfileClick = {}
     )

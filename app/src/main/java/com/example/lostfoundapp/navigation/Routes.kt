@@ -14,6 +14,8 @@ sealed class Routes(
 
     object Search : Routes("search")
 
+    object ItemDetail : Routes("item_detail")
+
     object Notifications : Routes("notifications")
 
     object Profile : Routes("profile")

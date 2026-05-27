@@ -1,0 +1,66 @@
+package com.example.lostfoundapp.ui.components.itemdetail
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+
+import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
+
+@Composable
+fun OwnershipNoticeSection() {
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp)
+            .background(
+                color = HomeHeaderBlue.copy(alpha = 0.06f),
+                shape = RoundedCornerShape(18.dp)
+            )
+            .padding(18.dp),
+
+        verticalAlignment = Alignment.Top
+    ) {
+
+        Icon(
+            imageVector = Icons.Outlined.Info,
+            contentDescription = null,
+            tint = HomeHeaderBlue,
+            modifier = Modifier.size(22.dp)
+        )
+
+        Spacer(modifier = Modifier.width(12.dp))
+
+        Column {
+
+            Text(
+                text = "Proceso de reclamación",
+                fontSize = 15.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color.Black
+            )
+
+            Spacer(modifier = Modifier.height(6.dp))
+
+            Text(
+                text =
+                    "Si este objeto es tuyo, puedes enviar una solicitud de reclamación. El usuario que realizó el reporte deberá confirmar la propiedad.",
+
+                fontSize = 14.sp,
+                lineHeight = 22.sp,
+                color = Color(0xFF5F6368)
+            )
+        }
+    }
+}
