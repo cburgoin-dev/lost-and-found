@@ -16,6 +16,8 @@ data class ItemPost(
 
     val imageRes: Int? = null,
 
+    val imageUrl: String? = null,
+
     val reporterName: String,
 
     val reporterImageRes: Int? = null,

@@ -25,9 +25,15 @@ import androidx.compose.material.icons.outlined.NotificationsNone
 import androidx.compose.material.icons.outlined.NearMe
 import androidx.compose.material.icons.outlined.SearchOff
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 import com.example.lostfoundapp.R
+import com.example.lostfoundapp.data.local.SessionManager
 import com.example.lostfoundapp.navigation.Routes
 import com.example.lostfoundapp.ui.components.AppBottomBar
 import com.example.lostfoundapp.ui.components.ItemCard
@@ -53,6 +60,8 @@ import com.example.lostfoundapp.ui.theme.LostBadgeText
 import com.example.lostfoundapp.data.mock.mockPosts
 import com.example.lostfoundapp.data.model.ItemPost
 import com.example.lostfoundapp.data.model.ReportType
+import com.example.lostfoundapp.data.remote.RetrofitInstance
+import com.example.lostfoundapp.data.toItemPost
 
 @Composable
 fun HomeScreen(
@@ -67,6 +76,51 @@ fun HomeScreen(
     onNotificationsClick: () -> Unit,
     onProfileClick: () -> Unit
 ) {
+    var posts by remember {
+        mutableStateOf<List<ItemPost>>(emptyList())
+    }
+
+    val context = LocalContext.current
+
+    val sessionManager =
+        SessionManager(context)
+
+    val token =
+        sessionManager.getToken() ?: ""
+
+    LaunchedEffect(Unit) {
+
+        try {
+
+
+            val response =
+                RetrofitInstance.api.getPosts(
+                    "Bearer $token"
+                )
+
+            if(response.isSuccessful) {
+
+                posts =
+                    response.body()
+                        ?.data
+                        ?.map { it.toItemPost() }
+                        ?: emptyList()
+
+                println("POSTS: ${posts.size}")
+                posts.forEach {
+                    println("POST: ${it.title}")
+                }
+
+            } else {
+
+                println(response.errorBody()?.string())
+            }
+
+        } catch (e: Exception) {
+
+            e.printStackTrace()
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -235,7 +289,7 @@ fun HomeScreen(
                     )
                 }
 
-                items(mockPosts) { item ->
+                items(posts) { item ->
 
                     ItemCard(
                         title = item.title,
@@ -256,9 +310,7 @@ fun HomeScreen(
                                 LostBadgeText
                             else
                                 FoundBadgeText,
-                        icon = painterResource(
-                            item.imageRes ?: R.drawable.airpods_case
-                        ),
+                        imageUrl = item.imageUrl,
                         onClick = {
                             onItemClick(item)
                         }

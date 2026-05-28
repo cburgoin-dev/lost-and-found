@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import coil.compose.AsyncImage
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,7 +45,8 @@ fun ItemCard(
     status: String,
     statusBackground: Color,
     statusTextColor: Color,
-    icon: Painter,
+    imageUrl: String?,
+    //icon: Painter,
     onClick: () -> Unit,
 ) {
 
@@ -78,11 +80,20 @@ fun ItemCard(
                     .background(Color(0xFFF3F4F6)),
                 contentAlignment = Alignment.Center
             ) {
-
+                /*
                 Image(
                     painter = icon,
                     contentDescription = null,
                     modifier = Modifier.height(52.dp)
+                )
+                */
+
+                AsyncImage(
+                    model = imageUrl,
+                    contentDescription = null,
+                    placeholder = painterResource(R.drawable.airpods_case),
+                    error = painterResource(R.drawable.airpods_case),
+                    modifier = Modifier.size(72.dp)
                 )
             }
 
@@ -149,7 +160,7 @@ fun ItemCard(
         }
     }
 }
-
+/*
 @Preview(showBackground = true)
 @Composable
 fun ItemCardPreview() {
@@ -187,4 +198,4 @@ fun ItemCardPreview() {
             onClick = {}
         )
     }
-}
+}*/

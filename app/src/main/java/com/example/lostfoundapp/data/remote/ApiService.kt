@@ -1,11 +1,13 @@
 package com.example.lostfoundapp.data.remote
 
 import com.example.lostfoundapp.data.model.LoginResponse
+import com.example.lostfoundapp.data.model.PostsResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
+import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
@@ -74,4 +76,10 @@ interface ApiService {
         @Part picture: MultipartBody.Part?
 
     ): Response<String>
+
+    @GET("api/posts")
+    suspend fun getPosts(
+        @Header("Authorization")
+        token: String
+    ): Response<PostsResponse>
 }
