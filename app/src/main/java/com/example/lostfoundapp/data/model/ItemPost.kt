@@ -16,9 +16,7 @@ data class ItemPost(
 
     val imageRes: Int? = null,
 
-    val reporterName: String,
-
-    val reporterImageRes: Int? = null,
+    val reporter: User,
 
     val isAnonymous: Boolean,
 

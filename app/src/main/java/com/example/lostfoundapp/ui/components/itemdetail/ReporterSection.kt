@@ -2,9 +2,12 @@ package com.example.lostfoundapp.ui.components.itemdetail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowForwardIos
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -25,9 +28,11 @@ import com.example.lostfoundapp.ui.theme.TextGray
 
 @Composable
 fun ReporterSection(
-    reporterName: String = "",
-    reporterImageRes: Int? = null,
-    isAnonymous: Boolean = false
+    reporterName: String,
+    reporterImageRes: Int?,
+    isAnonymous: Boolean,
+    isContactVisible: Boolean,
+    onClick: (() -> Unit)? = null
 ) {
 
     Column(
@@ -46,6 +51,23 @@ fun ReporterSection(
         Spacer(modifier = Modifier.height(14.dp))
 
         Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(18.dp))
+                .background(
+                    if (isContactVisible) {
+                        HomeHeaderBlue.copy(alpha = 0.08f)
+                    } else {
+                        Color.Transparent
+                    }
+                )
+                .clickable(
+                    enabled = isContactVisible && onClick != null
+                ) {
+                    onClick?.invoke()
+                }
+                .padding(14.dp),
+
             verticalAlignment = Alignment.CenterVertically
         ) {
 
@@ -83,7 +105,9 @@ fun ReporterSection(
 
             Spacer(modifier = Modifier.width(14.dp))
 
-            Column {
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
 
                 Text(
                     text =
@@ -101,13 +125,23 @@ fun ReporterSection(
 
                 Text(
                     text =
-                        if (isAnonymous)
-                            "La información será compartida durante el proceso de reclamación."
+                        if (isAnonymous || !isContactVisible)
+                            "La información será compartida durante el proceso de contacto."
                         else
-                            "Información compartida por el usuario.",
+                            "Toca para ver la información de contacto.",
 
                     color = DetailSecondaryText,
                     fontSize = 14.sp
+                )
+            }
+
+            if (isContactVisible) {
+
+                Icon(
+                    imageVector = Icons.AutoMirrored.Outlined.ArrowForwardIos,
+                    contentDescription = null,
+                    tint = DetailSecondaryText,
+                    modifier = Modifier.size(18.dp)
                 )
             }
         }

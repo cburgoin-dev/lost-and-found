@@ -14,11 +14,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.lostfoundapp.data.model.ReportType
 
 import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
 
 @Composable
-fun OwnershipNoticeSection() {
+fun OwnershipNoticeSection(
+    reportType: ReportType
+) {
 
     Row(
         modifier = Modifier
@@ -44,8 +47,20 @@ fun OwnershipNoticeSection() {
 
         Column {
 
+            val title =
+                if(reportType == ReportType.FOUND)
+                    "Proceso de reclamación"
+                else
+                    "Compartir información"
+
+            val description =
+                if(reportType == ReportType.FOUND)
+                    "Si este objeto es tuyo, puedes enviar una solicitud de reclamación. El usuario que realizó el reporte deberá confirmar la propiedad."
+                else
+                    "Si tienes información sobre este objeto, puedes contactar al usuario o enviar detalles que ayuden a localizarlo."
+
             Text(
-                text = "Proceso de reclamación",
+                text = title,
                 fontSize = 15.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = Color.Black
@@ -54,9 +69,7 @@ fun OwnershipNoticeSection() {
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text =
-                    "Si este objeto es tuyo, puedes enviar una solicitud de reclamación. El usuario que realizó el reporte deberá confirmar la propiedad.",
-
+                text = description,
                 fontSize = 14.sp,
                 lineHeight = 22.sp,
                 color = Color(0xFF5F6368)
