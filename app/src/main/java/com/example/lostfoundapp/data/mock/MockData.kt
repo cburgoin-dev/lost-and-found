@@ -6,13 +6,18 @@ val categories = listOf(
     "Teléfonos",
     "Libros",
     "Laptop",
-    "Audífonos"
+    "Audífonos",
+    "Documentos",
+    "Botellas",
+    "Otros",
 )
 
 val locations = listOf(
-    "Biblioteca",
+    "Biblioteca Central",
+    "Edificio A",
+    "Gimnasio",
     "Cafetería",
     "Laboratorio",
     "Rectoría",
-    "Parada de camiones"
+    "Parada de camiones",
 )

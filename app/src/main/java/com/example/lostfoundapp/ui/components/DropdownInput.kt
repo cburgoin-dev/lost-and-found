@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -64,6 +65,10 @@ fun DropdownInput(
                 text = text.ifEmpty { placeholder },
                 color = TextGray,
                 fontSize = 16.sp,
+
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+
                 modifier = Modifier.weight(1f)
             )
 
@@ -80,6 +85,10 @@ fun DropdownInput(
                 text = errorMessage,
                 color = ErrorRed,
                 fontSize = 13.sp,
+
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+
                 modifier = Modifier.padding(
                     start = 4.dp,
                     top = 4.dp,

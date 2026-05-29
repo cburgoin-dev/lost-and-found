@@ -15,15 +15,15 @@ val mockPosts = listOf(
 
         location = "Biblioteca Central",
 
+        category = "Audífonos",
+
         date = "20 de mayo, 2026",
 
         reportType = ReportType.LOST,
 
         imageRes = R.drawable.airpods_case,
 
-        reporterName = "Ana Sofía Perez",
-
-        reporterImageRes = R.drawable.profile_placeholder,
+        reporter = anaUser,
 
         isAnonymous = false,
 
@@ -39,15 +39,15 @@ val mockPosts = listOf(
 
         location = "Edificio A",
 
+        category = "Documentos",
+
         date = "21 de mayo, 2026",
 
         reportType = ReportType.FOUND,
 
         imageRes = R.drawable.student_id,
 
-        reporterName = "Carlos Mendoza",
-
-        reporterImageRes = R.drawable.profile_placeholder,
+        reporter = carlosUser,
 
         isAnonymous = false,
 
@@ -65,13 +65,13 @@ val mockPosts = listOf(
 
         date = "22 de mayo, 2026",
 
+        category = "Mochilas",
+
         reportType = ReportType.LOST,
 
         imageRes = R.drawable.backpack,
 
-        reporterName = "Usuario anónimo",
-
-        reporterImageRes = null,
+        reporter = anonymousUser,
 
         isAnonymous = true,
 
@@ -89,13 +89,13 @@ val mockPosts = listOf(
 
         date = "23 de mayo, 2026",
 
+        category = "Botellas",
+
         reportType = ReportType.FOUND,
 
         imageRes = R.drawable.water_bottle,
 
-        reporterName = "María Fernanda López",
-
-        reporterImageRes = R.drawable.profile_placeholder,
+        reporter = sofiaUser,
 
         isAnonymous = false,
 

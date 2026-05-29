@@ -31,6 +31,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 import com.example.lostfoundapp.R
+import com.example.lostfoundapp.data.mock.mockPosts
+import com.example.lostfoundapp.data.model.ItemPost
+import com.example.lostfoundapp.data.model.ReportType
 import com.example.lostfoundapp.ui.theme.FoundBadgeBackground
 import com.example.lostfoundapp.ui.theme.FoundBadgeText
 import com.example.lostfoundapp.ui.theme.LostBadgeBackground
@@ -49,6 +52,24 @@ fun ItemCard(
     //icon: Painter,
     onClick: () -> Unit,
 ) {
+
+    val status =
+        if(itemPost.reportType == ReportType.LOST)
+            "Perdido"
+        else
+            "Encontrado"
+
+    val statusBackground =
+        if(itemPost.reportType == ReportType.LOST)
+            LostBadgeBackground
+        else
+            FoundBadgeBackground
+
+    val statusTextColor =
+        if(itemPost.reportType == ReportType.LOST)
+            LostBadgeText
+        else
+            FoundBadgeText
 
     Box(
         modifier = Modifier
@@ -82,7 +103,9 @@ fun ItemCard(
             ) {
                 /*
                 Image(
-                    painter = icon,
+                    painter = painterResource(
+                        itemPost.imageRes ?: R.drawable.airpods_case
+                    ),
                     contentDescription = null,
                     modifier = Modifier.height(52.dp)
                 )
@@ -104,7 +127,7 @@ fun ItemCard(
             ) {
 
                 Text(
-                    text = title,
+                    text = itemPost.title,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = Color.Black,
@@ -115,7 +138,7 @@ fun ItemCard(
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = location,
+                    text = itemPost.location,
                     color = Color(0xFF707070),
                     fontSize = 15.sp,
                     maxLines = 1,
@@ -125,7 +148,7 @@ fun ItemCard(
                 Spacer(modifier = Modifier.height(2.dp))
 
                 Text(
-                    text = time,
+                    text = itemPost.date,
                     color = Color(0xFF9A9A9A),
                     fontSize = 14.sp,
                     maxLines = 1,
@@ -175,26 +198,14 @@ fun ItemCardPreview() {
     ) {
 
         ItemCard(
-            title = "AirPods Case",
-            location = "Biblioteca Central",
-            time = "10:15 AM",
-            status = "Perdido",
-            statusBackground = LostBadgeBackground,
-            statusTextColor = LostBadgeText,
-            icon = painterResource(R.drawable.ic_launcher_foreground),
+            itemPost = mockPosts[0],
             onClick = {}
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         ItemCard(
-            title = "Credencial UABCS",
-            location = "Edificio A",
-            time = "09:30 AM",
-            status = "Encontrado",
-            statusBackground = FoundBadgeBackground,
-            statusTextColor = FoundBadgeText,
-            icon = painterResource(R.drawable.ic_launcher_foreground),
+            itemPost = mockPosts[1],
             onClick = {}
         )
     }

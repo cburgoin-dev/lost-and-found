@@ -68,11 +68,11 @@ fun HomeScreen(
     username: String = "Cristian",
     onLostClick: () -> Unit,
     onFoundClick: () -> Unit,
+    onItemClick: (ItemPost) -> Unit,
 
     currentRoute: String?,
     onHomeClick: () -> Unit,
     onSearchClick: () -> Unit,
-    onItemClick: (ItemPost) -> Unit,
     onNotificationsClick: () -> Unit,
     onProfileClick: () -> Unit
 ) {
@@ -243,7 +243,7 @@ fun HomeScreen(
                         top = 26.dp
                     ),
 
-                contentPadding = PaddingValues(bottom = 120.dp),
+                contentPadding = PaddingValues(bottom = 144.dp),
 
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
@@ -284,7 +284,7 @@ fun HomeScreen(
                     Text(
                         text = "Recientes en el campus",
                         fontSize = 22.sp,
-                        fontWeight = FontWeight.SemiBold,
+                        fontWeight = FontWeight.Medium,
                         color = Color.Black
                     )
                 }
@@ -343,11 +343,11 @@ fun HomeScreenPreview(){
         username = "Cristian",
         onLostClick = {},
         onFoundClick = {},
+        onItemClick = {},
 
         currentRoute = Routes.Home.route,
         onHomeClick = {},
         onSearchClick = {},
-        onItemClick = {},
         onNotificationsClick = {},
         onProfileClick = {}
     )

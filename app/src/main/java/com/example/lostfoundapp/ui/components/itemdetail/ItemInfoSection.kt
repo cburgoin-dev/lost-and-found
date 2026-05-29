@@ -14,6 +14,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.lostfoundapp.data.model.ItemPost
+import com.example.lostfoundapp.data.model.ReportType
 import com.example.lostfoundapp.ui.theme.DetailSecondaryText
 import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
 
@@ -21,11 +23,20 @@ import com.example.lostfoundapp.ui.theme.TextGray
 
 @Composable
 fun ItemInfoSection(
-    title: String,
-    location: String,
-    date: String,
-    description: String
+    itemPost: ItemPost,
 ) {
+
+    val locationLabel =
+        if(itemPost.reportType == ReportType.FOUND)
+            "Encontrado en"
+        else
+            "Última ubicación conocida"
+
+    val dateLabel =
+        if(itemPost.reportType == ReportType.FOUND)
+            "Fecha de hallazgo"
+        else
+            "Última vez visto"
 
     Column(
         modifier = Modifier
@@ -34,7 +45,7 @@ fun ItemInfoSection(
     ) {
 
         Text(
-            text = title,
+            text = itemPost.title,
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Black
@@ -42,50 +53,74 @@ fun ItemInfoSection(
 
         Spacer(modifier = Modifier.height(14.dp))
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            Icon(
-                imageVector = Icons.Outlined.LocationOn,
-                contentDescription = null,
-                tint = HomeHeaderBlue
-            )
-
-            Spacer(modifier = Modifier.width(8.dp))
+        Column {
 
             Text(
-                text = location,
-                color = DetailSecondaryText,
-                fontSize = 16.sp
+                text = locationLabel,
+                color = HomeHeaderBlue,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium
             )
+
+            Spacer(modifier = Modifier.height(2.dp))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                Icon(
+                    imageVector = Icons.Outlined.LocationOn,
+                    contentDescription = null,
+                    tint = HomeHeaderBlue
+                )
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Text(
+                    text = itemPost.location,
+                    color = Color.Black,
+                    fontSize = 16.sp,
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            Icon(
-                imageVector = Icons.Outlined.DateRange,
-                contentDescription = null,
-                tint = HomeHeaderBlue
-            )
-
-            Spacer(modifier = Modifier.width(8.dp))
+        Column {
 
             Text(
-                text = date,
-                color = DetailSecondaryText,
-                fontSize = 16.sp
+                text = dateLabel,
+                color = HomeHeaderBlue,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium
             )
+
+            Spacer(modifier = Modifier.height(2.dp))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                Icon(
+                    imageVector = Icons.Outlined.DateRange,
+                    contentDescription = null,
+                    tint = HomeHeaderBlue
+                )
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Text(
+                    text = itemPost.date,
+                    color = Color.Black,
+                    fontSize = 16.sp,
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(20.dp))
 
         Text(
-            text = description,
+            text = itemPost.description,
 
             style = TextStyle(
                 color = Color.Black,

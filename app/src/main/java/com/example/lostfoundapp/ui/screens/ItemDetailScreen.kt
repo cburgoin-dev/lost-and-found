@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,6 +19,8 @@ import com.example.lostfoundapp.data.mock.mockPosts
 import com.example.lostfoundapp.data.model.ItemPost
 import com.example.lostfoundapp.data.model.ReportType
 import com.example.lostfoundapp.ui.components.PrimaryButton
+import com.example.lostfoundapp.ui.components.itemdetail.ClaimRequestBottomSheet
+import com.example.lostfoundapp.ui.components.itemdetail.ContactInfoBottomSheet
 import com.example.lostfoundapp.ui.components.itemdetail.ItemDetailActionsRow
 import com.example.lostfoundapp.ui.components.itemdetail.ItemHeroSection
 import com.example.lostfoundapp.ui.components.itemdetail.ItemInfoSection
@@ -25,14 +28,20 @@ import com.example.lostfoundapp.ui.components.itemdetail.OwnershipNoticeSection
 import com.example.lostfoundapp.ui.components.itemdetail.ReporterSection
 import com.example.lostfoundapp.ui.theme.BorderGray
 import com.example.lostfoundapp.ui.theme.FoundActionCardForeground
-import com.example.lostfoundapp.ui.theme.HomeBodyBackground
-import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
 
 @Composable
 fun ItemDetailScreen(
     itemPost: ItemPost,
     onBackClick: () -> Unit
 ) {
+
+    var showContactSheet by remember {
+        mutableStateOf(false)
+    }
+
+    var showRequestSheet by remember {
+        mutableStateOf(false)
+    }
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -63,10 +72,7 @@ fun ItemDetailScreen(
                     Spacer(modifier = Modifier.height(24.dp))
 
                     ItemInfoSection(
-                        title = itemPost.title,
-                        location = itemPost.location,
-                        date = itemPost.date,
-                        description = itemPost.description
+                        itemPost = itemPost
                     )
 
                     Spacer(modifier = Modifier.height(24.dp))
@@ -80,14 +86,21 @@ fun ItemDetailScreen(
                     Spacer(modifier = Modifier.height(24.dp))
 
                     ReporterSection(
-                        reporterName = itemPost.reporterName,
-                        reporterImageRes = itemPost.reporterImageRes,
-                        isAnonymous = itemPost.isAnonymous
+                        reporterName = itemPost.reporter.fullName,
+                        reporterImageRes = itemPost.reporter.profileImageRes,
+                        isAnonymous = itemPost.isAnonymous,
+                        isContactVisible = itemPost.isContactVisible,
+
+                        onClick = {
+                            showContactSheet = true
+                        }
                     )
 
                     Spacer(modifier = Modifier.height(28.dp))
 
-                    OwnershipNoticeSection()
+                    OwnershipNoticeSection(
+                        reportType = itemPost.reportType
+                    )
 
                     Spacer(modifier = Modifier.height(28.dp))
 
@@ -125,12 +138,36 @@ fun ItemDetailScreen(
             PrimaryButton(
                 text =
                     if(itemPost.reportType == ReportType.LOST)
-                        "Lo encontré"
+                        "Tengo información"
                     else
-                        "Reclamar objeto",
+                        "Solicitar reclamación",
                 backgroundColor = FoundActionCardForeground,
                 onClick = {
+                    showRequestSheet = true
+                }
+            )
+        }
 
+        if (showContactSheet) {
+
+            ContactInfoBottomSheet(
+                reporterName = itemPost.reporter.fullName,
+                reporterImageRes = itemPost.reporter.profileImageRes,
+                email = itemPost.reporter.email ?: "",
+                phone = itemPost.reporter.phone ?: "",
+
+                onDismiss = {
+                    showContactSheet = false
+                }
+            )
+        }
+
+        if (showRequestSheet) {
+
+            ClaimRequestBottomSheet(
+                reportType = itemPost.reportType,
+                onDismiss = {
+                    showRequestSheet = false
                 }
             )
         }
