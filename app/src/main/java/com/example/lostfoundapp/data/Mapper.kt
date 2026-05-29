@@ -3,7 +3,6 @@ package com.example.lostfoundapp.data
 import com.example.lostfoundapp.data.model.ItemPost
 import com.example.lostfoundapp.data.model.ReportType
 import com.example.lostfoundapp.data.model.PostResponse
-
 fun PostResponse.toItemPost(): ItemPost {
 
     return ItemPost(
@@ -15,6 +14,8 @@ fun PostResponse.toItemPost(): ItemPost {
         description = description,
 
         location = location?.name ?: "Sin ubicación",
+
+        category = category?.name ?: "Sin nombre",
 
         date = incident_date,
 
@@ -50,8 +51,6 @@ fun PostResponse.toItemPost(): ItemPost {
                 }
             },
 
-        //imageUrl = picture?.url,
-
         reporterName = "Usuario",
 
         reporterImageRes = null,
@@ -59,7 +58,5 @@ fun PostResponse.toItemPost(): ItemPost {
         isAnonymous = false,
 
         isContactVisible = true
-
     )
-
 }

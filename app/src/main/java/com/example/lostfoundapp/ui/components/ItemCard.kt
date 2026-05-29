@@ -49,27 +49,8 @@ fun ItemCard(
     statusBackground: Color,
     statusTextColor: Color,
     imageUrl: String?,
-    //icon: Painter,
     onClick: () -> Unit,
 ) {
-
-    val status =
-        if(itemPost.reportType == ReportType.LOST)
-            "Perdido"
-        else
-            "Encontrado"
-
-    val statusBackground =
-        if(itemPost.reportType == ReportType.LOST)
-            LostBadgeBackground
-        else
-            FoundBadgeBackground
-
-    val statusTextColor =
-        if(itemPost.reportType == ReportType.LOST)
-            LostBadgeText
-        else
-            FoundBadgeText
 
     Box(
         modifier = Modifier
@@ -101,15 +82,6 @@ fun ItemCard(
                     .background(Color(0xFFF3F4F6)),
                 contentAlignment = Alignment.Center
             ) {
-                /*
-                Image(
-                    painter = painterResource(
-                        itemPost.imageRes ?: R.drawable.airpods_case
-                    ),
-                    contentDescription = null,
-                    modifier = Modifier.height(52.dp)
-                )
-                */
 
                 AsyncImage(
                     model = imageUrl,
@@ -127,7 +99,7 @@ fun ItemCard(
             ) {
 
                 Text(
-                    text = itemPost.title,
+                    text = title,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = Color.Black,
@@ -138,7 +110,7 @@ fun ItemCard(
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = itemPost.location,
+                    text = location,
                     color = Color(0xFF707070),
                     fontSize = 15.sp,
                     maxLines = 1,
@@ -148,7 +120,7 @@ fun ItemCard(
                 Spacer(modifier = Modifier.height(2.dp))
 
                 Text(
-                    text = itemPost.date,
+                    text = time,
                     color = Color(0xFF9A9A9A),
                     fontSize = 14.sp,
                     maxLines = 1,
@@ -176,9 +148,7 @@ fun ItemCard(
                 text = status,
                 color = statusTextColor,
                 fontWeight = FontWeight.SemiBold,
-                fontSize = 14.sp,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                fontSize = 14.sp
             )
         }
     }

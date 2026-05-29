@@ -23,7 +23,7 @@ val mockPosts = listOf(
 
         imageRes = R.drawable.airpods_case,
 
-        reporter = anaUser,
+        reporterName = "anaUser",
 
         isAnonymous = false,
 
@@ -47,7 +47,7 @@ val mockPosts = listOf(
 
         imageRes = R.drawable.student_id,
 
-        reporter = carlosUser,
+        reporterName = "carlosUser",
 
         isAnonymous = false,
 
@@ -71,7 +71,7 @@ val mockPosts = listOf(
 
         imageRes = R.drawable.backpack,
 
-        reporter = anonymousUser,
+        reporterName = "anonymousUser",
 
         isAnonymous = true,
 
@@ -95,7 +95,7 @@ val mockPosts = listOf(
 
         imageRes = R.drawable.water_bottle,
 
-        reporter = sofiaUser,
+        reporterName = "sofiaUser",
 
         isAnonymous = false,
 
