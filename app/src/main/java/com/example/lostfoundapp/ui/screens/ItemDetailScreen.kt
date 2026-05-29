@@ -86,8 +86,8 @@ fun ItemDetailScreen(
                     Spacer(modifier = Modifier.height(24.dp))
 
                     ReporterSection(
-                        reporterName = itemPost.reporter.fullName,
-                        reporterImageRes = itemPost.reporter.profileImageRes,
+                        reporterName = itemPost.reporterName,
+                        reporterImageRes = itemPost.reporterImageRes,
                         isAnonymous = itemPost.isAnonymous,
                         isContactVisible = itemPost.isContactVisible,
 
@@ -151,10 +151,10 @@ fun ItemDetailScreen(
         if (showContactSheet) {
 
             ContactInfoBottomSheet(
-                reporterName = itemPost.reporter.fullName,
-                reporterImageRes = itemPost.reporter.profileImageRes,
-                email = itemPost.reporter.email ?: "",
-                phone = itemPost.reporter.phone ?: "",
+                reporterName = itemPost.reporterName,
+                reporterImageRes = itemPost.reporterImageRes,
+                email =  "",
+                phone =  "",
 
                 onDismiss = {
                     showContactSheet = false

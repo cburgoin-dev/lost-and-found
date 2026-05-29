@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import coil.compose.AsyncImage
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,27 +42,15 @@ import com.example.lostfoundapp.ui.theme.LostBadgeText
 
 @Composable
 fun ItemCard(
-    itemPost: ItemPost,
+    title: String,
+    location: String,
+    time: String,
+    status: String,
+    statusBackground: Color,
+    statusTextColor: Color,
+    imageUrl: String?,
     onClick: () -> Unit,
 ) {
-
-    val status =
-        if(itemPost.reportType == ReportType.LOST)
-            "Perdido"
-        else
-            "Encontrado"
-
-    val statusBackground =
-        if(itemPost.reportType == ReportType.LOST)
-            LostBadgeBackground
-        else
-            FoundBadgeBackground
-
-    val statusTextColor =
-        if(itemPost.reportType == ReportType.LOST)
-            LostBadgeText
-        else
-            FoundBadgeText
 
     Box(
         modifier = Modifier
@@ -94,12 +83,12 @@ fun ItemCard(
                 contentAlignment = Alignment.Center
             ) {
 
-                Image(
-                    painter = painterResource(
-                        itemPost.imageRes ?: R.drawable.airpods_case
-                    ),
+                AsyncImage(
+                    model = imageUrl,
                     contentDescription = null,
-                    modifier = Modifier.height(52.dp)
+                    placeholder = painterResource(R.drawable.airpods_case),
+                    error = painterResource(R.drawable.airpods_case),
+                    modifier = Modifier.size(72.dp)
                 )
             }
 
@@ -110,7 +99,7 @@ fun ItemCard(
             ) {
 
                 Text(
-                    text = itemPost.title,
+                    text = title,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = Color.Black,
@@ -121,7 +110,7 @@ fun ItemCard(
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = itemPost.location,
+                    text = location,
                     color = Color(0xFF707070),
                     fontSize = 15.sp,
                     maxLines = 1,
@@ -131,7 +120,7 @@ fun ItemCard(
                 Spacer(modifier = Modifier.height(2.dp))
 
                 Text(
-                    text = itemPost.date,
+                    text = time,
                     color = Color(0xFF9A9A9A),
                     fontSize = 14.sp,
                     maxLines = 1,
@@ -159,14 +148,12 @@ fun ItemCard(
                 text = status,
                 color = statusTextColor,
                 fontWeight = FontWeight.SemiBold,
-                fontSize = 14.sp,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                fontSize = 14.sp
             )
         }
     }
 }
-
+/*
 @Preview(showBackground = true)
 @Composable
 fun ItemCardPreview() {
@@ -192,4 +179,4 @@ fun ItemCardPreview() {
             onClick = {}
         )
     }
-}
+}*/

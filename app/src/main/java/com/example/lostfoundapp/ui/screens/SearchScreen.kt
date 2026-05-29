@@ -34,6 +34,7 @@ import com.example.lostfoundapp.data.mock.categories
 import com.example.lostfoundapp.data.mock.locations
 import com.example.lostfoundapp.data.mock.mockPosts
 import com.example.lostfoundapp.data.model.ItemPost
+import com.example.lostfoundapp.data.model.ReportType
 
 import com.example.lostfoundapp.navigation.Routes
 import com.example.lostfoundapp.ui.components.AppBottomBar
@@ -44,7 +45,13 @@ import com.example.lostfoundapp.ui.components.search.SearchFiltersSection
 import com.example.lostfoundapp.ui.theme.HomeBodyBackground
 import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
 import com.example.lostfoundapp.ui.components.search.SearchInput
+
 import com.example.lostfoundapp.ui.viewmodel.SearchViewModel
+
+import com.example.lostfoundapp.ui.theme.FoundBadgeBackground
+import com.example.lostfoundapp.ui.theme.FoundBadgeText
+import com.example.lostfoundapp.ui.theme.LostBadgeBackground
+import com.example.lostfoundapp.ui.theme.LostBadgeText
 
 @Composable
 fun SearchScreen(
@@ -245,12 +252,36 @@ fun SearchScreen(
                             items(filteredPosts) { item ->
 
                                 ItemCard(
-                                    itemPost = item,
+                                    title = item.title,
+                                    location = item.location,
+                                    time = item.date,
+
+                                    status =
+                                        if(item.reportType == ReportType.LOST)
+                                            "Perdido"
+                                        else
+                                            "Encontrado",
+
+                                    statusBackground =
+                                        if(item.reportType == ReportType.LOST)
+                                            LostBadgeBackground
+                                        else
+                                            FoundBadgeBackground,
+
+                                    statusTextColor =
+                                        if(item.reportType == ReportType.LOST)
+                                            LostBadgeText
+                                        else
+                                            FoundBadgeText,
+
+                                    imageUrl = item.imageUrl,
+
                                     onClick = {
                                         keyboardController?.hide()
                                         onItemClick(item)
                                     }
                                 )
+
                             }
                         }
                     }
