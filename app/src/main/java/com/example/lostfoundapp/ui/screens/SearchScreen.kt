@@ -29,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostfoundapp.data.mock.categories
 import com.example.lostfoundapp.data.mock.locations
 import com.example.lostfoundapp.data.mock.mockPosts
@@ -43,6 +44,7 @@ import com.example.lostfoundapp.ui.components.search.SearchFiltersSection
 import com.example.lostfoundapp.ui.theme.HomeBodyBackground
 import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
 import com.example.lostfoundapp.ui.components.search.SearchInput
+import com.example.lostfoundapp.ui.viewmodel.SearchViewModel
 
 @Composable
 fun SearchScreen(
@@ -55,55 +57,33 @@ fun SearchScreen(
     onProfileClick: () -> Unit
 ) {
 
-    var searchQuery by remember {
-        mutableStateOf("")
-    }
-
-    var selectedCategory by remember {
-        mutableStateOf("")
-    }
-
-    var selectedLocation by remember {
-        mutableStateOf("")
-    }
-
-    var selectedDateFilter by remember {
-        mutableStateOf("Esta semana")
-    }
-
-    var showCategoryDialog by remember {
-        mutableStateOf(false)
-    }
-
-    var showLocationDialog by remember {
-        mutableStateOf(false)
-    }
+    val viewModel: SearchViewModel = viewModel()
 
     val filteredPosts = mockPosts.filter { post ->
 
         val matchesCategory =
-            selectedCategory.isEmpty() ||
-            post.category == selectedCategory
+            viewModel.selectedCategory.isEmpty() ||
+            post.category == viewModel.selectedCategory
 
         val matchesLocation =
-            selectedLocation.isEmpty() ||
+            viewModel.selectedLocation.isEmpty() ||
             post.location.contains(
-                selectedLocation,
+                viewModel.selectedLocation,
                 ignoreCase = true
             )
 
         val matchesSearch =
-            searchQuery.isEmpty() ||
+            viewModel.searchQuery.isEmpty() ||
             post.title.contains(
-                searchQuery,
+                viewModel.searchQuery,
                 ignoreCase = true
             ) ||
             post.location.contains(
-                searchQuery,
+                viewModel.searchQuery,
                 ignoreCase = true
             ) ||
             post.category.contains(
-                searchQuery,
+                viewModel.searchQuery,
                 ignoreCase = true
             )
 
@@ -145,9 +125,9 @@ fun SearchScreen(
             ) {
 
                 SearchInput(
-                    value = searchQuery,
+                    value = viewModel.searchQuery,
                     onValueChange = {
-                        searchQuery = it
+                        viewModel.updateSearchQuery(it)
                     }
                 )
             }
@@ -175,24 +155,24 @@ fun SearchScreen(
                 ) {
 
                     SearchFiltersSection(
-                        selectedCategory = selectedCategory,
-                        selectedLocation = selectedLocation,
+                        selectedCategory = viewModel.selectedCategory,
+                        selectedLocation = viewModel.selectedLocation,
 
                         onCategoryClick = {
-                            showCategoryDialog = true
+                            viewModel.showCategoryDialog()
                         },
 
                         onLocationClick = {
-                            showLocationDialog = true
+                            viewModel.showLocationDialog()
                         }
                     )
 
                     Spacer(modifier = Modifier.height(20.dp))
 
                     DateFilterRow(
-                        selectedFilter = selectedDateFilter,
+                        selectedFilter = viewModel.selectedDateFilter,
                         onFilterSelected = {
-                            selectedDateFilter = it
+                            viewModel.updateDateFilter(it)
                         }
                     )
 
@@ -278,50 +258,40 @@ fun SearchScreen(
             }
         }
 
-        if(showCategoryDialog) {
+        if(viewModel.showCategoryDialog) {
 
             SelectionDialog(
                 title = "Seleccionar categoría",
-                options = listOf(
-                    "Limpiar selección"
-                ) + categories,
+                options = categories,
+                selectedOption = viewModel.selectedCategory,
 
                 onDismiss = {
-                    showCategoryDialog = false
+                    viewModel.hideCategoryDialog()
                 },
 
                 onOptionSelected = {
 
-                    selectedCategory =
-                        if(it == "Limpiar selección")
-                            ""
-                        else
-                            it
-                    showCategoryDialog = false
+                    viewModel.updateCategory(it)
+                    viewModel.hideCategoryDialog()
                 }
             )
         }
 
-        if(showLocationDialog) {
+        if(viewModel.showLocationDialog) {
 
             SelectionDialog(
                 title = "Seleccionar ubicación",
-                options = listOf(
-                    "Limpiar selección"
-                ) + locations,
+                options = locations,
+                selectedOption = viewModel.selectedLocation,
 
                 onDismiss = {
-                    showLocationDialog = false
+                    viewModel.hideLocationDialog()
                 },
 
                 onOptionSelected = {
 
-                    selectedLocation =
-                        if(it == "Limpiar selección")
-                            ""
-                        else
-                            it
-                    showLocationDialog = false
+                    viewModel.updateLocation(it)
+                    viewModel.hideLocationDialog()
                 }
             )
         }

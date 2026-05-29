@@ -19,6 +19,20 @@ fun AppNavigation() {
 
     val currentRoute = navBackStackEntry?.destination?.route
 
+    fun navigateToBottomBarRoute(route: String) {
+
+        navController.navigate(route) {
+
+            popUpTo(navController.graph.startDestinationId) {
+                saveState = true
+            }
+
+            launchSingleTop = true
+
+            restoreState = true
+        }
+    }
+
     NavHost(
         navController = navController,
         startDestination = Routes.Home.route
@@ -108,19 +122,19 @@ fun AppNavigation() {
                 },
 
                 onSearchClick = {
-                    navController.navigate(
+                    navigateToBottomBarRoute(
                         Routes.Search.route
                     )
                 },
 
                 onNotificationsClick = {
-                    navController.navigate(
+                    navigateToBottomBarRoute(
                         Routes.Notifications.route
                     )
                 },
 
                 onProfileClick = {
-                    navController.navigate(
+                    navigateToBottomBarRoute(
                         Routes.Profile.route
                     )
                 }
@@ -142,7 +156,9 @@ fun AppNavigation() {
                 currentRoute = currentRoute,
 
                 onHomeClick = {
-                    navController.navigate(Routes.Home.route)
+                    navigateToBottomBarRoute(
+                        Routes.Home.route
+                    )
                 },
 
                 onSearchClick = {
@@ -150,11 +166,15 @@ fun AppNavigation() {
                 },
 
                 onNotificationsClick = {
-                    navController.navigate(Routes.Notifications.route)
+                    navigateToBottomBarRoute(
+                        Routes.Notifications.route
+                    )
                 },
 
                 onProfileClick = {
-                    navController.navigate(Routes.Profile.route)
+                    navigateToBottomBarRoute(
+                        Routes.Profile.route
+                    )
                 }
             )
         }
@@ -191,11 +211,15 @@ fun AppNavigation() {
                 currentRoute = currentRoute,
 
                 onHomeClick = {
-                    navController.navigate(Routes.Home.route)
+                    navigateToBottomBarRoute(
+                        Routes.Home.route
+                    )
                 },
 
                 onSearchClick = {
-                    navController.navigate(Routes.Search.route)
+                    navigateToBottomBarRoute(
+                        Routes.Search.route
+                    )
                 },
 
                 onNotificationsClick = {
@@ -203,7 +227,9 @@ fun AppNavigation() {
                 },
 
                 onProfileClick = {
-                    navController.navigate(Routes.Profile.route)
+                    navigateToBottomBarRoute(
+                        Routes.Profile.route
+                    )
                 }
             )
         }
@@ -216,15 +242,21 @@ fun AppNavigation() {
                 currentRoute = currentRoute,
 
                 onHomeClick = {
-                    navController.navigate(Routes.Home.route)
+                    navigateToBottomBarRoute(
+                        Routes.Home.route
+                    )
                 },
 
                 onSearchClick = {
-                    navController.navigate(Routes.Search.route)
+                    navigateToBottomBarRoute(
+                        Routes.Search.route
+                    )
                 },
 
                 onNotificationsClick = {
-                    navController.navigate(Routes.Notifications.route)
+                    navigateToBottomBarRoute(
+                        Routes.Notifications.route
+                    )
                 },
 
                 onProfileClick = {

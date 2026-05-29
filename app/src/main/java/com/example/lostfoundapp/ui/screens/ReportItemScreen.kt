@@ -543,6 +543,7 @@ fun ReportItemScreen(
             SelectionDialog(
                 title = "Seleccionar categoría",
                 options = categories,
+                selectedOption = category,
 
                 onDismiss = {
                     showCategoryDialog = false
@@ -562,6 +563,7 @@ fun ReportItemScreen(
             SelectionDialog(
                 title = "Seleccionar ubicación",
                 options = locations,
+                selectedOption = location,
 
                 onDismiss = {
                     showLocationDialog = false
