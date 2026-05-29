@@ -14,6 +14,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.lostfoundapp.data.model.ItemPost
 import com.example.lostfoundapp.data.model.ReportType
 import com.example.lostfoundapp.ui.theme.DetailSecondaryText
 import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
@@ -22,21 +23,17 @@ import com.example.lostfoundapp.ui.theme.TextGray
 
 @Composable
 fun ItemInfoSection(
-    title: String,
-    location: String,
-    date: String,
-    description: String,
-    reportType: ReportType
+    itemPost: ItemPost,
 ) {
 
     val locationLabel =
-        if(reportType == ReportType.FOUND)
+        if(itemPost.reportType == ReportType.FOUND)
             "Encontrado en"
         else
             "Última ubicación conocida"
 
     val dateLabel =
-        if(reportType == ReportType.FOUND)
+        if(itemPost.reportType == ReportType.FOUND)
             "Fecha de hallazgo"
         else
             "Última vez visto"
@@ -48,7 +45,7 @@ fun ItemInfoSection(
     ) {
 
         Text(
-            text = title,
+            text = itemPost.title,
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Black
@@ -80,7 +77,7 @@ fun ItemInfoSection(
                 Spacer(modifier = Modifier.width(8.dp))
 
                 Text(
-                    text = location,
+                    text = itemPost.location,
                     color = Color.Black,
                     fontSize = 16.sp,
                 )
@@ -113,7 +110,7 @@ fun ItemInfoSection(
                 Spacer(modifier = Modifier.width(8.dp))
 
                 Text(
-                    text = date,
+                    text = itemPost.date,
                     color = Color.Black,
                     fontSize = 16.sp,
                 )
@@ -123,7 +120,7 @@ fun ItemInfoSection(
         Spacer(modifier = Modifier.height(20.dp))
 
         Text(
-            text = description,
+            text = itemPost.description,
 
             style = TextStyle(
                 color = Color.Black,

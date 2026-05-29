@@ -82,6 +82,25 @@ fun AppNavigation() {
         ) {
 
             HomeScreen(
+                onLostClick = {
+                    navController.navigate(
+                        Routes.ReportLost.route
+                    )
+                },
+
+                onFoundClick = {
+                    navController.navigate(
+                        Routes.ReportFound.route
+                    )
+                },
+
+                onItemClick = { itemPost ->
+
+                    navController.navigate(
+                        "item_detail/${itemPost.id}"
+                    )
+                },
+
                 currentRoute = currentRoute,
 
                 onHomeClick = {
@@ -91,13 +110,6 @@ fun AppNavigation() {
                 onSearchClick = {
                     navController.navigate(
                         Routes.Search.route
-                    )
-                },
-
-                onItemClick = { itemPost ->
-
-                    navController.navigate(
-                        "item_detail/${itemPost.id}"
                     )
                 },
 
@@ -111,18 +123,6 @@ fun AppNavigation() {
                     navController.navigate(
                         Routes.Profile.route
                     )
-                },
-
-                onLostClick = {
-                    navController.navigate(
-                        Routes.ReportLost.route
-                    )
-                },
-
-                onFoundClick = {
-                    navController.navigate(
-                        Routes.ReportFound.route
-                    )
                 }
             )
         }
@@ -132,6 +132,13 @@ fun AppNavigation() {
         ) {
 
             SearchScreen(
+                onItemClick = { itemPost ->
+
+                    navController.navigate(
+                        "item_detail/${itemPost.id}"
+                    )
+                },
+
                 currentRoute = currentRoute,
 
                 onHomeClick = {

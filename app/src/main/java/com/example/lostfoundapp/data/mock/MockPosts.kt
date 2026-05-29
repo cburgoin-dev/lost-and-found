@@ -15,6 +15,8 @@ val mockPosts = listOf(
 
         location = "Biblioteca Central",
 
+        category = "Audífonos",
+
         date = "20 de mayo, 2026",
 
         reportType = ReportType.LOST,
@@ -36,6 +38,8 @@ val mockPosts = listOf(
         description = "Credencial encontrada cerca del Edificio A.",
 
         location = "Edificio A",
+
+        category = "Documentos",
 
         date = "21 de mayo, 2026",
 
@@ -61,6 +65,8 @@ val mockPosts = listOf(
 
         date = "22 de mayo, 2026",
 
+        category = "Mochilas",
+
         reportType = ReportType.LOST,
 
         imageRes = R.drawable.backpack,
@@ -82,6 +88,8 @@ val mockPosts = listOf(
         location = "Cafetería",
 
         date = "23 de mayo, 2026",
+
+        category = "Botellas",
 
         reportType = ReportType.FOUND,
 

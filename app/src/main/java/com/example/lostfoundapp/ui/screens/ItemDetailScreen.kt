@@ -72,11 +72,7 @@ fun ItemDetailScreen(
                     Spacer(modifier = Modifier.height(24.dp))
 
                     ItemInfoSection(
-                        title = itemPost.title,
-                        location = itemPost.location,
-                        date = itemPost.date,
-                        description = itemPost.description,
-                        reportType = itemPost.reportType
+                        itemPost = itemPost
                     )
 
                     Spacer(modifier = Modifier.height(24.dp))

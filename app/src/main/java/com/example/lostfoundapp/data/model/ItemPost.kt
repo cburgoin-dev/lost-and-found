@@ -10,6 +10,8 @@ data class ItemPost(
 
     val location: String,
 
+    val category: String,
+
     val date: String,
 
     val reportType: ReportType,

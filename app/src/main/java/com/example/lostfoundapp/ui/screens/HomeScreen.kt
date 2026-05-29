@@ -59,11 +59,11 @@ fun HomeScreen(
     username: String = "Cristian",
     onLostClick: () -> Unit,
     onFoundClick: () -> Unit,
+    onItemClick: (ItemPost) -> Unit,
 
     currentRoute: String?,
     onHomeClick: () -> Unit,
     onSearchClick: () -> Unit,
-    onItemClick: (ItemPost) -> Unit,
     onNotificationsClick: () -> Unit,
     onProfileClick: () -> Unit
 ) {
@@ -189,7 +189,7 @@ fun HomeScreen(
                         top = 26.dp
                     ),
 
-                contentPadding = PaddingValues(bottom = 120.dp),
+                contentPadding = PaddingValues(bottom = 144.dp),
 
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
@@ -230,7 +230,7 @@ fun HomeScreen(
                     Text(
                         text = "Recientes en el campus",
                         fontSize = 22.sp,
-                        fontWeight = FontWeight.SemiBold,
+                        fontWeight = FontWeight.Medium,
                         color = Color.Black
                     )
                 }
@@ -238,27 +238,7 @@ fun HomeScreen(
                 items(mockPosts) { item ->
 
                     ItemCard(
-                        title = item.title,
-                        location = item.location,
-                        time = item.date,
-                        status =
-                            if(item.reportType == ReportType.LOST)
-                                "Perdido"
-                            else
-                                "Encontrado",
-                        statusBackground =
-                            if(item.reportType == ReportType.LOST)
-                                LostBadgeBackground
-                            else
-                                FoundBadgeBackground,
-                        statusTextColor =
-                            if(item.reportType == ReportType.LOST)
-                                LostBadgeText
-                            else
-                                FoundBadgeText,
-                        icon = painterResource(
-                            item.imageRes ?: R.drawable.airpods_case
-                        ),
+                        itemPost = item,
                         onClick = {
                             onItemClick(item)
                         }
@@ -291,11 +271,11 @@ fun HomeScreenPreview(){
         username = "Cristian",
         onLostClick = {},
         onFoundClick = {},
+        onItemClick = {},
 
         currentRoute = Routes.Home.route,
         onHomeClick = {},
         onSearchClick = {},
-        onItemClick = {},
         onNotificationsClick = {},
         onProfileClick = {}
     )
