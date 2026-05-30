@@ -19,7 +19,7 @@ import com.example.lostfoundapp.data.mock.mockPosts
 import com.example.lostfoundapp.data.model.ItemPost
 import com.example.lostfoundapp.data.model.ReportType
 import com.example.lostfoundapp.ui.components.PrimaryButton
-import com.example.lostfoundapp.ui.components.itemdetail.ClaimRequestBottomSheet
+import com.example.lostfoundapp.ui.components.itemdetail.CreateRequestBottomSheet
 import com.example.lostfoundapp.ui.components.itemdetail.ContactInfoBottomSheet
 import com.example.lostfoundapp.ui.components.itemdetail.ItemDetailActionsRow
 import com.example.lostfoundapp.ui.components.itemdetail.ItemHeroSection
@@ -164,7 +164,7 @@ fun ItemDetailScreen(
 
         if (showRequestSheet) {
 
-            ClaimRequestBottomSheet(
+            CreateRequestBottomSheet(
                 reportType = itemPost.reportType,
                 onDismiss = {
                     showRequestSheet = false

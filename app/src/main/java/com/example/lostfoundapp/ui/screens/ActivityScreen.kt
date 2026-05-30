@@ -1,0 +1,161 @@
+package com.example.lostfoundapp.ui.screens
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.lostfoundapp.data.mock.mockRequests
+import com.example.lostfoundapp.navigation.Routes
+import com.example.lostfoundapp.ui.components.AppBottomBar
+import com.example.lostfoundapp.ui.components.activity.ActivityTabRow
+import com.example.lostfoundapp.ui.components.activity.RequestCard
+import com.example.lostfoundapp.ui.theme.HomeBodyBackground
+import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
+
+@Composable
+fun ActivityScreen(
+    currentRoute: String?,
+    onHomeClick: () -> Unit,
+    onSearchClick: () -> Unit,
+    onActivityClick: () -> Unit,
+    onProfileClick: () -> Unit,
+) {
+
+    var selectedTab by remember {
+        mutableStateOf("Solicitudes")
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+    ) {
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(HomeHeaderBlue)
+        ) {
+
+            Spacer(modifier = Modifier.height(56.dp))
+
+            Text(
+                text = "Actividad",
+                color = Color.White,
+                fontSize = 34.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(horizontal = 24.dp)
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            ActivityTabRow(
+                selectedTab = selectedTab,
+                onTabSelected = {
+                    selectedTab = it
+                },
+                modifier = Modifier.padding(horizontal = 24.dp)
+            )
+
+            Spacer(
+                modifier = Modifier.height(24.dp)
+            )
+
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .clip(
+                        RoundedCornerShape(
+                            topStart = 32.dp,
+                            topEnd = 32.dp
+                        )
+                    )
+                    .background(HomeBodyBackground)
+            ) {
+
+                Column (
+                    modifier = Modifier.padding(
+                        horizontal = 20.dp,
+                        vertical = 24.dp
+                    )
+                ) {
+
+                    if(selectedTab == "Solicitudes") {
+
+                        LazyColumn(
+                            modifier = Modifier.weight(1f),
+                            contentPadding = PaddingValues(bottom = 120.dp),
+                            verticalArrangement = Arrangement.spacedBy(20.dp)
+                        ) {
+
+                            items(mockRequests) { request ->
+
+                                RequestCard(
+                                    request = request,
+                                    onClick = {
+
+                                    }
+                                )
+                            }
+                        }
+
+                    } else {
+
+                        Text("Notificaciones")
+                    }
+                }
+            }
+        }
+
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Bottom
+        ) {
+
+            AppBottomBar(
+                currentRoute = currentRoute,
+                onHomeClick = onHomeClick,
+                onSearchClick = onSearchClick,
+                onActivityClick = onActivityClick,
+                onProfileClick = onProfileClick
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ActivityScreenPreview() {
+
+    ActivityScreen(
+        currentRoute = Routes.Activity.route,
+        onHomeClick = {},
+        onSearchClick = {},
+        onActivityClick = {},
+        onProfileClick = {}
+    )
+}

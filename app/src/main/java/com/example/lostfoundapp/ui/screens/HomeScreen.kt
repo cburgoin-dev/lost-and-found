@@ -73,7 +73,7 @@ fun HomeScreen(
     currentRoute: String?,
     onHomeClick: () -> Unit,
     onSearchClick: () -> Unit,
-    onNotificationsClick: () -> Unit,
+    onActivityClick: () -> Unit,
     onProfileClick: () -> Unit
 ) {
     var posts by remember {
@@ -196,7 +196,7 @@ fun HomeScreen(
                         modifier = Modifier
                             .size(26.dp)
                             .clickable {
-                                onNotificationsClick()
+                                onActivityClick()
                             }
                     )
                 }
@@ -283,7 +283,7 @@ fun HomeScreen(
 
                     Text(
                         text = "Recientes en el campus",
-                        fontSize = 22.sp,
+                        fontSize = 20.sp,
                         fontWeight = FontWeight.Medium,
                         color = Color.Black
                     )
@@ -328,7 +328,7 @@ fun HomeScreen(
                 currentRoute = currentRoute,
                 onHomeClick = onHomeClick,
                 onSearchClick = onSearchClick,
-                onNotificationsClick = onNotificationsClick,
+                onActivityClick = onActivityClick,
                 onProfileClick = onProfileClick
             )
         }
@@ -348,7 +348,7 @@ fun HomeScreenPreview(){
         currentRoute = Routes.Home.route,
         onHomeClick = {},
         onSearchClick = {},
-        onNotificationsClick = {},
+        onActivityClick = {},
         onProfileClick = {}
     )
 }

@@ -57,3 +57,15 @@ val SwitchUncheckedThumb = Color.White
 val ErrorRed = Color(0xFFE53935)
 
 val DetailSecondaryText = Color(0xFF5F6368)
+
+val PendingBadgeBackground = Color(0xFFFFF4CC)
+val PendingBadgeText = Color(0xFF8A6D1F)
+
+val ApprovedBadgeBackground = Color(0xFFDDF5E5)
+val ApprovedBadgeText = Color(0xFF1E7A4D)
+
+val RejectedBadgeBackground = LostBadgeBackground
+val RejectedBadgeText = LostBadgeText
+
+val ReadBadgeBackground = FoundBadgeBackground
+val ReadBadgeText = FoundBadgeText

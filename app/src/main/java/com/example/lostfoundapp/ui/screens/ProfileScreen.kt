@@ -19,7 +19,7 @@ fun ProfileScreen(
     currentRoute: String?,
     onHomeClick: () -> Unit,
     onSearchClick: () -> Unit,
-    onNotificationsClick: () -> Unit,
+    onActivityClick: () -> Unit,
     onProfileClick: () -> Unit,
 ) {
 
@@ -46,7 +46,7 @@ fun ProfileScreen(
                 currentRoute = currentRoute,
                 onHomeClick = onHomeClick,
                 onSearchClick = onSearchClick,
-                onNotificationsClick = onNotificationsClick,
+                onActivityClick = onActivityClick,
                 onProfileClick = onProfileClick
             )
         }
@@ -61,7 +61,7 @@ fun ProfileScreenPreview() {
         currentRoute = Routes.Profile.route,
         onHomeClick = {},
         onSearchClick = {},
-        onNotificationsClick = {},
+        onActivityClick = {},
         onProfileClick = {}
     )
 }

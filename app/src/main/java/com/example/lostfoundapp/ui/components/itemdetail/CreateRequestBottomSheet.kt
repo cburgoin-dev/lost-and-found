@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -25,7 +24,7 @@ import com.example.lostfoundapp.ui.theme.DetailSecondaryText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ClaimRequestBottomSheet(
+fun CreateRequestBottomSheet(
     reportType: ReportType,
     onDismiss: () -> Unit
 ) {

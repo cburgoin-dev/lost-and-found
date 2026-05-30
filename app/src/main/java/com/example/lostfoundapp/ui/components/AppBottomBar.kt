@@ -25,7 +25,7 @@ fun AppBottomBar(
     currentRoute: String?,
     onHomeClick: () -> Unit,
     onSearchClick: () -> Unit,
-    onNotificationsClick: () -> Unit,
+    onActivityClick: () -> Unit,
     onProfileClick: () -> Unit,
 ) {
 
@@ -70,11 +70,11 @@ fun AppBottomBar(
             )
 
             BottomBarItem(
-                label = "Alertas",
+                label = "Actividad",
                 icon = Icons.Filled.Notifications,
-                selected = currentRoute == Routes.Notifications.route,
+                selected = currentRoute == Routes.Activity.route,
                 onClick = {
-                    onNotificationsClick()
+                    onActivityClick()
                 },
                 modifier = Modifier.weight(1f)
             )

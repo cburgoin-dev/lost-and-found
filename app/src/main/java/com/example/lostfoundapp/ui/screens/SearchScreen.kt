@@ -60,7 +60,7 @@ fun SearchScreen(
     currentRoute: String?,
     onHomeClick: () -> Unit,
     onSearchClick: () -> Unit,
-    onNotificationsClick: () -> Unit,
+    onActivityClick: () -> Unit,
     onProfileClick: () -> Unit
 ) {
 
@@ -336,7 +336,7 @@ fun SearchScreen(
                 currentRoute = currentRoute,
                 onHomeClick = onHomeClick,
                 onSearchClick = onSearchClick,
-                onNotificationsClick = onNotificationsClick,
+                onActivityClick = onActivityClick,
                 onProfileClick = onProfileClick
             )
         }
@@ -351,7 +351,7 @@ fun SearchScreenPreview() {
         currentRoute = Routes.Search.route,
         onHomeClick = {},
         onSearchClick = {},
-        onNotificationsClick = {},
+        onActivityClick = {},
         onProfileClick = {},
         onItemClick = {}
     )

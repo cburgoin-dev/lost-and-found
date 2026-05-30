@@ -16,7 +16,7 @@ sealed class Routes(
 
     object ItemDetail : Routes("item_detail/{itemId}")
 
-    object Notifications : Routes("notifications")
+    object Activity : Routes("activity")
 
     object Profile : Routes("profile")
 

@@ -35,7 +35,7 @@ fun AppNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = Routes.Login.route
+        startDestination = Routes.Home.route
     ) {
 
         composable(
@@ -127,9 +127,9 @@ fun AppNavigation() {
                     )
                 },
 
-                onNotificationsClick = {
+                onActivityClick = {
                     navigateToBottomBarRoute(
-                        Routes.Notifications.route
+                        Routes.Activity.route
                     )
                 },
 
@@ -165,9 +165,9 @@ fun AppNavigation() {
 
                 },
 
-                onNotificationsClick = {
+                onActivityClick = {
                     navigateToBottomBarRoute(
-                        Routes.Notifications.route
+                        Routes.Activity.route
                     )
                 },
 
@@ -204,10 +204,10 @@ fun AppNavigation() {
         }
 
         composable(
-            Routes.Notifications.route
+            Routes.Activity.route
         ) {
 
-            NotificationsScreen(
+            ActivityScreen(
                 currentRoute = currentRoute,
 
                 onHomeClick = {
@@ -222,7 +222,7 @@ fun AppNavigation() {
                     )
                 },
 
-                onNotificationsClick = {
+                onActivityClick = {
 
                 },
 
@@ -253,9 +253,9 @@ fun AppNavigation() {
                     )
                 },
 
-                onNotificationsClick = {
+                onActivityClick = {
                     navigateToBottomBarRoute(
-                        Routes.Notifications.route
+                        Routes.Activity.route
                     )
                 },
 
