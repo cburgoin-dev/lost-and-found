@@ -6,7 +6,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -54,9 +53,8 @@ fun ItemDetailScreen(
             item {
 
                 ItemHeroSection(
-                    imageRes = itemPost.imageRes ?: R.drawable.airpods_case,
+                    imageUrl = itemPost.imageUrl,
                     reportType = itemPost.reportType,
-
                     onBackClick = onBackClick
                 )
             }
@@ -141,7 +139,9 @@ fun ItemDetailScreen(
                         "Tengo información"
                     else
                         "Solicitar reclamación",
+
                 backgroundColor = FoundActionCardForeground,
+
                 onClick = {
                     showRequestSheet = true
                 }
@@ -153,8 +153,8 @@ fun ItemDetailScreen(
             ContactInfoBottomSheet(
                 reporterName = itemPost.reporterName,
                 reporterImageRes = itemPost.reporterImageRes,
-                email =  "",
-                phone =  "",
+                email = "",
+                phone = "",
 
                 onDismiss = {
                     showContactSheet = false
@@ -166,6 +166,7 @@ fun ItemDetailScreen(
 
             CreateRequestBottomSheet(
                 reportType = itemPost.reportType,
+
                 onDismiss = {
                     showRequestSheet = false
                 }

@@ -2,16 +2,22 @@ package com.example.lostfoundapp.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.navigation.compose.*
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.lostfoundapp.data.mock.mockPosts
+import com.example.lostfoundapp.data.model.ItemPost
 
 import com.example.lostfoundapp.ui.screens.*
 import com.example.lostfoundapp.data.model.ReportType
 
 @Composable
 fun AppNavigation() {
-
+    var selectedPost by remember {
+        mutableStateOf<ItemPost?>(null)
+    }
     val navController =
         rememberNavController()
 
@@ -110,6 +116,8 @@ fun AppNavigation() {
 
                 onItemClick = { itemPost ->
 
+                    selectedPost = itemPost
+
                     navController.navigate(
                         "item_detail/${itemPost.id}"
                     )
@@ -148,6 +156,8 @@ fun AppNavigation() {
             SearchScreen(
                 onItemClick = { itemPost ->
 
+                    selectedPost = itemPost
+
                     navController.navigate(
                         "item_detail/${itemPost.id}"
                     )
@@ -181,21 +191,12 @@ fun AppNavigation() {
 
         composable(
             route = Routes.ItemDetail.route
-        ) { backStackEntry ->
+        ) {
 
-            val itemId =
-                backStackEntry.arguments
-                    ?.getString("itemId")
-                    ?.toIntOrNull()
-
-            val itemPost =
-                mockPosts.find { it.id == itemId }
-
-            itemPost?.let {
+            selectedPost?.let { itemPost ->
 
                 ItemDetailScreen(
-                    itemPost = it,
-
+                    itemPost = itemPost,
                     onBackClick = {
                         navController.popBackStack()
                     }
