@@ -18,6 +18,8 @@ sealed class Routes(
 
     object Activity : Routes("activity")
 
+    object RequestDetail : Routes("request_detail/{requestId}")
+
     object Profile : Routes("profile")
 
     object ReportLost :

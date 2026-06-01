@@ -8,16 +8,28 @@ import androidx.compose.runtime.setValue
 import androidx.navigation.compose.*
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.lostfoundapp.data.mock.mockPosts
+import com.example.lostfoundapp.data.mock.mockRequests
 import com.example.lostfoundapp.data.model.ItemPost
+import com.example.lostfoundapp.data.model.NotificationType
 
 import com.example.lostfoundapp.ui.screens.*
 import com.example.lostfoundapp.data.model.ReportType
+import com.example.lostfoundapp.data.model.Request
 
 @Composable
 fun AppNavigation() {
     var selectedPost by remember {
         mutableStateOf<ItemPost?>(null)
     }
+
+    var selectedRequest by remember {
+        mutableStateOf<Request?>(null)
+    }
+
+    var hasUnreadActivity by remember {
+        mutableStateOf(true)
+    }
+
     val navController =
         rememberNavController()
 
@@ -102,6 +114,8 @@ fun AppNavigation() {
         ) {
 
             HomeScreen(
+                hasUnreadActivity = hasUnreadActivity,
+
                 onLostClick = {
                     navController.navigate(
                         Routes.ReportLost.route
@@ -136,6 +150,8 @@ fun AppNavigation() {
                 },
 
                 onActivityClick = {
+                    hasUnreadActivity = false
+
                     navigateToBottomBarRoute(
                         Routes.Activity.route
                     )
@@ -176,6 +192,8 @@ fun AppNavigation() {
                 },
 
                 onActivityClick = {
+                    hasUnreadActivity = false
+
                     navigateToBottomBarRoute(
                         Routes.Activity.route
                     )
@@ -231,8 +249,61 @@ fun AppNavigation() {
                     navigateToBottomBarRoute(
                         Routes.Profile.route
                     )
+                },
+
+                onRequestClick = { request ->
+                    selectedRequest = request
+
+                    navController.navigate(
+                        Routes.RequestDetail.route
+                    )
+                },
+
+                onNotificationClick = { notification ->
+
+                    when(notification.type) {
+
+                        NotificationType.REQUEST_APPROVED,
+                        NotificationType.MATCH_FOUND -> {
+
+                            notification.relatedItemId?.let { itemId ->
+
+                                selectedPost =
+                                    mockPosts.firstOrNull {
+                                        it.id == itemId
+                                    }
+
+                                navController.navigate(
+                                    "item_detail/$itemId"
+                                )
+                            }
+                        }
+
+                        NotificationType.REQUEST_REJECTED,
+                        NotificationType.SYSTEM -> {
+
+                            // No navigation
+                        }
+                    }
                 }
             )
+        }
+
+        composable(
+            Routes.RequestDetail.route
+        ) {
+
+            selectedRequest?.let { request ->
+
+                RequestDetailScreen(
+                    request = request,
+                    onBackClick = {
+                        navController.popBackStack()
+                    },
+                    onApproveClick = {},
+                    onRejectClick = {}
+                )
+            }
         }
 
         composable(
@@ -255,6 +326,8 @@ fun AppNavigation() {
                 },
 
                 onActivityClick = {
+                    hasUnreadActivity = false
+
                     navigateToBottomBarRoute(
                         Routes.Activity.route
                     )

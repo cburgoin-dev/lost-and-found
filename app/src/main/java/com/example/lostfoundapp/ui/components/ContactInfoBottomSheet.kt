@@ -1,4 +1,4 @@
-package com.example.lostfoundapp.ui.components.itemdetail
+package com.example.lostfoundapp.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -37,10 +37,10 @@ import com.example.lostfoundapp.ui.theme.TextGray
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContactInfoBottomSheet(
-    reporterName: String,
-    reporterImageRes: Int?,
-    email: String,
-    phone: String,
+    userName: String,
+    userImageRes: Int?,
+    email: String?,
+    phone: String?,
     onDismiss: () -> Unit
 ) {
 
@@ -70,10 +70,10 @@ fun ContactInfoBottomSheet(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            if (reporterImageRes != null) {
+            if (userImageRes != null) {
 
                 Image(
-                    painter = painterResource(reporterImageRes),
+                    painter = painterResource(userImageRes),
                     contentDescription = null,
 
                     modifier = Modifier
@@ -105,7 +105,7 @@ fun ContactInfoBottomSheet(
             Spacer(modifier = Modifier.height(18.dp))
 
             Text(
-                text = reporterName,
+                text = userName,
                 fontSize = 22.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = Color.Black,
@@ -114,39 +114,45 @@ fun ContactInfoBottomSheet(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            ContactInfoItem(
-                icon = Icons.Outlined.Email,
-                text = email,
-                onClick = {
-                    clipboardManager.setText(
-                        AnnotatedString(email)
-                    )
+            if (!email.isNullOrBlank()) {
 
-                    Toast.makeText(
-                        context,
-                        "Correo copiado",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            )
+                ContactInfoItem(
+                    icon = Icons.Outlined.Email,
+                    text = email,
+                    onClick = {
+                        clipboardManager.setText(
+                            AnnotatedString(email)
+                        )
+
+                        Toast.makeText(
+                            context,
+                            "Correo copiado",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                )
+            }
 
             Spacer(modifier = Modifier.height(14.dp))
 
-            ContactInfoItem(
-                icon = Icons.Outlined.Phone,
-                text = phone,
-                onClick = {
-                    clipboardManager.setText(
-                        AnnotatedString(phone)
-                    )
+            if (!phone.isNullOrBlank()) {
 
-                    Toast.makeText(
-                        context,
-                        "Número copiado",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            )
+                ContactInfoItem(
+                    icon = Icons.Outlined.Phone,
+                    text = phone,
+                    onClick = {
+                        clipboardManager.setText(
+                            AnnotatedString(phone)
+                        )
+
+                        Toast.makeText(
+                            context,
+                            "Número copiado",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                )
+            }
 
             Spacer(modifier = Modifier.height(20.dp))
 
@@ -165,7 +171,7 @@ fun ContactInfoBottomSheet(
 @Composable
 private fun ContactInfoItem(
     icon: ImageVector,
-    text: String,
+    text: String?,
     onClick: () -> Unit
 ) {
 
@@ -191,7 +197,7 @@ private fun ContactInfoItem(
         Spacer(modifier = Modifier.width(14.dp))
 
         Text(
-            text = text,
+            text = text ?: "No disponible",
             fontSize = 16.sp,
             color = Color.Black
         )

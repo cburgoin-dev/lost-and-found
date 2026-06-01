@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
@@ -32,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -66,6 +68,7 @@ import com.example.lostfoundapp.data.toItemPost
 @Composable
 fun HomeScreen(
     username: String = "Cristian",
+    hasUnreadActivity: Boolean,
     onLostClick: () -> Unit,
     onFoundClick: () -> Unit,
     onItemClick: (ItemPost) -> Unit,
@@ -189,16 +192,32 @@ fun HomeScreen(
                         }
                     }
 
-                    Icon(
-                        imageVector = Icons.Outlined.NotificationsNone,
-                        contentDescription = null,
-                        tint = Color.White,
-                        modifier = Modifier
-                            .size(26.dp)
-                            .clickable {
-                                onActivityClick()
-                            }
-                    )
+                    Box {
+
+                        Icon(
+                            imageVector = Icons.Outlined.NotificationsNone,
+                            contentDescription = null,
+                            tint = Color.White,
+                            modifier = Modifier
+                                .size(26.dp)
+                                .clickable {
+                                    onActivityClick()
+                                }
+                        )
+
+                        if (hasUnreadActivity) {
+
+                            Box(
+                                modifier = Modifier
+                                    .size(10.dp)
+                                    .align(Alignment.TopEnd)
+                                    .clip(CircleShape)
+                                    .background(
+                                        Color(0xFFD32F2F)
+                                    )
+                            )
+                        }
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(42.dp))
@@ -326,6 +345,7 @@ fun HomeScreen(
 
             AppBottomBar(
                 currentRoute = currentRoute,
+                hasUnreadActivity = hasUnreadActivity,
                 onHomeClick = onHomeClick,
                 onSearchClick = onSearchClick,
                 onActivityClick = onActivityClick,
@@ -341,6 +361,8 @@ fun HomeScreenPreview(){
 
     HomeScreen(
         username = "Cristian",
+        hasUnreadActivity = true,
+
         onLostClick = {},
         onFoundClick = {},
         onItemClick = {},

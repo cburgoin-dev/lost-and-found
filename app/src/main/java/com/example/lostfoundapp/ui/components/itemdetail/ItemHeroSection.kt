@@ -40,7 +40,7 @@ fun ItemHeroSection(
         AsyncImage(
             model = imageUrl,
             contentDescription = null,
-            contentScale = ContentScale.Crop,
+            contentScale = ContentScale.Fit,
             modifier = Modifier.fillMaxSize(),
 
             placeholder = painterResource(R.drawable.airpods_case),

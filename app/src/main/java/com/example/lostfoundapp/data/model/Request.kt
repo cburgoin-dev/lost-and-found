@@ -8,13 +8,13 @@ data class Request(
 
     val itemName: String,
 
-    val senderName: String,
+    val itemImageRes: Int? = null,
+
+    val sender: User,
 
     val description: String,
 
     val additionalMessage: String,
-
-    val contactInfo: String,
 
     val status: RequestStatus,
 

@@ -1,4 +1,4 @@
-package com.example.lostfoundapp.ui.components.itemdetail
+package com.example.lostfoundapp.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,6 +19,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.lostfoundapp.ui.theme.DetailSecondaryText
@@ -27,22 +29,26 @@ import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
 import com.example.lostfoundapp.ui.theme.TextGray
 
 @Composable
-fun ReporterSection(
-    reporterName: String,
-    reporterImageRes: Int?,
+fun UserInfoSection(
+    title: String,
+    userName: String,
+    userImageRes: Int?,
     isAnonymous: Boolean,
     isContactVisible: Boolean,
+    horizontalPadding: Dp = 20.dp,
+    secondaryText: String? = null,
+    showAsCard: Boolean = false,
     onClick: (() -> Unit)? = null
 ) {
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp)
+            .padding(horizontal = horizontalPadding)
     ) {
 
         Text(
-            text = "Publicado por",
+            text = title,
             color = HomeHeaderBlue,
             fontSize = 15.sp,
             fontWeight = FontWeight.Medium
@@ -55,10 +61,15 @@ fun ReporterSection(
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(18.dp))
                 .background(
-                    if (isContactVisible) {
-                        HomeHeaderBlue.copy(alpha = 0.08f)
-                    } else {
-                        Color.Transparent
+                    when {
+                        showAsCard ->
+                            HomeHeaderBlue.copy(alpha = 0.06f)
+
+                        isContactVisible ->
+                            HomeHeaderBlue.copy(alpha = 0.08f)
+
+                        else ->
+                            Color.Transparent
                     }
                 )
                 .clickable(
@@ -71,7 +82,7 @@ fun ReporterSection(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            if(isAnonymous || reporterImageRes == null) {
+            if(isAnonymous || userImageRes == null) {
 
                 Box(
                     modifier = Modifier
@@ -92,7 +103,7 @@ fun ReporterSection(
             } else {
 
                 Image(
-                    painter = painterResource(reporterImageRes),
+                    painter = painterResource(userImageRes),
                     contentDescription = null,
 
                     modifier = Modifier
@@ -114,21 +125,26 @@ fun ReporterSection(
                         if(isAnonymous)
                             "Usuario anónimo"
                         else
-                            reporterName,
+                            userName,
 
-                    fontSize = 18.sp,
+                    fontSize = 17.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = Color.Black
+                    color = Color.Black,
+
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
 
                 Spacer(modifier = Modifier.height(2.dp))
 
                 Text(
-                    text =
+                    text = secondaryText ?: run {
+
                         if (isAnonymous || !isContactVisible)
                             "La información será compartida durante el proceso de contacto."
                         else
-                            "Toca para ver la información de contacto.",
+                            "Toca para ver la información de contacto."
+                    },
 
                     color = DetailSecondaryText,
                     fontSize = 14.sp

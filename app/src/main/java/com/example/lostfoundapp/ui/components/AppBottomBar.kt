@@ -23,6 +23,7 @@ import com.example.lostfoundapp.ui.theme.BottomBarDivider
 
 fun AppBottomBar(
     currentRoute: String?,
+    hasUnreadActivity: Boolean = false,
     onHomeClick: () -> Unit,
     onSearchClick: () -> Unit,
     onActivityClick: () -> Unit,
@@ -73,6 +74,7 @@ fun AppBottomBar(
                 label = "Actividad",
                 icon = Icons.Filled.Notifications,
                 selected = currentRoute == Routes.Activity.route,
+                showBadge = hasUnreadActivity,
                 onClick = {
                     onActivityClick()
                 },

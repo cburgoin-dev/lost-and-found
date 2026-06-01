@@ -13,18 +13,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
-import com.example.lostfoundapp.R
 import com.example.lostfoundapp.data.mock.mockPosts
 import com.example.lostfoundapp.data.model.ItemPost
 import com.example.lostfoundapp.data.model.ReportType
 import com.example.lostfoundapp.ui.components.PrimaryButton
 import com.example.lostfoundapp.ui.components.itemdetail.CreateRequestBottomSheet
-import com.example.lostfoundapp.ui.components.itemdetail.ContactInfoBottomSheet
+import com.example.lostfoundapp.ui.components.ContactInfoBottomSheet
 import com.example.lostfoundapp.ui.components.itemdetail.ItemDetailActionsRow
 import com.example.lostfoundapp.ui.components.itemdetail.ItemHeroSection
 import com.example.lostfoundapp.ui.components.itemdetail.ItemInfoSection
 import com.example.lostfoundapp.ui.components.itemdetail.OwnershipNoticeSection
-import com.example.lostfoundapp.ui.components.itemdetail.ReporterSection
+import com.example.lostfoundapp.ui.components.UserInfoSection
 import com.example.lostfoundapp.ui.theme.BorderGray
 import com.example.lostfoundapp.ui.theme.FoundActionCardForeground
 
@@ -83,11 +82,14 @@ fun ItemDetailScreen(
 
                     Spacer(modifier = Modifier.height(24.dp))
 
-                    ReporterSection(
-                        reporterName = itemPost.reporterName,
-                        reporterImageRes = itemPost.reporterImageRes,
+                    UserInfoSection(
+                        title = "Publicado por",
+                        userName = itemPost.reporterName,
+                        userImageRes = itemPost.reporterImageRes,
                         isAnonymous = itemPost.isAnonymous,
                         isContactVisible = itemPost.isContactVisible,
+                        horizontalPadding = 20.dp,
+                        showAsCard = false,
 
                         onClick = {
                             showContactSheet = true
@@ -151,8 +153,8 @@ fun ItemDetailScreen(
         if (showContactSheet) {
 
             ContactInfoBottomSheet(
-                reporterName = itemPost.reporterName,
-                reporterImageRes = itemPost.reporterImageRes,
+                userName = itemPost.reporterName,
+                userImageRes = itemPost.reporterImageRes,
                 email = "",
                 phone = "",
 

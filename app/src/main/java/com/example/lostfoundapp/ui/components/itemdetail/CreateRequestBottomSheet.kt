@@ -49,8 +49,8 @@ fun CreateRequestBottomSheet(
         mutableStateOf("")
     }
 
-    var contactInput by remember {
-        mutableStateOf("")
+    var shareContactInfo by remember {
+        mutableStateOf(true)
     }
 
     val primaryLabel =
@@ -65,8 +65,11 @@ fun CreateRequestBottomSheet(
         else
             "Mensaje adicional (opcional)"
 
-    val contactLabel =
-        "Correo o teléfono de contacto"
+    val contactInfoText =
+        if (reportType == ReportType.LOST)
+            "Tu información de contacto será compartida únicamente si el propietario aprueba esta información."
+        else
+            "Tu información de contacto será compartida únicamente si la solicitud es aprobada."
 
     val buttonText =
         if(reportType == ReportType.LOST)
@@ -131,18 +134,8 @@ fun CreateRequestBottomSheet(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            CustomInput(
-                value = contactInput,
-                placeholder = contactLabel,
-                onValueChange = {
-                    contactInput = it
-                }
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
-
             Text(
-                text = "Tu información solo será compartida con el usuario de esta publicación.",
+                text = contactInfoText,
                 fontSize = 13.sp,
                 lineHeight = 20.sp,
                 color = DetailSecondaryText

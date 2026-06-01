@@ -55,6 +55,7 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation(libs.androidx.ui)
+    implementation(libs.androidx.compose.ui.unit)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

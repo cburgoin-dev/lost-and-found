@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,26 +28,32 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+
+import com.example.lostfoundapp.data.mock.mockNotifications
 import com.example.lostfoundapp.data.mock.mockRequests
+import com.example.lostfoundapp.data.model.Notification
+import com.example.lostfoundapp.data.model.Request
 import com.example.lostfoundapp.navigation.Routes
 import com.example.lostfoundapp.ui.components.AppBottomBar
 import com.example.lostfoundapp.ui.components.activity.ActivityTabRow
+import com.example.lostfoundapp.ui.components.activity.NotificationCard
 import com.example.lostfoundapp.ui.components.activity.RequestCard
 import com.example.lostfoundapp.ui.theme.HomeBodyBackground
 import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
+import com.example.lostfoundapp.ui.viewmodel.ActivityViewModel
 
 @Composable
 fun ActivityScreen(
     currentRoute: String?,
+    activityViewModel: ActivityViewModel = viewModel(),
     onHomeClick: () -> Unit,
     onSearchClick: () -> Unit,
     onActivityClick: () -> Unit,
     onProfileClick: () -> Unit,
+    onRequestClick: (Request) -> Unit,
+    onNotificationClick: (Notification) -> Unit
 ) {
-
-    var selectedTab by remember {
-        mutableStateOf("Solicitudes")
-    }
 
     Box(
         modifier = Modifier
@@ -73,9 +80,9 @@ fun ActivityScreen(
             Spacer(modifier = Modifier.height(20.dp))
 
             ActivityTabRow(
-                selectedTab = selectedTab,
+                selectedTab = activityViewModel.selectedTab,
                 onTabSelected = {
-                    selectedTab = it
+                    activityViewModel.selectTab(it)
                 },
                 modifier = Modifier.padding(horizontal = 24.dp)
             )
@@ -104,7 +111,7 @@ fun ActivityScreen(
                     )
                 ) {
 
-                    if(selectedTab == "Solicitudes") {
+                    if(activityViewModel.selectedTab == "Solicitudes") {
 
                         LazyColumn(
                             modifier = Modifier.weight(1f),
@@ -117,7 +124,7 @@ fun ActivityScreen(
                                 RequestCard(
                                     request = request,
                                     onClick = {
-
+                                        onRequestClick(request)
                                     }
                                 )
                             }
@@ -125,7 +132,22 @@ fun ActivityScreen(
 
                     } else {
 
-                        Text("Notificaciones")
+                        LazyColumn(
+                            modifier = Modifier.weight(1f),
+                            contentPadding = PaddingValues(bottom = 120.dp),
+                            verticalArrangement = Arrangement.spacedBy(20.dp)
+                        ) {
+
+                            items(mockNotifications) { notification ->
+
+                                NotificationCard(
+                                    notification = notification,
+                                    onClick = {
+                                        onNotificationClick(notification)
+                                    }
+                                )
+                            }
+                        }
                     }
                 }
             }
@@ -156,6 +178,8 @@ fun ActivityScreenPreview() {
         onHomeClick = {},
         onSearchClick = {},
         onActivityClick = {},
-        onProfileClick = {}
+        onProfileClick = {},
+        onRequestClick = {},
+        onNotificationClick = {}
     )
 }
