@@ -53,6 +53,13 @@ import com.example.lostfoundapp.ui.theme.FoundBadgeText
 import com.example.lostfoundapp.ui.theme.LostBadgeBackground
 import com.example.lostfoundapp.ui.theme.LostBadgeText
 
+import com.example.lostfoundapp.data.local.SessionManager
+import com.example.lostfoundapp.data.remote.RetrofitInstance
+import com.example.lostfoundapp.data.toItemPost
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
+
+
 @Composable
 fun SearchScreen(
     onItemClick: (ItemPost) -> Unit,
@@ -64,9 +71,54 @@ fun SearchScreen(
     onProfileClick: () -> Unit
 ) {
 
+    var posts by remember {
+        mutableStateOf<List<ItemPost>>(emptyList())
+    }
+
+    val context = LocalContext.current
+
+    val sessionManager = SessionManager(context)
+
+    val token = sessionManager.getToken() ?: ""
     val viewModel: SearchViewModel = viewModel()
 
-    val filteredPosts = mockPosts.filter { post ->
+
+    LaunchedEffect(viewModel.selectedCategoryId,
+            viewModel.selectedLocationId,
+            viewModel.selectedDateFilter) {
+
+        try {
+
+            val response =
+                RetrofitInstance.api.getPosts(
+                    token = "Bearer $token",
+
+                    categoryId =
+                        viewModel.selectedCategoryId,
+
+                    locationId =
+                        viewModel.selectedLocationId,
+
+                    time =
+                        viewModel.selectedDateFilter.lowercase()
+                )
+
+            if(response.isSuccessful) {
+
+                posts =
+                    response.body()
+                        ?.data
+                        ?.map { it.toItemPost() }
+                        ?: emptyList()
+            }
+
+        } catch (e: Exception) {
+
+            e.printStackTrace()
+        }
+    }
+
+    val filteredPosts = posts.filter { post ->
 
         val matchesCategory =
             viewModel.selectedCategory.isEmpty() ||
@@ -293,16 +345,24 @@ fun SearchScreen(
 
             SelectionDialog(
                 title = "Seleccionar categoría",
-                options = categories,
+                options = categories.map{it.name},
                 selectedOption = viewModel.selectedCategory,
 
                 onDismiss = {
                     viewModel.hideCategoryDialog()
                 },
 
-                onOptionSelected = {
+                onOptionSelected = { optionSelected ->
 
-                    viewModel.updateCategory(it)
+                    val selectedCategory = categories.find {
+                        it.name == optionSelected
+                    }
+
+                    viewModel.updateCategory(
+                        id = selectedCategory?.id,
+                        name = selectedCategory?.name ?: ""
+                    )
+
                     viewModel.hideCategoryDialog()
                 }
             )
@@ -312,16 +372,24 @@ fun SearchScreen(
 
             SelectionDialog(
                 title = "Seleccionar ubicación",
-                options = locations,
+                options = locations.map{it.name},
                 selectedOption = viewModel.selectedLocation,
 
                 onDismiss = {
                     viewModel.hideLocationDialog()
                 },
 
-                onOptionSelected = {
+                onOptionSelected = { optionSelected ->
 
-                    viewModel.updateLocation(it)
+                    val selectedLocation = locations.find {
+                        it.name == optionSelected
+                    }
+
+                    viewModel.updateLocation(
+                        id = selectedLocation?.id,
+                        name = selectedLocation?.name ?: ""
+                    )
+
                     viewModel.hideLocationDialog()
                 }
             )

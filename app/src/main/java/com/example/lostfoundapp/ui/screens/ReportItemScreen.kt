@@ -79,6 +79,13 @@ fun ReportItemScreen(
         mutableStateOf("")
     }
 
+    var categoryId by remember {
+        mutableStateOf<Int?>(null)
+    }
+
+    var locationId by remember {
+        mutableStateOf<Int?>(null)
+    }
     var date by remember {
         mutableStateOf("")
     }
@@ -462,21 +469,7 @@ fun ReportItemScreen(
                                 val token =
                                     sessionManager.getToken() ?: ""
 
-                                val categoryId =
-                                    when (category) {
 
-                                        "Electrónicos" -> "1"
-                                        "Mochilas" -> "2"
-                                        else -> "1"
-                                    }
-
-                                val locationId =
-                                    when (location) {
-
-                                        "Biblioteca" -> "1"
-                                        "Cafetería" -> "2"
-                                        else -> "1"
-                                    }
                                 println("TOKEN: $token")
                                 val response =
                                     api.createPost(
@@ -501,11 +494,11 @@ fun ReportItemScreen(
                                                 .toRequestBodyText(),
 
                                         locationId =
-                                            locationId
+                                            locationId.toString()
                                                 .toRequestBodyText(),
 
                                         categoryId =
-                                            categoryId
+                                            categoryId.toString()
                                                 .toRequestBodyText(),
 
                                         incidentDate =
@@ -542,16 +535,24 @@ fun ReportItemScreen(
 
             SelectionDialog(
                 title = "Seleccionar categoría",
-                options = categories,
+                options = categories.map{it.name},
                 selectedOption = category,
 
                 onDismiss = {
                     showCategoryDialog = false
                 },
 
-                onOptionSelected = {
+                onOptionSelected = { selectedName ->
 
-                    category = it
+                    val selectedCategory =
+                        categories.find { it.name == selectedName }
+
+                    category =
+                        selectedCategory?.name ?: ""
+
+                    categoryId =
+                        selectedCategory?.id
+
                     categoryError = false
                     showCategoryDialog = false
                 }
@@ -562,16 +563,24 @@ fun ReportItemScreen(
 
             SelectionDialog(
                 title = "Seleccionar ubicación",
-                options = locations,
+                options = locations.map{it.name},
                 selectedOption = location,
 
                 onDismiss = {
                     showLocationDialog = false
                 },
 
-                onOptionSelected = {
+                onOptionSelected = { selectedName ->
 
-                    location = it
+                    val selectedLocation =
+                        locations.find { it.name == selectedName }
+
+                    location =
+                        selectedLocation?.name ?: ""
+
+                    locationId =
+                        selectedLocation?.id
+
                     locationError = false
                     showLocationDialog = false
                 }
