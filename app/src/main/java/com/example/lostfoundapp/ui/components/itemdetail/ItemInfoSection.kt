@@ -1,6 +1,8 @@
 package com.example.lostfoundapp.ui.components.itemdetail
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.LocationOn
@@ -44,14 +46,16 @@ fun ItemInfoSection(
             .padding(horizontal = 20.dp)
     ) {
 
+
         Text(
             text = itemPost.title,
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
+            lineHeight = 38.sp,
             color = Color.Black
         )
 
-        Spacer(modifier = Modifier.height(14.dp))
+        Spacer(modifier = Modifier.height(18.dp))
 
         Column {
 
@@ -62,10 +66,21 @@ fun ItemInfoSection(
                 fontWeight = FontWeight.Medium
             )
 
-            Spacer(modifier = Modifier.height(2.dp))
+            Spacer(modifier = Modifier.height(6.dp))
 
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        HomeHeaderBlue.copy(alpha = 0.05f),
+                        RoundedCornerShape(14.dp)
+                    )
+                    .padding(
+                        horizontal = 14.dp,
+                        vertical = 12.dp
+                    ),
+
+                        verticalAlignment = Alignment.CenterVertically
             ) {
 
                 Icon(
@@ -84,7 +99,7 @@ fun ItemInfoSection(
             }
         }
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         Column {
 
@@ -95,9 +110,20 @@ fun ItemInfoSection(
                 fontWeight = FontWeight.Medium
             )
 
-            Spacer(modifier = Modifier.height(2.dp))
+            Spacer(modifier = Modifier.height(6.dp))
 
             Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        HomeHeaderBlue.copy(alpha = 0.05f),
+                        RoundedCornerShape(14.dp)
+                    )
+                    .padding(
+                        horizontal = 14.dp,
+                        vertical = 12.dp
+                    ),
+
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
@@ -117,7 +143,7 @@ fun ItemInfoSection(
             }
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         Text(
             text = itemPost.description,

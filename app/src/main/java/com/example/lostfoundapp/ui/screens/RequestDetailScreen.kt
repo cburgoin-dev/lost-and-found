@@ -71,23 +71,26 @@ fun RequestDetailScreen(
     }
 
     val secondaryText =
-        when {
-
-            request.status == RequestStatus.APPROVED ->
+        when (request.status) {
+            RequestStatus.APPROVED ->
                 "Toca para ver la información de contacto."
 
-            request.status == RequestStatus.REJECTED ->
+            RequestStatus.REJECTED ->
                 "La información de contacto no está disponible."
 
-            else ->
-                "La información de contacto estará disponible después de aprobar la solicitud."
+            else -> "La información de contacto estará disponible después de aprobar la solicitud."
         }
 
     val userName =
-        if (request.status == RequestStatus.APPROVED)
-            request.sender.fullName
-        else
-            "Usuario pendiente"
+        when (request.status) {
+            RequestStatus.APPROVED ->
+                request.sender.fullName
+
+            RequestStatus.REJECTED ->
+                "Usuario anónimo"
+
+            else -> "Usuario pendiente"
+        }
 
     Box(
         modifier = Modifier
@@ -145,8 +148,6 @@ fun RequestDetailScreen(
                 }
             }
 
-
-
             LazyColumn(
                 modifier = Modifier.weight(1f),
                 contentPadding = PaddingValues(
@@ -174,13 +175,10 @@ fun RequestDetailScreen(
                     )
 
                     Text(
-
                         text = request.itemName,
                         fontSize = 28.sp,
                         fontWeight = FontWeight.Bold,
-
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        lineHeight = 34.sp
                     )
                 }
 

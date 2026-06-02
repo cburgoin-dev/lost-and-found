@@ -15,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.lostfoundapp.data.model.Request
+import com.example.lostfoundapp.data.model.RequestStatus
 import com.example.lostfoundapp.data.model.RequestType
 import com.example.lostfoundapp.ui.theme.DetailSecondaryText
 import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
@@ -24,11 +25,17 @@ fun RequestContextSection(
     request: Request
 ) {
 
+    val displayedName =
+        if (request.status != RequestStatus.APPROVED)
+            "Un usuario"
+        else
+            request.sender.fullName
+
     val description =
         if (request.requestType == RequestType.CLAIM)
-            "${request.sender.fullName} envió una solicitud para reclamar este objeto."
+            "$displayedName envió una solicitud para reclamar este objeto."
         else
-            "${request.sender.fullName} compartió información que podría ayudar a localizar este objeto."
+            "$displayedName compartió información que podría ayudar a localizar este objeto."
 
     Column(
         modifier = Modifier

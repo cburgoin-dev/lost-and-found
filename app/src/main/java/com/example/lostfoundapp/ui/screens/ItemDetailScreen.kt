@@ -72,7 +72,7 @@ fun ItemDetailScreen(
                         itemPost = itemPost
                     )
 
-                    Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(28.dp))
 
                     HorizontalDivider(
                         modifier = Modifier.padding(horizontal = 20.dp),

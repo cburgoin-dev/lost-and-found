@@ -34,6 +34,7 @@ import com.example.lostfoundapp.R
 import com.example.lostfoundapp.data.mock.mockPosts
 import com.example.lostfoundapp.data.model.ItemPost
 import com.example.lostfoundapp.data.model.ReportType
+import com.example.lostfoundapp.ui.theme.DetailSecondaryText
 import com.example.lostfoundapp.ui.theme.FoundBadgeBackground
 import com.example.lostfoundapp.ui.theme.FoundBadgeText
 import com.example.lostfoundapp.ui.theme.LostBadgeBackground
@@ -111,7 +112,7 @@ fun ItemCard(
 
                 Text(
                     text = location,
-                    color = Color(0xFF707070),
+                    color = DetailSecondaryText,
                     fontSize = 15.sp,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -121,7 +122,7 @@ fun ItemCard(
 
                 Text(
                     text = time,
-                    color = Color(0xFF9A9A9A),
+                    color = DetailSecondaryText,
                     fontSize = 14.sp,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis

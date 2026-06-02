@@ -38,6 +38,7 @@ import com.example.lostfoundapp.data.model.NotificationType
 import com.example.lostfoundapp.ui.theme.DetailSecondaryText
 import com.example.lostfoundapp.ui.theme.GoldAccent
 import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
+import com.example.lostfoundapp.ui.theme.LostBadgeText
 
 @Composable
 fun NotificationCard(
@@ -65,13 +66,13 @@ fun NotificationCard(
         when(notification.type) {
 
             NotificationType.REQUEST_APPROVED ->
-                Color(0xFF2E7D32)
+                HomeHeaderBlue
 
             NotificationType.REQUEST_REJECTED ->
-                Color(0xFFC62828)
+                LostBadgeText
 
             NotificationType.MATCH_FOUND ->
-                Color(0xFF7B1FA2)
+                HomeHeaderBlue
 
             NotificationType.SYSTEM ->
                 HomeHeaderBlue
@@ -97,67 +98,95 @@ fun NotificationCard(
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Top
             ) {
 
-                Row(
-                    modifier = Modifier.weight(1f),
-                    verticalAlignment = Alignment.CenterVertically
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(
+                            HomeHeaderBlue.copy(alpha = 0.08f)
+                        ),
+
+                    contentAlignment = Alignment.Center
                 ) {
 
                     Icon(
                         imageVector = icon,
                         contentDescription = null,
                         tint = iconColor,
-                        modifier = Modifier.size(22.dp)
+                        modifier = Modifier.size(24.dp)
                     )
+                }
 
-                    Spacer(
-                        modifier = Modifier.width(10.dp)
-                    )
+                Spacer(
+                    modifier = Modifier.width(12.dp)
+                )
+
+                Column(
+                    modifier = Modifier.weight(1f)
+                ) {
 
                     Text(
                         text = notification.title,
-                        fontSize = 16.sp,
+                        fontSize = 17.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = Color.Black
                     )
-                }
 
-                if (!notification.isRead) {
-
-                    Box(
-                        modifier = Modifier
-                            .size(10.dp)
-                            .clip(CircleShape)
-                            .background(
-                                Color(0xFFE53935)
-                            )
+                    Spacer(
+                        modifier = Modifier.height(6.dp)
                     )
+
+                    Text(
+                        text = notification.description,
+                        fontSize = 14.sp,
+                        lineHeight = 22.sp,
+                        color = DetailSecondaryText
+                    )
+
+                    Spacer(
+                        modifier = Modifier.height(10.dp)
+                    )
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+
+                        Text(
+                            text = notification.createdAt,
+                            fontSize = 14.sp,
+                            color = DetailSecondaryText
+                        )
+
+                        if (!notification.isRead) {
+
+                            Box(
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(100.dp))
+                                    .background(
+                                        HomeHeaderBlue.copy(alpha = 0.10f)
+                                    )
+                                    .padding(
+                                        horizontal = 12.dp,
+                                        vertical = 5.dp
+                                    )
+                            ) {
+
+                                Text(
+                                    text = "Nuevo",
+                                    color = HomeHeaderBlue,
+                                    fontSize = 13.sp,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            }
+                        }
+                    }
                 }
             }
-
-            Spacer(
-                modifier = Modifier.height(10.dp)
-            )
-
-            Text(
-                text = notification.description,
-                fontSize = 14.sp,
-                lineHeight = 20.sp,
-                color = DetailSecondaryText
-            )
-
-            Spacer(
-                modifier = Modifier.height(10.dp)
-            )
-
-            Text(
-                text = notification.createdAt,
-                fontSize = 13.sp,
-                color = DetailSecondaryText
-            )
         }
     }
 }

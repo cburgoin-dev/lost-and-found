@@ -15,7 +15,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.lostfoundapp.data.model.RequestStatus
+import com.example.lostfoundapp.ui.theme.FoundBadgeBackground
+import com.example.lostfoundapp.ui.theme.FoundBadgeText
 import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
+import com.example.lostfoundapp.ui.theme.LostBadgeBackground
+import com.example.lostfoundapp.ui.theme.LostBadgeText
 
 @Composable
 fun RequestStatusSection(
@@ -27,15 +31,15 @@ fun RequestStatusSection(
 
     val backgroundColor =
         if (isApproved)
-            Color(0xFFE8F5E9)
+            FoundBadgeBackground
         else
-            Color(0xFFFFEBEE)
+            LostBadgeBackground
 
     val titleColor =
         if (isApproved)
-            Color(0xFF2E7D32)
+            FoundBadgeText
         else
-            Color(0xFFC62828)
+            LostBadgeText
 
     val title =
         if(status == RequestStatus.APPROVED)
