@@ -35,6 +35,9 @@ fun ItemDetailActionsRow(
         verticalAlignment = Alignment.CenterVertically
     ) {
 
+        // SI ALCANZA EL TIEMPO Y VALE LA PENA IMPLEMENTAR ESTE BOTÓN
+
+        /*
         BottomActionItem(
             modifier = Modifier.weight(1f),
             icon = {
@@ -48,6 +51,7 @@ fun ItemDetailActionsRow(
             text = "Compartir",
             onClick = onShareClick
         )
+         */
 
         BottomActionItem(
             modifier = Modifier.weight(1f),
@@ -59,7 +63,7 @@ fun ItemDetailActionsRow(
                     tint = FoundActionCardForeground
                 )
             },
-            text = "Guardar",
+            text = "Guardar publicación",
             onClick = onSaveClick
         )
 
@@ -73,7 +77,7 @@ fun ItemDetailActionsRow(
                     tint = FoundActionCardForeground
                 )
             },
-            text = "Reportar problema",
+            text = "Reportar publicación",
             onClick = onReportClick
         )
     }

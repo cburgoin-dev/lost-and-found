@@ -214,7 +214,7 @@ fun ReportItemScreen(
                     ) {
 
                         Text(
-                            text = "Nuevo reporte",
+                            text = "Nueva publicación",
                             color = Color.White,
                             fontSize = 26.sp,
                             fontWeight = FontWeight.Bold
@@ -380,7 +380,7 @@ fun ReportItemScreen(
             ) {
 
                 PrimaryButton(
-                    text = "Publicar reporte",
+                    text = "Crear publicación",
                     backgroundColor =
                         if(reportType == ReportType.LOST)
                             LostActionCardForeground

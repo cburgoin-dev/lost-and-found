@@ -83,11 +83,7 @@ fun RequestCard(
                             else
                                 Icons.Outlined.Info,
                         contentDescription = null,
-                        tint =
-                            if (request.requestType == RequestType.CLAIM)
-                                GoldAccent
-                            else
-                                HomeHeaderBlue,
+                        tint = HomeHeaderBlue,
                         modifier = Modifier.size(22.dp)
                     )
 
