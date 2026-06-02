@@ -16,6 +16,12 @@ class SearchViewModel : ViewModel() {
     var selectedLocation by mutableStateOf("")
         private set
 
+    var selectedCategoryId by mutableStateOf<Int?>(null)
+        private set
+
+    var selectedLocationId by mutableStateOf<Int?>(null)
+        private set
+
     var selectedDateFilter by mutableStateOf("Hoy")
         private set
 
@@ -29,12 +35,20 @@ class SearchViewModel : ViewModel() {
         searchQuery = value
     }
 
-    fun updateCategory(value: String) {
-        selectedCategory = value
+    fun updateCategory(
+        id: Int?,
+        name: String
+    ) {
+        selectedCategoryId = id
+        selectedCategory = name
     }
 
-    fun updateLocation(value: String) {
-        selectedLocation = value
+    fun updateLocation(
+        id: Int?,
+        name: String
+    ) {
+        selectedLocationId = id
+        selectedLocation = name
     }
 
     fun updateDateFilter(value: String) {
