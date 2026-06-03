@@ -30,7 +30,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -40,8 +39,7 @@ import com.example.lostfoundapp.data.model.RequestStatus
 import com.example.lostfoundapp.data.model.RequestType
 import com.example.lostfoundapp.ui.components.BackButton
 import com.example.lostfoundapp.ui.components.PrimaryButton
-import com.example.lostfoundapp.ui.components.SecondaryButton
-import com.example.lostfoundapp.ui.components.activity.ConfirmationBottomSheet
+import com.example.lostfoundapp.ui.components.ConfirmationBottomSheet
 import com.example.lostfoundapp.ui.components.activity.RequestContextSection
 import com.example.lostfoundapp.ui.components.activity.RequestMessageSection
 import com.example.lostfoundapp.ui.components.activity.RequestStatusSection
@@ -305,10 +303,9 @@ fun RequestDetailScreen(
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
 
-                SecondaryButton(
+                PrimaryButton(
                     text = "Rechazar",
                     backgroundColor = LostActionCardForeground,
-                    textColor = Color.White,
                     modifier = Modifier.weight(1f),
                     onClick = {
                         showRejectSheet = true

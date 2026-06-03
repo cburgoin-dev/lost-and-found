@@ -362,12 +362,25 @@ fun ReportItemScreen(
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                VisibilitySwitch(
-                    checked = publicContact,
-                    onCheckedChange = {
-                        publicContact = it
-                    }
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+
+                    Text(
+                        text = "Mostrar mi contacto públicamente",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.weight(1f)
+                    )
+
+                    VisibilitySwitch(
+                        checked = publicContact,
+                        onCheckedChange = {
+                            publicContact = it
+                        }
+                    )
+                }
             }
         }
 

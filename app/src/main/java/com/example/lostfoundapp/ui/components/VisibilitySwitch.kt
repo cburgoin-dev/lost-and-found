@@ -11,7 +11,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
-import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
 import com.example.lostfoundapp.ui.theme.SwitchCheckedThumb
 import com.example.lostfoundapp.ui.theme.SwitchCheckedTrack
 import com.example.lostfoundapp.ui.theme.SwitchUncheckedThumb
@@ -23,33 +22,19 @@ fun VisibilitySwitch(
     onCheckedChange: (Boolean) -> Unit
 ) {
 
-    Row(
-        modifier = Modifier.fillMaxWidth(),
+    Switch(
+        checked = checked,
+        onCheckedChange = onCheckedChange,
 
-        verticalAlignment = Alignment.CenterVertically
-    ) {
+        colors = SwitchDefaults.colors(
+            checkedThumbColor = SwitchCheckedThumb,
+            checkedTrackColor = SwitchCheckedTrack,
 
-        Text(
-            text = "Mostrar mi contacto públicamente",
-            fontSize = 15.sp,
-            fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.weight(1f)
+            uncheckedThumbColor = SwitchUncheckedThumb,
+            uncheckedTrackColor = SwitchUncheckedTrack,
+
+            uncheckedBorderColor= Color.Transparent,
+            checkedBorderColor = Color.Transparent
         )
-
-        Switch(
-            checked = checked,
-            onCheckedChange = onCheckedChange,
-
-            colors = SwitchDefaults.colors(
-                checkedThumbColor = SwitchCheckedThumb,
-                checkedTrackColor = SwitchCheckedTrack,
-
-                uncheckedThumbColor = SwitchUncheckedThumb,
-                uncheckedTrackColor = SwitchUncheckedTrack,
-
-                uncheckedBorderColor= Color.Transparent,
-                checkedBorderColor = Color.Transparent
-            )
-        )
-    }
+    )
 }

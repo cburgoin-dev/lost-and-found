@@ -101,7 +101,6 @@ fun RequestCard(
                         "Información sobre objeto",
 
                 fontSize = 15.sp,
-                fontWeight = FontWeight.Medium,
                 color = DetailSecondaryText
             )
 

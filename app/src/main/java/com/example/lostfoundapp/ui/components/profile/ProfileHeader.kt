@@ -1,8 +1,10 @@
 package com.example.lostfoundapp.ui.components.profile
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -10,68 +12,116 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material.icons.outlined.Phone
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+
+import com.example.lostfoundapp.R
 import com.example.lostfoundapp.ui.components.PrimaryButton
+import com.example.lostfoundapp.ui.components.Roboto
 import com.example.lostfoundapp.ui.components.VisibilitySwitch
+import com.example.lostfoundapp.ui.theme.DetailSecondaryText
+import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
 
 @Composable
 fun ProfileHeader(
     userName: String,
     email: String,
     phone: String,
-    isContactVisible: Boolean,
-    onEditProfileClick: () -> Unit,
-    onVisibilityChange: (Boolean) -> Unit
 ) {
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(24.dp),
-
+        modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
         Box(
             modifier = Modifier
-                .size(96.dp)
-                .clip(CircleShape)
-                .background(Color.LightGray)
-        )
+                .size(140.dp)
+                .background(
+                    Color.White,
+                    CircleShape
+                )
+                .padding(4.dp)
+        ) {
 
-        Spacer(modifier = Modifier.height(12.dp))
+            Image(
+                painter = painterResource(R.drawable.carlos_profile),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(132.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop
+            )
+        }
 
         Text(
-            text = userName
-        )
-
-        Text(
-            text = email
-        )
-
-        Text(
-            text = phone
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        PrimaryButton(
-            text = "Editar perfil",
-            onClick = onEditProfileClick,
-            modifier = Modifier.width(180.dp)
+            text = userName,
+            fontSize = 24.sp,
+            fontWeight = FontWeight.SemiBold
         )
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        VisibilitySwitch(
-            checked = isContactVisible,
-            onCheckedChange = onVisibilityChange
-        )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                Icon(
+                    imageVector = Icons.Outlined.Email,
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp),
+                    tint = DetailSecondaryText
+                )
+
+                Spacer(modifier = Modifier.width(6.dp))
+
+                Text(
+                    text = email,
+                    fontSize = 16.sp,
+                    color = DetailSecondaryText
+                )
+            }
+
+            Spacer(modifier = Modifier.height(6.dp))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                Icon(
+                    imageVector = Icons.Outlined.Phone,
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp),
+                    tint = DetailSecondaryText
+                )
+
+                Spacer(modifier = Modifier.width(6.dp))
+
+                Text(
+                    text = phone,
+                    fontSize = 16.sp,
+                    color = DetailSecondaryText
+                )
+            }
+        }
     }
 }

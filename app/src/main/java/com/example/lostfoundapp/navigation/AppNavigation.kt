@@ -335,6 +335,10 @@ fun AppNavigation() {
 
                 onProfileClick = {
 
+                },
+
+                onEditProfileClick = {
+
                 }
             )
         }
