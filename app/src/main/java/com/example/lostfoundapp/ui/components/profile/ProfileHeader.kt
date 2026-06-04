@@ -1,5 +1,6 @@
 package com.example.lostfoundapp.ui.components.profile
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -15,6 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -29,6 +31,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 
 import com.example.lostfoundapp.R
 import com.example.lostfoundapp.ui.components.PrimaryButton
@@ -36,12 +39,14 @@ import com.example.lostfoundapp.ui.components.Roboto
 import com.example.lostfoundapp.ui.components.VisibilitySwitch
 import com.example.lostfoundapp.ui.theme.DetailSecondaryText
 import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
+import com.example.lostfoundapp.ui.theme.TextGray
 
 @Composable
 fun ProfileHeader(
     userName: String,
     email: String,
     phone: String,
+    profileImageUri: Uri?
 ) {
 
     Column(
@@ -59,14 +64,35 @@ fun ProfileHeader(
                 .padding(4.dp)
         ) {
 
-            Image(
-                painter = painterResource(R.drawable.carlos_profile),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(132.dp)
-                    .clip(CircleShape),
-                contentScale = ContentScale.Crop
-            )
+            if (profileImageUri != null) {
+
+                AsyncImage(
+                    model = profileImageUri,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(132.dp)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop
+                )
+
+            } else {
+
+                Box(
+                    modifier = Modifier
+                        .size(132.dp)
+                        .clip(CircleShape)
+                        .background(Color(0xFFF1F1F1)),
+                    contentAlignment = Alignment.Center
+                ) {
+
+                    Icon(
+                        imageVector = Icons.Outlined.Person,
+                        contentDescription = null,
+                        tint = TextGray,
+                        modifier = Modifier.size(64.dp)
+                    )
+                }
+            }
         }
 
         Text(

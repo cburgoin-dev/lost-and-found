@@ -12,6 +12,10 @@ sealed class Routes(
 
     object Home : Routes("home")
 
+    object ReportLost : Routes("report_lost")
+
+    object ReportFound : Routes("report_found")
+
     object Search : Routes("search")
 
     object ItemDetail : Routes("item_detail/{itemId}")
@@ -22,9 +26,9 @@ sealed class Routes(
 
     object Profile : Routes("profile")
 
-    object ReportLost :
-        Routes("report_lost")
+    object EditProfile : Routes("edit_profile")
 
-    object ReportFound :
-        Routes("report_found")
+    object UserPosts: Routes("user_posts")
+
+    object SavedPosts : Routes("saved_posts")
 }

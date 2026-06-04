@@ -5,16 +5,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.*
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.lostfoundapp.data.mock.mockPosts
 import com.example.lostfoundapp.data.mock.mockRequests
 import com.example.lostfoundapp.data.model.ItemPost
 import com.example.lostfoundapp.data.model.NotificationType
+import com.example.lostfoundapp.data.model.PostsScreenType
 
 import com.example.lostfoundapp.ui.screens.*
 import com.example.lostfoundapp.data.model.ReportType
 import com.example.lostfoundapp.data.model.Request
+import com.example.lostfoundapp.ui.viewmodel.ProfileViewModel
 
 @Composable
 fun AppNavigation() {
@@ -33,9 +36,22 @@ fun AppNavigation() {
     val navController =
         rememberNavController()
 
+    val profileViewModel: ProfileViewModel = viewModel()
+
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
     val currentRoute = navBackStackEntry?.destination?.route
+
+    fun navigateToItemDetail(
+        item: ItemPost
+    ) {
+
+        selectedPost = item
+
+        navController.navigate(
+            "item_detail/${item.id}"
+        )
+    }
 
     fun navigateToBottomBarRoute(route: String) {
 
@@ -128,14 +144,7 @@ fun AppNavigation() {
                     )
                 },
 
-                onItemClick = { itemPost ->
-
-                    selectedPost = itemPost
-
-                    navController.navigate(
-                        "item_detail/${itemPost.id}"
-                    )
-                },
+                onItemClick = ::navigateToItemDetail,
 
                 currentRoute = currentRoute,
 
@@ -166,18 +175,35 @@ fun AppNavigation() {
         }
 
         composable(
+            Routes.ReportLost.route
+        ) {
+
+            ReportItemScreen(
+                reportType = ReportType.LOST,
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        composable(
+            Routes.ReportFound.route
+        ) {
+
+            ReportItemScreen(
+                reportType = ReportType.FOUND,
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        composable(
             Routes.Search.route
         ) {
 
             SearchScreen(
-                onItemClick = { itemPost ->
-
-                    selectedPost = itemPost
-
-                    navController.navigate(
-                        "item_detail/${itemPost.id}"
-                    )
-                },
+                onItemClick = ::navigateToItemDetail,
 
                 currentRoute = currentRoute,
 
@@ -311,6 +337,8 @@ fun AppNavigation() {
         ) {
 
             ProfileScreen(
+                profileViewModel = profileViewModel,
+
                 currentRoute = currentRoute,
 
                 onHomeClick = {
@@ -338,32 +366,80 @@ fun AppNavigation() {
                 },
 
                 onEditProfileClick = {
+                    profileViewModel.startEditing()
+
+                    navController.navigate(
+                        Routes.EditProfile.route
+                    )
+                },
+
+                onMyPostsClick = {
+                    navController.navigate(
+                        Routes.UserPosts.route
+                    )
+                },
+
+                onSavedPostsClick = {
+                    navController.navigate(
+                        Routes.SavedPosts.route
+                    )
+                }
+            )
+        }
+
+        composable(
+            Routes.EditProfile.route
+        ) {
+
+            EditProfileScreen(
+                profileViewModel = profileViewModel,
+
+                onBackClick = {
+                    navController.popBackStack()
+                },
+
+                onSaveClick = {
+
+                    navController.popBackStack()
+                },
+
+                onChangePhotoClick = {
 
                 }
             )
         }
 
         composable(
-            Routes.ReportLost.route
+            Routes.UserPosts.route
         ) {
 
-            ReportItemScreen(
-                reportType = ReportType.LOST,
+            PostsScreen(
+                title = "Mis publicaciones",
+                posts = mockPosts,
+                screenType = PostsScreenType.USER_POSTS,
+
                 onBackClick = {
                     navController.popBackStack()
-                }
+                },
+
+                onItemClick = ::navigateToItemDetail,
             )
         }
 
         composable(
-            Routes.ReportFound.route
+            Routes.SavedPosts.route
         ) {
 
-            ReportItemScreen(
-                reportType = ReportType.FOUND,
+            PostsScreen(
+                title = "Guardadas",
+                posts = emptyList(),
+                screenType = PostsScreenType.SAVED_POSTS,
+
                 onBackClick = {
                     navController.popBackStack()
-                }
+                },
+
+                onItemClick = ::navigateToItemDetail,
             )
         }
     }
