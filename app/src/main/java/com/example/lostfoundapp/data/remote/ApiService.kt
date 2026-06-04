@@ -49,6 +49,7 @@ interface ApiService {
         @Field("name") name: String,
         @Field("email") email: String,
         @Field("password") password: String
+
     ): Response<String>
 
     @Multipart
@@ -76,7 +77,12 @@ interface ApiService {
         @Part("incident_date")
         incidentDate: RequestBody,
 
+        @Part("share_my_data")
+        shareContact: RequestBody,
+
         @Part picture: MultipartBody.Part?
+
+
 
     ): Response<String>
 

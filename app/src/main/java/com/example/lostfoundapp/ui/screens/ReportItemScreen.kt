@@ -518,6 +518,10 @@ fun ReportItemScreen(
                                             date
                                                 .toRequestBodyText(),
 
+                                        shareContact =
+                                            publicContact.toString()
+                                                .toRequestBodyText(),
+
                                         picture =
                                             imagePart
                                     )
