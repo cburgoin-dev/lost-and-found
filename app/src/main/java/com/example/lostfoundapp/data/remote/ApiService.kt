@@ -12,8 +12,10 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Multipart
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
@@ -131,4 +133,19 @@ interface ApiService {
 
     ): Response<GetRequestsResponse>
 
+    @PATCH("api/requests/{id}/accept")
+    suspend fun approveRequest(
+        @Header("Authorization")
+        token: String,
+        @Path("id")
+        requestId : Int
+        ): Response<GetRequestsResponse>
+
+    @PATCH("api/requests/{id}/decline")
+    suspend fun declineRequest(
+        @Header("Authorization")
+        token: String,
+        @Path("id")
+        requestId : Int
+    ): Response<GetRequestsResponse>
 }

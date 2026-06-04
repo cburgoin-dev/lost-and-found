@@ -23,20 +23,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 
+import com.example.lostfoundapp.data.local.SessionManager
+
 import com.example.lostfoundapp.data.model.Request
 import com.example.lostfoundapp.data.model.RequestStatus
 import com.example.lostfoundapp.data.model.RequestType
+import com.example.lostfoundapp.data.remote.RetrofitInstance.api
 import com.example.lostfoundapp.ui.components.BackButton
 import com.example.lostfoundapp.ui.components.PrimaryButton
 import com.example.lostfoundapp.ui.components.ConfirmationBottomSheet
@@ -47,6 +52,7 @@ import com.example.lostfoundapp.ui.components.ContactInfoBottomSheet
 import com.example.lostfoundapp.ui.components.UserInfoSection
 import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
 import com.example.lostfoundapp.ui.theme.LostActionCardForeground
+import kotlinx.coroutines.launch
 
 @Composable
 fun RequestDetailScreen(
@@ -55,6 +61,17 @@ fun RequestDetailScreen(
     onApproveClick: () -> Unit,
     onRejectClick: () -> Unit
 ) {
+
+    val context = LocalContext.current
+
+    val sessionManager =
+        SessionManager(context)
+
+    val token =
+        sessionManager.getToken() ?: ""
+
+    val scope = rememberCoroutineScope()
+
 
     var showContactSheet by remember {
         mutableStateOf(false)
@@ -337,7 +354,6 @@ fun RequestDetailScreen(
         }
 
         if (showApproveSheet) {
-
             ConfirmationBottomSheet(
                 title = "Aprobar solicitud",
                 description = "Al aprobar esta solicitud, ambos usuarios podrán acceder a la información de contacto para continuar la comunicación.",
@@ -345,8 +361,15 @@ fun RequestDetailScreen(
                 buttonColor = HomeHeaderBlue,
 
                 onConfirm = {
-                    showApproveSheet = false
-                    onApproveClick()
+                    scope.launch {
+                        //enviar peticion aceptar
+                        api.approveRequest(
+                            token = "Bearer $token",
+                            requestId = request.id
+                        )
+                        showApproveSheet = false
+                        onApproveClick()
+                    }
                 },
 
                 onDismiss = {
@@ -364,8 +387,16 @@ fun RequestDetailScreen(
                 buttonColor = LostActionCardForeground,
 
                 onConfirm = {
-                    showRejectSheet = false
-                    onRejectClick()
+                    //enviar peticion rechazar
+                    scope.launch {
+                        //enviar peticion aceptar
+                        api.declineRequest(
+                            token = "Bearer $token",
+                            requestId = request.id
+                        )
+                        showRejectSheet = false
+                        onRejectClick()
+                    }
                 },
 
                 onDismiss = {
