@@ -36,7 +36,7 @@ val mockPosts = listOf(
 
     ItemPost(
         id = 3,
-        title = "Mochila Negra",
+        title = "Mochila Negra ASDKMASDMADSKDSMASAFMASFMASKFMSAFKMSAFMKASFMKSAFKFMK",
         description = "Mochila olvidada en el gimnasio.",
         location = "Gimnasio",
         date = "22 de mayo, 2026",

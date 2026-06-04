@@ -68,45 +68,21 @@ fun RequestCard(
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+                Text(
+                    text = request.itemName,
+                    modifier = Modifier.weight(1f),
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
 
-                    Icon(
-                        imageVector =
-                            if (request.requestType == RequestType.CLAIM)
-                                Icons.Outlined.Handshake
-                            else
-                                Icons.Outlined.Info,
-                        contentDescription = null,
-                        tint =
-                            if (request.requestType == RequestType.CLAIM)
-                                GoldAccent
-                            else
-                                HomeHeaderBlue,
-                        modifier = Modifier.size(22.dp)
-                    )
-
-                    Spacer(
-                        modifier = Modifier.width(8.dp)
-                    )
-
-                    Text(
-                        text =
-                            if (request.requestType == RequestType.CLAIM)
-                                "Solicitud de reclamación"
-                            else
-                                "Información sobre objeto",
-
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = Color.Black
-                    )
-                }
+                Spacer(
+                    modifier = Modifier.width(12.dp)
+                )
 
                 RequestStatusBadge(
                     status = request.status
@@ -114,29 +90,28 @@ fun RequestCard(
             }
 
             Spacer(
-                modifier = Modifier.height(10.dp)
-            )
-
-            Text(
-                text = request.itemName,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-
-            Spacer(
-                modifier = Modifier.height(6.dp)
+                modifier = Modifier.height(8.dp)
             )
 
             Text(
                 text =
-                    "${request.sender.fullName} • ${request.createdAt}",
+                    if (request.requestType == RequestType.CLAIM)
+                        "Solicitud de reclamación"
+                    else
+                        "Información sobre objeto",
 
+                fontSize = 15.sp,
+                color = DetailSecondaryText
+            )
+
+            Spacer(
+                modifier = Modifier.height(8.dp)
+            )
+
+            Text(
+                text = request.createdAt,
                 fontSize = 14.sp,
                 color = DetailSecondaryText,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
             )
         }
     }

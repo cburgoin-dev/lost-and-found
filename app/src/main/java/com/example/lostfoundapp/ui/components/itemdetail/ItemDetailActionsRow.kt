@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Bookmark
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.Flag
 import androidx.compose.material.icons.outlined.Share
@@ -35,6 +36,9 @@ fun ItemDetailActionsRow(
         verticalAlignment = Alignment.CenterVertically
     ) {
 
+        // SI ALCANZA EL TIEMPO Y VALE LA PENA IMPLEMENTAR ESTE BOTÓN
+
+        /*
         BottomActionItem(
             modifier = Modifier.weight(1f),
             icon = {
@@ -48,6 +52,7 @@ fun ItemDetailActionsRow(
             text = "Compartir",
             onClick = onShareClick
         )
+         */
 
         BottomActionItem(
             modifier = Modifier.weight(1f),
@@ -59,7 +64,7 @@ fun ItemDetailActionsRow(
                     tint = FoundActionCardForeground
                 )
             },
-            text = "Guardar",
+            text = "Guardar publicación",
             onClick = onSaveClick
         )
 
@@ -73,7 +78,7 @@ fun ItemDetailActionsRow(
                     tint = FoundActionCardForeground
                 )
             },
-            text = "Reportar problema",
+            text = "Reportar publicación",
             onClick = onReportClick
         )
     }

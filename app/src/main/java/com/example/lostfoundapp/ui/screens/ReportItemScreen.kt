@@ -221,7 +221,7 @@ fun ReportItemScreen(
                     ) {
 
                         Text(
-                            text = "Nuevo reporte",
+                            text = "Nueva publicación",
                             color = Color.White,
                             fontSize = 26.sp,
                             fontWeight = FontWeight.Bold
@@ -362,12 +362,25 @@ fun ReportItemScreen(
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                VisibilitySwitch(
-                    checked = publicContact,
-                    onCheckedChange = {
-                        publicContact = it
-                    }
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+
+                    Text(
+                        text = "Mostrar mi contacto públicamente",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.weight(1f)
+                    )
+
+                    VisibilitySwitch(
+                        checked = publicContact,
+                        onCheckedChange = {
+                            publicContact = it
+                        }
+                    )
+                }
             }
         }
 
@@ -387,7 +400,7 @@ fun ReportItemScreen(
             ) {
 
                 PrimaryButton(
-                    text = "Publicar reporte",
+                    text = "Crear publicación",
                     backgroundColor =
                         if(reportType == ReportType.LOST)
                             LostActionCardForeground

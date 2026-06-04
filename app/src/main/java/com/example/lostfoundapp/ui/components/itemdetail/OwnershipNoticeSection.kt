@@ -40,7 +40,7 @@ fun OwnershipNoticeSection(
             imageVector = Icons.Outlined.Info,
             contentDescription = null,
             tint = HomeHeaderBlue,
-            modifier = Modifier.size(22.dp)
+            modifier = Modifier.size(24.dp)
         )
 
         Spacer(modifier = Modifier.width(12.dp))

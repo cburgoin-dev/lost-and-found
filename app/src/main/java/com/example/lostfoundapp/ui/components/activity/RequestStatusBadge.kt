@@ -31,7 +31,6 @@ fun RequestStatusBadge(
             RequestStatus.PENDING -> PendingBadgeBackground
             RequestStatus.APPROVED -> ApprovedBadgeBackground
             RequestStatus.REJECTED -> RejectedBadgeBackground
-            RequestStatus.READ -> ReadBadgeBackground
         }
 
     val textColor =
@@ -39,7 +38,6 @@ fun RequestStatusBadge(
             RequestStatus.PENDING -> PendingBadgeText
             RequestStatus.APPROVED -> ApprovedBadgeText
             RequestStatus.REJECTED -> RejectedBadgeText
-            RequestStatus.READ -> ReadBadgeText
         }
 
     val text =
@@ -47,7 +45,6 @@ fun RequestStatusBadge(
             RequestStatus.PENDING -> "Pendiente"
             RequestStatus.APPROVED -> "Aprobada"
             RequestStatus.REJECTED -> "Rechazada"
-            RequestStatus.READ -> "Leída"
         }
 
     Box(
