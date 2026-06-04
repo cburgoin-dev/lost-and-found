@@ -28,10 +28,12 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.ui.platform.LocalContext
 
 import androidx.compose.ui.tooling.preview.Preview
 
 import com.example.lostfoundapp.R
+import com.example.lostfoundapp.data.local.SessionManager
 
 import com.example.lostfoundapp.data.remote.RetrofitInstance.api
 
@@ -66,6 +68,11 @@ fun SignUpScreen(
     }
 
     val viewModelScope = rememberCoroutineScope()
+
+    val context = LocalContext.current
+
+    val sessionManager =
+        SessionManager(context)
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -253,6 +260,11 @@ fun SignUpScreen(
                                 Log.d("CODE", response.code().toString())
 
                                 if (response.isSuccessful) {
+                                    val loginResponse =
+                                        api.login(
+                                            email = email,
+                                            password = password
+                                        )
 
                                     val result = response.body()
 
@@ -264,7 +276,19 @@ fun SignUpScreen(
                                         "BODY",
                                         response.body().toString()
                                     )
-                                    onSignupSuccess()
+
+                                    if(loginResponse.isSuccessful){
+
+                                        val token = loginResponse.body()
+
+                                        if(token != null){
+
+                                            sessionManager.saveToken(token)
+
+                                            onSignupSuccess()
+                                        }
+                                    }
+
 
                                 } else {
 
