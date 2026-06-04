@@ -75,5 +75,7 @@ data class RequestDto(
     val status: String,
     val title: String,
     val user_name: String,
-    val time: String
+    val time: String,
+    val content: String,
+    val message: String,
 )

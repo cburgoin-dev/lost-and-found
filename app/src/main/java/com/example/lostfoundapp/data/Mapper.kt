@@ -92,9 +92,9 @@ fun RequestDto.toRequest(): Request {
                 profileImageRes = R.drawable.airpods_case
             ),
 
-        description = "",
+        description = content,
 
-        additionalMessage = "",
+        additionalMessage = message,
 
         status =
             when(status) {
