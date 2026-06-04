@@ -21,13 +21,21 @@ import com.example.lostfoundapp.ui.components.CustomInput
 import com.example.lostfoundapp.ui.components.DescriptionInput
 import com.example.lostfoundapp.ui.components.PrimaryButton
 import com.example.lostfoundapp.ui.theme.DetailSecondaryText
+import androidx.compose.ui.platform.LocalContext
+import kotlinx.coroutines.launch
+import androidx.compose.runtime.rememberCoroutineScope
+import com.example.lostfoundapp.data.local.SessionManager
+import com.example.lostfoundapp.data.remote.RetrofitInstance
+import com.example.lostfoundapp.utils.toRequestBodyText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateRequestBottomSheet(
+    postId: Int,
     reportType: ReportType,
     onDismiss: () -> Unit
 ) {
+
 
     val title =
         if(reportType == ReportType.LOST)
@@ -80,6 +88,12 @@ fun CreateRequestBottomSheet(
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
     )
+
+    val viewModelScope = rememberCoroutineScope()
+
+    val context = LocalContext.current
+
+    val sessionManager = SessionManager(context)
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
@@ -147,7 +161,54 @@ fun CreateRequestBottomSheet(
                 text = buttonText,
                 height = 52.dp,
                 onClick = {
+                    if(primaryInput.isBlank()){
+                        return@PrimaryButton
+                    }
+                    viewModelScope.launch {
 
+                        try {
+
+                            val token =
+                                sessionManager.getToken() ?: ""
+
+                            val response =
+                                RetrofitInstance.api.createRequest(
+
+                                    token =
+                                        "Bearer $token",
+
+                                    postId =
+                                        postId
+                                            .toString()
+                                            .toRequestBodyText(),
+
+                                    content =
+                                        primaryInput
+                                            .toRequestBodyText(),
+
+                                    message =
+                                        secondaryInput
+                                            .toRequestBodyText()
+                                )
+
+                            if(response.isSuccessful){
+
+                                println("SOLICITUD ENVIADA")
+
+                                onDismiss()
+
+                            }else{
+
+                                println(
+                                    response.errorBody()?.string()
+                                )
+                            }
+
+                        } catch(e: Exception){
+
+                            e.printStackTrace()
+                        }
+                    }
                 }
             )
         }

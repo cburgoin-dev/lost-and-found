@@ -1,8 +1,15 @@
 package com.example.lostfoundapp.data
 
+import com.example.lostfoundapp.R
 import com.example.lostfoundapp.data.model.ItemPost
 import com.example.lostfoundapp.data.model.ReportType
 import com.example.lostfoundapp.data.model.PostResponse
+import com.example.lostfoundapp.data.model.Request
+import com.example.lostfoundapp.data.model.RequestDto
+import com.example.lostfoundapp.data.model.RequestStatus
+import com.example.lostfoundapp.data.model.RequestType
+import com.example.lostfoundapp.data.model.User
+
 fun PostResponse.toItemPost(): ItemPost {
 
     return ItemPost(
@@ -58,5 +65,50 @@ fun PostResponse.toItemPost(): ItemPost {
         isAnonymous = false,
 
         isContactVisible = true
+    )
+}
+
+fun RequestDto.toRequest(): Request {
+
+    return Request(
+
+        id = id,
+
+        requestType =
+            if(type.contains("Información"))
+                RequestType.INFORMATION
+            else
+                RequestType.CLAIM,
+
+        itemName = title,
+
+        itemImageRes =
+            R.drawable.airpods_case,
+
+        sender =
+            User(
+                id = 0,
+                fullName = user_name,
+                profileImageRes = R.drawable.airpods_case
+            ),
+
+        description = "",
+
+        additionalMessage = "",
+
+        status =
+            when(status) {
+
+                "Aprobado" ->
+                    RequestStatus.APPROVED
+
+                "Rechazado" ->
+                    RequestStatus.REJECTED
+
+                else ->
+                    RequestStatus.PENDING
+            },
+
+        createdAt = time
     )
 }

@@ -24,16 +24,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.lostfoundapp.data.local.SessionManager
 
 import com.example.lostfoundapp.data.mock.mockNotifications
 import com.example.lostfoundapp.data.mock.mockRequests
 import com.example.lostfoundapp.data.model.Notification
 import com.example.lostfoundapp.data.model.Request
+import com.example.lostfoundapp.data.remote.RetrofitInstance
+import com.example.lostfoundapp.data.toRequest
 import com.example.lostfoundapp.navigation.Routes
 import com.example.lostfoundapp.ui.components.AppBottomBar
 import com.example.lostfoundapp.ui.components.activity.ActivityTabRow
@@ -54,7 +58,47 @@ fun ActivityScreen(
     onRequestClick: (Request) -> Unit,
     onNotificationClick: (Notification) -> Unit
 ) {
+    val context = LocalContext.current
 
+    val sessionManager =
+        SessionManager(context)
+
+    val token =
+        sessionManager.getToken() ?: ""
+
+    var requests by remember {
+        mutableStateOf<List<Request>>(emptyList())
+    }
+
+    LaunchedEffect(Unit) {
+
+        try {
+
+            val response =
+                RetrofitInstance.api.getRequests(
+                    token = "Bearer $token"
+                )
+
+            if(response.isSuccessful){
+
+                requests =
+                    response.body()
+                        ?.data
+                        ?.map { it.toRequest() }
+                        ?: emptyList()
+
+            } else {
+
+                println(
+                    response.errorBody()?.string()
+                )
+            }
+
+        } catch(e: Exception){
+
+            e.printStackTrace()
+        }
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -119,7 +163,7 @@ fun ActivityScreen(
                             verticalArrangement = Arrangement.spacedBy(20.dp)
                         ) {
 
-                            items(mockRequests) { request ->
+                            items(requests) { request ->
 
                                 RequestCard(
                                     request = request,

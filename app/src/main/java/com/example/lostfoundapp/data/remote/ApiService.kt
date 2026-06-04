@@ -1,5 +1,7 @@
 package com.example.lostfoundapp.data.remote
 
+import com.example.lostfoundapp.data.model.CreateRequestResponse
+import com.example.lostfoundapp.data.model.GetRequestsResponse
 import com.example.lostfoundapp.data.model.LoginResponse
 import com.example.lostfoundapp.data.model.PostsResponse
 import okhttp3.MultipartBody
@@ -86,7 +88,8 @@ interface ApiService {
 
     @GET("api/posts")
     suspend fun getPosts(
-        @Header("Authorization") token: String,
+        @Header("Authorization")
+        token: String,
 
         @Query("category_id")
         categoryId: Int? = null,
@@ -97,4 +100,29 @@ interface ApiService {
         @Query("time")
         time: String? = null
     ): Response<PostsResponse>
+
+    @Multipart
+    @POST("api/requests")
+    suspend fun createRequest(
+
+        @Header("Authorization")
+        token: String,
+
+        @Part("post_id")
+        postId: RequestBody,
+
+        @Part("content")
+        content: RequestBody,
+
+        @Part("message")
+        message: RequestBody
+    ): Response<CreateRequestResponse>
+
+    @GET("api/requests")
+    suspend fun getRequests(
+        @Header("Authorization")
+        token: String,
+
+    ): Response<GetRequestsResponse>
+
 }

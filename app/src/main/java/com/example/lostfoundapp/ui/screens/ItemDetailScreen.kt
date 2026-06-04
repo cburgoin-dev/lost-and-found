@@ -167,8 +167,8 @@ fun ItemDetailScreen(
         if (showRequestSheet) {
 
             CreateRequestBottomSheet(
+                postId = itemPost.id,
                 reportType = itemPost.reportType,
-
                 onDismiss = {
                     showRequestSheet = false
                 }
