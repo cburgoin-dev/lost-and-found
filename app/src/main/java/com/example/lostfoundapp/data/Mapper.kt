@@ -99,10 +99,10 @@ fun RequestDto.toRequest(): Request {
         status =
             when(status) {
 
-                "Aprobado" ->
+                "Aprobada" ->
                     RequestStatus.APPROVED
 
-                "Rechazado" ->
+                "Rechazada" ->
                     RequestStatus.REJECTED
 
                 else ->
