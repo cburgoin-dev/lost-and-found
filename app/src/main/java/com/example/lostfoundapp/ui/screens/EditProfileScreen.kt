@@ -3,7 +3,6 @@ package com.example.lostfoundapp.ui.screens
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -26,9 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -40,17 +37,19 @@ import com.example.lostfoundapp.ui.theme.BorderGray
 import com.example.lostfoundapp.ui.theme.CardWhite
 import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
 import com.example.lostfoundapp.ui.theme.TextGray
-import com.example.lostfoundapp.ui.viewmodel.ProfileViewModel
+import com.example.lostfoundapp.ui.viewmodel.EditProfileViewModel
+import com.example.lostfoundapp.ui.viewmodel.UserViewModel
 
 @Composable
 fun EditProfileScreen(
-    profileViewModel: ProfileViewModel,
+    userViewModel: UserViewModel,
+    editProfileViewModel: EditProfileViewModel,
     onBackClick: () -> Unit,
-    onSaveClick: (String) -> Unit,
+    onSaveClick: () -> Unit,
     onChangePhotoClick: (Uri) -> Unit
 ) {
 
-    val selectedImageUri = profileViewModel.editedProfileImageUri
+    val selectedImageUri = editProfileViewModel.profileImageUri
 
     val imagePickerLauncher =
         rememberLauncherForActivityResult(
@@ -59,7 +58,7 @@ fun EditProfileScreen(
 
             if(uri != null) {
 
-                profileViewModel.updateEditedProfileImage(uri)
+                editProfileViewModel.updateProfileImage(uri)
 
                 onChangePhotoClick(uri)
             }
@@ -239,7 +238,7 @@ fun EditProfileScreen(
                     )
 
                     Text(
-                        text = profileViewModel.userName,
+                        text = userViewModel.userName,
                         color = Color.Gray
                     )
                 }
@@ -287,7 +286,7 @@ fun EditProfileScreen(
                     )
 
                     Text(
-                        text = profileViewModel.email,
+                        text = userViewModel.email,
                         color = Color.Gray
                     )
                 }
@@ -312,12 +311,12 @@ fun EditProfileScreen(
                 )
 
                 AuthInput(
-                    value = profileViewModel.editedPhone,
+                    value = editProfileViewModel.phone,
                     placeholder = "Ingresa tu teléfono",
                     leadingIcon = Icons.Outlined.Phone,
 
                     onValueChange = {
-                        profileViewModel.updateEditedPhone(it)
+                        editProfileViewModel.updatePhone(it)
                     }
                 )
 
@@ -331,8 +330,12 @@ fun EditProfileScreen(
                     onClick = {
                         focusManager.clearFocus()
                         keyboardController?.hide()
-                        profileViewModel.saveProfile()
-                        onSaveClick(profileViewModel.phone)
+                        userViewModel.updateUser(
+                            phone = editProfileViewModel.phone,
+                            imageUri = editProfileViewModel.profileImageUri
+                        )
+
+                        onSaveClick()
                     }
                 )
             }

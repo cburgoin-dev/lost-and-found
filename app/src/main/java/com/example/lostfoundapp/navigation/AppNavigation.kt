@@ -9,7 +9,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.*
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.lostfoundapp.data.mock.mockPosts
-import com.example.lostfoundapp.data.mock.mockRequests
 import com.example.lostfoundapp.data.model.ItemPost
 import com.example.lostfoundapp.data.model.NotificationType
 import com.example.lostfoundapp.data.model.PostsScreenType
@@ -17,7 +16,8 @@ import com.example.lostfoundapp.data.model.PostsScreenType
 import com.example.lostfoundapp.ui.screens.*
 import com.example.lostfoundapp.data.model.ReportType
 import com.example.lostfoundapp.data.model.Request
-import com.example.lostfoundapp.ui.viewmodel.ProfileViewModel
+import com.example.lostfoundapp.ui.viewmodel.EditProfileViewModel
+import com.example.lostfoundapp.ui.viewmodel.UserViewModel
 
 @Composable
 fun AppNavigation() {
@@ -36,7 +36,9 @@ fun AppNavigation() {
     val navController =
         rememberNavController()
 
-    val profileViewModel: ProfileViewModel = viewModel()
+    val userViewModel: UserViewModel = viewModel()
+
+    val editProfileViewModel: EditProfileViewModel = viewModel()
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
@@ -130,6 +132,8 @@ fun AppNavigation() {
         ) {
 
             HomeScreen(
+                userViewModel = userViewModel,
+
                 hasUnreadActivity = hasUnreadActivity,
 
                 onLostClick = {
@@ -337,7 +341,7 @@ fun AppNavigation() {
         ) {
 
             ProfileScreen(
-                profileViewModel = profileViewModel,
+                userViewModel = userViewModel,
 
                 currentRoute = currentRoute,
 
@@ -366,7 +370,11 @@ fun AppNavigation() {
                 },
 
                 onEditProfileClick = {
-                    profileViewModel.startEditing()
+
+                    editProfileViewModel.startEditing(
+                        currentPhone = userViewModel.phone,
+                        currentImage = userViewModel.profileImageUri
+                    )
 
                     navController.navigate(
                         Routes.EditProfile.route
@@ -392,7 +400,8 @@ fun AppNavigation() {
         ) {
 
             EditProfileScreen(
-                profileViewModel = profileViewModel,
+                userViewModel = userViewModel,
+                editProfileViewModel = editProfileViewModel,
 
                 onBackClick = {
                     navController.popBackStack()
