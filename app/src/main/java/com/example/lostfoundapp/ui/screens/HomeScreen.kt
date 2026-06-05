@@ -59,15 +59,17 @@ import com.example.lostfoundapp.ui.theme.LostActionCardBackground
 import com.example.lostfoundapp.ui.theme.LostActionCardForeground
 import com.example.lostfoundapp.ui.theme.LostBadgeBackground
 import com.example.lostfoundapp.ui.theme.LostBadgeText
-import com.example.lostfoundapp.data.mock.mockPosts
 import com.example.lostfoundapp.data.model.ItemPost
 import com.example.lostfoundapp.data.model.ReportType
 import com.example.lostfoundapp.data.remote.RetrofitInstance
 import com.example.lostfoundapp.data.toItemPost
+import com.example.lostfoundapp.ui.viewmodel.EditProfileViewModel
+import com.example.lostfoundapp.ui.viewmodel.UserViewModel
 
 @Composable
 fun HomeScreen(
-    username: String = "Cristian",
+    userViewModel: UserViewModel,
+
     hasUnreadActivity: Boolean,
     onLostClick: () -> Unit,
     onFoundClick: () -> Unit,
@@ -82,6 +84,11 @@ fun HomeScreen(
     var posts by remember {
         mutableStateOf<List<ItemPost>>(emptyList())
     }
+
+    val firstName = userViewModel.userName
+        .split(" ")
+        .firstOrNull()
+        ?: ""
 
     val context = LocalContext.current
 
@@ -223,7 +230,7 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.height(42.dp))
 
                 Text(
-                    text = "Hola, $username",
+                    text = "Hola, $firstName",
                     fontSize = 32.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White
@@ -353,24 +360,4 @@ fun HomeScreen(
             )
         }
     }
-}
-
-@Preview
-@Composable
-fun HomeScreenPreview(){
-
-    HomeScreen(
-        username = "Cristian",
-        hasUnreadActivity = true,
-
-        onLostClick = {},
-        onFoundClick = {},
-        onItemClick = {},
-
-        currentRoute = Routes.Home.route,
-        onHomeClick = {},
-        onSearchClick = {},
-        onActivityClick = {},
-        onProfileClick = {}
-    )
 }
