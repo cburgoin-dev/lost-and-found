@@ -18,6 +18,7 @@ import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostfoundapp.navigation.Routes
 import com.example.lostfoundapp.ui.components.AppBottomBar
 import com.example.lostfoundapp.ui.components.ConfirmationBottomSheet
@@ -37,15 +39,20 @@ import com.example.lostfoundapp.ui.components.profile.ProfileHeader
 import com.example.lostfoundapp.ui.components.profile.ProfileMenuCard
 import com.example.lostfoundapp.ui.theme.BorderGray
 import com.example.lostfoundapp.ui.theme.LostActionCardForeground
+import com.example.lostfoundapp.ui.viewmodel.ProfileViewModel
 
 @Composable
 fun ProfileScreen(
+    profileViewModel: ProfileViewModel,
     currentRoute: String?,
     onHomeClick: () -> Unit,
     onSearchClick: () -> Unit,
     onActivityClick: () -> Unit,
     onProfileClick: () -> Unit,
+
     onEditProfileClick: () -> Unit,
+    onMyPostsClick: () -> Unit,
+    onSavedPostsClick: () -> Unit
 ) {
 
     var showLogoutConfirmation by remember {
@@ -77,9 +84,10 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.height(48.dp))
 
                 ProfileHeader(
-                    userName = "Cristian Burgoin",
-                    email = "cristian@uabcs.mx",
-                    phone = "612 123 4567",
+                    userName = profileViewModel.userName,
+                    email = profileViewModel.email,
+                    phone = profileViewModel.phone,
+                    profileImageUri = profileViewModel.profileImageUri
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -93,7 +101,7 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.height(32.dp))
 
                 Text(
-                    text = "Mi cuenta",
+                    text = "Mi contenido",
                     modifier = Modifier.fillMaxWidth(),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold
@@ -113,7 +121,9 @@ fun ProfileScreen(
                 ProfileMenuCard(
                     title = "Mis publicaciones",
                     icon = Icons.Filled.Description,
-                    onClick = {}
+                    onClick = {
+                        onMyPostsClick()
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -121,7 +131,9 @@ fun ProfileScreen(
                 ProfileMenuCard(
                     title = "Publicaciones guardadas",
                     icon = Icons.Outlined.Bookmark,
-                    onClick = {}
+                    onClick = {
+                        onSavedPostsClick()
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(48.dp))
@@ -161,7 +173,7 @@ fun ProfileScreen(
 
             onConfirm = {
 
-                // BACKEND, AQUI DEBERIA MANDAR A INICIAR SESIÓN
+                profileViewModel.logout()
 
                 showLogoutConfirmation = false
             },
@@ -171,18 +183,4 @@ fun ProfileScreen(
             }
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ProfileScreenPreview() {
-
-    ProfileScreen(
-        currentRoute = Routes.Profile.route,
-        onHomeClick = {},
-        onSearchClick = {},
-        onActivityClick = {},
-        onProfileClick = {},
-        onEditProfileClick = {}
-    )
 }

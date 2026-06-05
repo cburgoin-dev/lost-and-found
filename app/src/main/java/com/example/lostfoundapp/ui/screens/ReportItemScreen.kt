@@ -22,6 +22,8 @@ import android.content.Context
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import com.example.lostfoundapp.data.local.SessionManager
 import java.util.Calendar
 
@@ -166,6 +168,10 @@ fun ReportItemScreen(
         calendar.get(Calendar.DAY_OF_MONTH)
     )
 
+    val focusManager = LocalFocusManager.current
+
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     val viewModelScope = rememberCoroutineScope()
 
     val context = LocalContext.current
@@ -208,6 +214,8 @@ fun ReportItemScreen(
 
                     BackButton(
                         onClick = {
+                            focusManager.clearFocus()
+                            keyboardController?.hide()
                             onBackClick()
                         },
 
@@ -223,7 +231,7 @@ fun ReportItemScreen(
                         Text(
                             text = "Nueva publicación",
                             color = Color.White,
-                            fontSize = 26.sp,
+                            fontSize = 24.sp,
                             fontWeight = FontWeight.Bold
                         )
                     }
@@ -407,6 +415,9 @@ fun ReportItemScreen(
                         else
                             FoundActionCardForeground,
                     onClick = {
+                        focusManager.clearFocus()
+                        keyboardController?.hide()
+
                         imageError =
                             reportType == ReportType.FOUND
                                     && !hasImage
