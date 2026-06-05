@@ -16,6 +16,7 @@ import com.example.lostfoundapp.data.model.PostsScreenType
 import com.example.lostfoundapp.ui.screens.*
 import com.example.lostfoundapp.data.model.ReportType
 import com.example.lostfoundapp.data.model.Request
+import com.example.lostfoundapp.ui.viewmodel.ActivityViewModel
 import com.example.lostfoundapp.ui.viewmodel.EditProfileViewModel
 import com.example.lostfoundapp.ui.viewmodel.UserViewModel
 
@@ -29,14 +30,12 @@ fun AppNavigation() {
         mutableStateOf<Request?>(null)
     }
 
-    var hasUnreadActivity by remember {
-        mutableStateOf(true)
-    }
-
     val navController =
         rememberNavController()
 
     val userViewModel: UserViewModel = viewModel()
+
+    val activityViewModel: ActivityViewModel = viewModel()
 
     val editProfileViewModel: EditProfileViewModel = viewModel()
 
@@ -71,7 +70,7 @@ fun AppNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = Routes.Login.route
+        startDestination = Routes.Home.route
     ) {
 
         composable(
@@ -134,7 +133,7 @@ fun AppNavigation() {
             HomeScreen(
                 userViewModel = userViewModel,
 
-                hasUnreadActivity = hasUnreadActivity,
+                hasUnreadActivity = activityViewModel.hasUnreadActivity,
 
                 onLostClick = {
                     navController.navigate(
@@ -163,8 +162,6 @@ fun AppNavigation() {
                 },
 
                 onActivityClick = {
-                    hasUnreadActivity = false
-
                     navigateToBottomBarRoute(
                         Routes.Activity.route
                     )
@@ -207,9 +204,11 @@ fun AppNavigation() {
         ) {
 
             SearchScreen(
-                onItemClick = ::navigateToItemDetail,
-
                 currentRoute = currentRoute,
+
+                hasUnreadActivity = activityViewModel.hasUnreadActivity,
+
+                onItemClick = ::navigateToItemDetail,
 
                 onHomeClick = {
                     navigateToBottomBarRoute(
@@ -222,8 +221,6 @@ fun AppNavigation() {
                 },
 
                 onActivityClick = {
-                    hasUnreadActivity = false
-
                     navigateToBottomBarRoute(
                         Routes.Activity.route
                     )
@@ -258,6 +255,8 @@ fun AppNavigation() {
 
             ActivityScreen(
                 currentRoute = currentRoute,
+
+                activityViewModel = activityViewModel,
 
                 onHomeClick = {
                     navigateToBottomBarRoute(
@@ -345,6 +344,8 @@ fun AppNavigation() {
 
                 currentRoute = currentRoute,
 
+                hasUnreadActivity = activityViewModel.hasUnreadActivity,
+
                 onHomeClick = {
                     navigateToBottomBarRoute(
                         Routes.Home.route
@@ -358,8 +359,6 @@ fun AppNavigation() {
                 },
 
                 onActivityClick = {
-                    hasUnreadActivity = false
-
                     navigateToBottomBarRoute(
                         Routes.Activity.route
                     )

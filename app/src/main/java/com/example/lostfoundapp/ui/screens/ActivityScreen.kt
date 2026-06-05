@@ -87,6 +87,10 @@ fun ActivityScreen(
                         ?.map { it.toRequest() }
                         ?: emptyList()
 
+                activityViewModel.updatePendingRequests(
+                    requests
+                )
+
             } else {
 
                 println(
@@ -127,6 +131,10 @@ fun ActivityScreen(
                 selectedTab = activityViewModel.selectedTab,
                 onTabSelected = {
                     activityViewModel.selectTab(it)
+
+                    if (it == "Notificaciones") {
+                        activityViewModel.markNotificationsAsRead()
+                    }
                 },
                 modifier = Modifier.padding(horizontal = 24.dp)
             )
@@ -157,39 +165,99 @@ fun ActivityScreen(
 
                     if(activityViewModel.selectedTab == "Solicitudes") {
 
-                        LazyColumn(
-                            modifier = Modifier.weight(1f),
-                            contentPadding = PaddingValues(bottom = 120.dp),
-                            verticalArrangement = Arrangement.spacedBy(20.dp)
-                        ) {
+                        if(requests.isEmpty()) {
 
-                            items(requests) { request ->
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
 
-                                RequestCard(
-                                    request = request,
-                                    onClick = {
-                                        onRequestClick(request)
-                                    }
-                                )
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+
+                                    Text(
+                                        text = "No tienes solicitudes",
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+
+                                    Spacer(
+                                        modifier = Modifier.height(4.dp)
+                                    )
+
+                                    Text(
+                                        text = "Las solicitudes aparecerán aquí",
+                                        color = Color.Gray
+                                    )
+                                }
+                            }
+
+                        } else {
+
+                            LazyColumn(
+                                modifier = Modifier.weight(1f),
+                                contentPadding = PaddingValues(bottom = 120.dp),
+                                verticalArrangement = Arrangement.spacedBy(20.dp)
+                            ) {
+
+                                items(requests) { request ->
+
+                                    RequestCard(
+                                        request = request,
+                                        onClick = {
+                                            onRequestClick(request)
+                                        }
+                                    )
+                                }
                             }
                         }
 
                     } else {
 
-                        LazyColumn(
-                            modifier = Modifier.weight(1f),
-                            contentPadding = PaddingValues(bottom = 120.dp),
-                            verticalArrangement = Arrangement.spacedBy(20.dp)
-                        ) {
+                        if(mockNotifications.isEmpty()) {
 
-                            items(mockNotifications) { notification ->
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
 
-                                NotificationCard(
-                                    notification = notification,
-                                    onClick = {
-                                        onNotificationClick(notification)
-                                    }
-                                )
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+
+                                    Text(
+                                        text = "No tienes notificaciones",
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+
+                                    Spacer(
+                                        modifier = Modifier.height(4.dp)
+                                    )
+
+                                    Text(
+                                        text = "Las nuevas notificaciones aparecerán aquí",
+                                        color = Color.Gray
+                                    )
+                                }
+                            }
+
+                        } else {
+
+                            LazyColumn(
+                                modifier = Modifier.weight(1f),
+                                contentPadding = PaddingValues(bottom = 120.dp),
+                                verticalArrangement = Arrangement.spacedBy(20.dp)
+                            ) {
+
+                                items(mockNotifications) { notification ->
+
+                                    NotificationCard(
+                                        notification = notification,
+                                        onClick = {
+                                            onNotificationClick(notification)
+                                        }
+                                    )
+                                }
                             }
                         }
                     }
