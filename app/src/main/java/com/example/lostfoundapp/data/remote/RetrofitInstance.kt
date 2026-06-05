@@ -8,7 +8,7 @@ object RetrofitInstance {
 
     private val retrofit = Retrofit.Builder()
 
-        .baseUrl("https://lostandfound-api-dev-g7m8ub.laravel.cloud/")
+        .baseUrl("http://10.0.2.2:8000/")
         .addConverterFactory(
             ScalarsConverterFactory.create()
         )
