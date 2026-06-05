@@ -3,12 +3,12 @@ package com.example.lostfoundapp.data
 import com.example.lostfoundapp.R
 import com.example.lostfoundapp.data.model.ItemPost
 import com.example.lostfoundapp.data.model.ReportType
-import com.example.lostfoundapp.data.model.PostResponse
 import com.example.lostfoundapp.data.model.Request
-import com.example.lostfoundapp.data.model.RequestDto
 import com.example.lostfoundapp.data.model.RequestStatus
 import com.example.lostfoundapp.data.model.RequestType
 import com.example.lostfoundapp.data.model.User
+import com.example.lostfoundapp.data.response.PostResponse
+import com.example.lostfoundapp.data.response.RequestDto
 
 fun PostResponse.toItemPost(): ItemPost {
 

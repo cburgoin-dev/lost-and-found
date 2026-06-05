@@ -6,7 +6,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 
@@ -35,19 +34,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.lostfoundapp.R
 import com.example.lostfoundapp.data.local.SessionManager
 
-import com.example.lostfoundapp.data.remote.RetrofitInstance.api
-
 import com.example.lostfoundapp.ui.components.AuthInput
 import com.example.lostfoundapp.ui.components.AuthPasswordInput
 import com.example.lostfoundapp.ui.components.PrimaryButton
-import com.example.lostfoundapp.ui.components.Roboto
 
 import com.example.lostfoundapp.ui.theme.CardWhite
 import com.example.lostfoundapp.ui.theme.DarkOverlay
 import com.example.lostfoundapp.ui.theme.GoldAccent
-import com.example.lostfoundapp.ui.theme.TextGray
-
-import kotlinx.coroutines.launch
+import com.example.lostfoundapp.ui.viewmodel.AuthViewModel
 
 @Composable
 fun SignUpScreen(
@@ -67,12 +61,24 @@ fun SignUpScreen(
         mutableStateOf("")
     }
 
-    val viewModelScope = rememberCoroutineScope()
-
     val context = LocalContext.current
 
-    val sessionManager =
-        SessionManager(context)
+    val authViewModel = remember {
+
+        AuthViewModel(
+            SessionManager(context)
+        )
+    }
+
+    LaunchedEffect(
+        authViewModel.authSuccess
+    ) {
+
+        if(authViewModel.authSuccess) {
+
+            onSignupSuccess()
+        }
+    }
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -247,65 +253,11 @@ fun SignUpScreen(
 
                     onClick = {
 
-                        viewModelScope.launch {
-
-                            try {
-
-                                val response = api.signup(
-                                    name= fullname,
-                                    email= email,
-                                    password =password
-                                )
-
-                                Log.d("CODE", response.code().toString())
-
-                                if (response.isSuccessful) {
-                                    val loginResponse =
-                                        api.login(
-                                            email = email,
-                                            password = password
-                                        )
-
-                                    val result = response.body()
-
-                                    Log.d(
-                                        "USUARIO CREADO",
-                                        result.toString()
-                                    )
-                                    Log.d(
-                                        "BODY",
-                                        response.body().toString()
-                                    )
-
-                                    if(loginResponse.isSuccessful){
-
-                                        val token = loginResponse.body()
-
-                                        if(token != null){
-
-                                            sessionManager.saveToken(token)
-
-                                            onSignupSuccess()
-                                        }
-                                    }
-
-
-                                } else {
-
-                                    Log.d(
-                                        "ERROR_BODY",
-                                        response.errorBody()?.string() ?: "No error body"
-                                    )
-                                }
-
-                            } catch (e: Exception) {
-
-                                Log.d(
-                                    "EXCEPTION",
-                                    e.message ?: "Unknown error"
-                                )
-                            }
-                        }
+                        authViewModel.signup(
+                            name = fullname,
+                            email = email,
+                            password = password
+                        )
                     }
                 )
 

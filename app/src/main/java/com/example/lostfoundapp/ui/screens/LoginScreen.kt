@@ -1,6 +1,5 @@
 package com.example.lostfoundapp.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicText
@@ -27,7 +26,6 @@ import androidx.compose.ui.unit.sp
 
 import com.example.lostfoundapp.R
 import com.example.lostfoundapp.data.local.SessionManager
-import com.example.lostfoundapp.data.remote.RetrofitInstance.api
 import com.example.lostfoundapp.ui.components.AuthInput
 import com.example.lostfoundapp.ui.components.AuthPasswordInput
 import com.example.lostfoundapp.ui.components.PrimaryButton
@@ -35,7 +33,7 @@ import com.example.lostfoundapp.ui.theme.CardWhite
 import com.example.lostfoundapp.ui.theme.DarkOverlay
 import com.example.lostfoundapp.ui.theme.GoldAccent
 import com.example.lostfoundapp.ui.theme.TextGray
-import kotlinx.coroutines.launch
+import com.example.lostfoundapp.ui.viewmodel.AuthViewModel
 
 @Composable
 fun LoginScreen(
@@ -51,11 +49,26 @@ fun LoginScreen(
     var password by remember {
         mutableStateOf("")
     }
-    val viewModelScope = rememberCoroutineScope()
+
     val context = LocalContext.current
 
-    val sessionManager =
-        SessionManager(context)
+    val authViewModel = remember {
+
+        AuthViewModel(
+            SessionManager(context)
+        )
+    }
+
+    LaunchedEffect(
+        authViewModel.authSuccess
+    ) {
+
+        if(authViewModel.authSuccess) {
+
+            onLoginClick()
+        }
+    }
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -209,30 +222,11 @@ fun LoginScreen(
                     PrimaryButton(
                         text = "Iniciar sesión",
                         onClick = {
-                            viewModelScope.launch {
 
-                                val response = api.login(
-                                    email = "dev@dev.com",
-                                    password = "password"
-                                )
-
-                                if (response.isSuccessful) {
-
-                                    val token = response.body()
-                                    if (token !=null){
-                                        onLoginClick()
-                                        sessionManager.saveToken(
-                                            token = token
-                                        )
-                                        Log.d("TOKEN", token ?: "null")
-                                    }
-
-
-                                } else {
-
-                                    Log.d("LOGIN", "Error")
-                                }
-                            }
+                            authViewModel.login(
+                                email,
+                                password
+                            )
                         }
                     )
 

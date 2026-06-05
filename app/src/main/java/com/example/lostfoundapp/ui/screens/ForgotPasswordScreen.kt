@@ -33,6 +33,9 @@ import com.example.lostfoundapp.ui.theme.GoldAccent
 import com.example.lostfoundapp.ui.theme.TextGray
 
 import androidx.compose.material3.Icon
+import androidx.compose.ui.platform.LocalContext
+import com.example.lostfoundapp.data.local.SessionManager
+import com.example.lostfoundapp.ui.viewmodel.AuthViewModel
 
 @Composable
 fun ForgotPasswordScreen(
@@ -45,6 +48,25 @@ fun ForgotPasswordScreen(
 
     var emailSent by remember {
         mutableStateOf(false)
+    }
+
+    val context = LocalContext.current
+
+    val authViewModel = remember {
+
+        AuthViewModel(
+            SessionManager(context)
+        )
+    }
+
+    LaunchedEffect(
+        authViewModel.forgotPasswordSuccess
+    ) {
+
+        if(authViewModel.forgotPasswordSuccess) {
+
+            emailSent = true
+        }
     }
 
     Box(
@@ -188,9 +210,9 @@ fun ForgotPasswordScreen(
 
                             onClick = {
 
-                                // AQUI SE CONECTA CON EL BACKEND
-
-                                emailSent = true
+                                authViewModel.forgotPassword(
+                                    email
+                                )
                             }
                         )
 
