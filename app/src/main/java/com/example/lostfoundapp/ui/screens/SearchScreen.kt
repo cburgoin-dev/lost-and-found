@@ -62,9 +62,10 @@ import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun SearchScreen(
+    currentRoute: String?,
+    hasUnreadActivity: Boolean,
     onItemClick: (ItemPost) -> Unit,
 
-    currentRoute: String?,
     onHomeClick: () -> Unit,
     onSearchClick: () -> Unit,
     onActivityClick: () -> Unit,
@@ -402,6 +403,7 @@ fun SearchScreen(
 
             AppBottomBar(
                 currentRoute = currentRoute,
+                hasUnreadActivity = hasUnreadActivity,
                 onHomeClick = onHomeClick,
                 onSearchClick = onSearchClick,
                 onActivityClick = onActivityClick,
@@ -409,18 +411,4 @@ fun SearchScreen(
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun SearchScreenPreview() {
-
-    SearchScreen(
-        currentRoute = Routes.Search.route,
-        onHomeClick = {},
-        onSearchClick = {},
-        onActivityClick = {},
-        onProfileClick = {},
-        onItemClick = {}
-    )
 }

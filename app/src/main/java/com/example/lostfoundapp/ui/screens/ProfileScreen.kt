@@ -39,6 +39,8 @@ import com.example.lostfoundapp.ui.viewmodel.UserViewModel
 fun ProfileScreen(
     userViewModel: UserViewModel,
     currentRoute: String?,
+    hasUnreadActivity: Boolean,
+
     onHomeClick: () -> Unit,
     onSearchClick: () -> Unit,
     onActivityClick: () -> Unit,
@@ -149,6 +151,7 @@ fun ProfileScreen(
 
             AppBottomBar(
                 currentRoute = currentRoute,
+                hasUnreadActivity = hasUnreadActivity,
                 onHomeClick = onHomeClick,
                 onSearchClick = onSearchClick,
                 onActivityClick = onActivityClick,

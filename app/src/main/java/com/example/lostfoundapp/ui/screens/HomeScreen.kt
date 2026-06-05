@@ -315,32 +315,72 @@ fun HomeScreen(
                     )
                 }
 
-                items(posts) { item ->
+                if (posts.isEmpty()) {
 
-                    ItemCard(
-                        title = item.title,
-                        location = item.location,
-                        time = item.date,
-                        status =
-                            if(item.reportType == ReportType.LOST)
-                                "Perdido"
-                            else
-                                "Encontrado",
-                        statusBackground =
-                            if(item.reportType == ReportType.LOST)
-                                LostBadgeBackground
-                            else
-                                FoundBadgeBackground,
-                        statusTextColor =
-                            if(item.reportType == ReportType.LOST)
-                                LostBadgeText
-                            else
-                                FoundBadgeText,
-                        imageUrl = item.imageUrl,
-                        onClick = {
-                            onItemClick(item)
+                    item {
+
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 32.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+
+                            Icon(
+                                imageVector = Icons.Outlined.SearchOff,
+                                contentDescription = null,
+                                tint = Color.Gray,
+                                modifier = Modifier.size(48.dp)
+                            )
+
+                            Spacer(
+                                modifier = Modifier.height(12.dp)
+                            )
+
+                            Text(
+                                text = "No hay publicaciones todavía",
+                                fontWeight = FontWeight.SemiBold
+                            )
+
+                            Spacer(
+                                modifier = Modifier.height(4.dp)
+                            )
+
+                            Text(
+                                text = "Cuando alguien reporte un objeto aparecerá aquí",
+                                color = Color.Gray
+                            )
                         }
-                    )
+                    }
+                } else {
+
+                    items(posts) { item ->
+
+                        ItemCard(
+                            title = item.title,
+                            location = item.location,
+                            time = item.date,
+                            status =
+                                if(item.reportType == ReportType.LOST)
+                                    "Perdido"
+                                else
+                                    "Encontrado",
+                            statusBackground =
+                                if(item.reportType == ReportType.LOST)
+                                    LostBadgeBackground
+                                else
+                                    FoundBadgeBackground,
+                            statusTextColor =
+                                if(item.reportType == ReportType.LOST)
+                                    LostBadgeText
+                                else
+                                    FoundBadgeText,
+                            imageUrl = item.imageUrl,
+                            onClick = {
+                                onItemClick(item)
+                            }
+                        )
+                    }
                 }
             }
         }
