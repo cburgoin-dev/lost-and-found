@@ -70,7 +70,7 @@ fun AppNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = Routes.Login.route
+        startDestination = Routes.Home.route
     ) {
 
         composable(
