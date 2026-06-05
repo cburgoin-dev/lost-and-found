@@ -99,7 +99,7 @@ fun RequestDetailScreen(
     val userName =
         when (request.status) {
             RequestStatus.APPROVED ->
-                request.sender.fullName
+                request.sender.name
 
             RequestStatus.REJECTED ->
                 "Usuario anónimo"
@@ -342,7 +342,7 @@ fun RequestDetailScreen(
         if (showContactSheet) {
 
             ContactInfoBottomSheet(
-                userName = request.sender.fullName,
+                userName = request.sender.name,
                 userImageRes = request.sender.profileImageRes,
                 email = request.sender.email,
                 phone = request.sender.phone,

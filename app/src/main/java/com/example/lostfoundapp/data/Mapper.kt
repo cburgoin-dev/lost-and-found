@@ -87,10 +87,15 @@ fun RequestDto.toRequest(): Request {
 
         sender =
             User(
-                id = 0,
-                fullName = user_name,
+                id = user?.id ?: -1,
+                name = user?.name ?: "Usuario pendiente",
+                email = user?.email ?: "-",
+                phone = user?.phone ?: "-",
                 profileImageRes = R.drawable.airpods_case
             ),
+
+
+
 
         description = content,
 

@@ -4,7 +4,7 @@ data class User(
 
     val id: Int,
 
-    val fullName: String,
+    val name: String,
 
     val profileImageRes: Int? = null,
 

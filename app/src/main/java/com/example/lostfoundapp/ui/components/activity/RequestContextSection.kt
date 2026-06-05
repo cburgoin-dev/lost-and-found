@@ -29,7 +29,7 @@ fun RequestContextSection(
         if (request.status != RequestStatus.APPROVED)
             "Un usuario"
         else
-            request.sender.fullName
+            request.sender.name
 
     val description =
         if (request.requestType == RequestType.CLAIM)
