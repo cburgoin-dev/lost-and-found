@@ -12,14 +12,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.lostfoundapp.data.local.SessionManager
 import com.example.lostfoundapp.data.mock.mockPosts
 import com.example.lostfoundapp.data.model.ItemPost
-import com.example.lostfoundapp.data.model.NotificationType
 import com.example.lostfoundapp.data.model.PostsScreenType
 
 import com.example.lostfoundapp.ui.screens.*
 import com.example.lostfoundapp.data.model.ReportType
 import com.example.lostfoundapp.data.model.Request
 import com.example.lostfoundapp.ui.viewmodel.ActivityViewModel
-import com.example.lostfoundapp.ui.viewmodel.AuthViewModel
 import com.example.lostfoundapp.ui.viewmodel.EditProfileViewModel
 import com.example.lostfoundapp.ui.viewmodel.PostsViewModel
 import com.example.lostfoundapp.ui.viewmodel.UserViewModel
@@ -30,8 +28,11 @@ fun AppNavigation() {
 
     val sessionManager = SessionManager(context)
 
-    val startDestination = if(sessionManager.hasToken()) Routes.Home.route else Routes.Login.route
-
+    val startDestination =
+        if(sessionManager.hasToken())
+            Routes.Home.route
+        else
+            Routes.Login.route
 
     var selectedPost by remember {
         mutableStateOf<ItemPost?>(null)
@@ -43,8 +44,6 @@ fun AppNavigation() {
 
     val navController =
         rememberNavController()
-
-    val context = LocalContext.current
 
     val userViewModel: UserViewModel = viewModel()
 
@@ -203,8 +202,16 @@ fun AppNavigation() {
 
             ReportItemScreen(
                 reportType = ReportType.LOST,
+
                 onBackClick = {
                     navController.popBackStack()
+                },
+
+                onPostCreated = {
+
+                    navController.navigate(
+                        Routes.Home.route
+                    )
                 }
             )
         }
@@ -215,8 +222,16 @@ fun AppNavigation() {
 
             ReportItemScreen(
                 reportType = ReportType.FOUND,
+
                 onBackClick = {
                     navController.popBackStack()
+                },
+
+                onPostCreated = {
+
+                    navController.navigate(
+                        Routes.Home.route
+                    )
                 }
             )
         }
