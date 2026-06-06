@@ -34,7 +34,7 @@ class AuthViewModel(
 
     var requestSuccsess by mutableStateOf(false)
         private set
-    var message by mutableStateOf("")
+    var message: String? by mutableStateOf("")
         private set
 
     fun login(
@@ -74,7 +74,7 @@ class AuthViewModel(
                     requestSuccsess = true
                     message = result.message
                 }
-                is ApiResult.Error -> {
+                is ApiResult.Error<*> -> {
                     requestSuccsess = false
                     message = result.message
                 }

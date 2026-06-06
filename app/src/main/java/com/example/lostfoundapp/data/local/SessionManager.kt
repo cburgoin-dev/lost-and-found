@@ -19,6 +19,10 @@ class SessionManager(
             .apply()
     }
 
+    fun hasToken(): Boolean{
+        return this.getToken() != null
+    }
+
     fun getToken(): String? {
 
         return prefs.getString(

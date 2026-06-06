@@ -5,9 +5,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.*
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.lostfoundapp.data.local.SessionManager
 import com.example.lostfoundapp.data.mock.mockPosts
 import com.example.lostfoundapp.data.model.ItemPost
 import com.example.lostfoundapp.data.model.NotificationType
@@ -17,11 +19,19 @@ import com.example.lostfoundapp.ui.screens.*
 import com.example.lostfoundapp.data.model.ReportType
 import com.example.lostfoundapp.data.model.Request
 import com.example.lostfoundapp.ui.viewmodel.ActivityViewModel
+import com.example.lostfoundapp.ui.viewmodel.AuthViewModel
 import com.example.lostfoundapp.ui.viewmodel.EditProfileViewModel
 import com.example.lostfoundapp.ui.viewmodel.UserViewModel
 
 @Composable
 fun AppNavigation() {
+    val context = LocalContext.current
+
+    val sessionManager = SessionManager(context)
+
+    val startDestination = if(sessionManager.hasToken()) Routes.Home.route else Routes.Login.route
+
+
     var selectedPost by remember {
         mutableStateOf<ItemPost?>(null)
     }
@@ -70,7 +80,7 @@ fun AppNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = Routes.Login.route
+        startDestination = startDestination
     ) {
 
         composable(

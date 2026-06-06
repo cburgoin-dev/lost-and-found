@@ -3,8 +3,6 @@ package com.example.lostfoundapp.data.repository
 
 import com.example.lostfoundapp.data.local.SessionManager
 import com.example.lostfoundapp.data.model.ApiResult
-import com.example.lostfoundapp.data.model.BkResponse
-import com.example.lostfoundapp.data.remote.ApiService
 import com.example.lostfoundapp.data.remote.RetrofitInstance
 import com.example.lostfoundapp.utils.extractErrorMessage
 import retrofit2.HttpException
@@ -24,11 +22,11 @@ class AuthRepository(
                 message = response.message
             )
         } catch (e: HttpException) {
-            ApiResult.Error(
+            ApiResult.Error<Unit>(
                 extractErrorMessage(e)
             )
         } catch (e: IOException) {
-            ApiResult.Error(
+            ApiResult.Error<Unit>(
                 "No hay conexión a internet"
             )
         }
