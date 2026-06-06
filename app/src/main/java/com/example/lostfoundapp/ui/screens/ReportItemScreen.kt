@@ -24,6 +24,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostfoundapp.data.local.SessionManager
 import java.util.Calendar
 import android.util.Log
@@ -37,14 +38,13 @@ import com.example.lostfoundapp.ui.components.VisibilitySwitch
 import com.example.lostfoundapp.ui.components.BackButton
 import com.example.lostfoundapp.ui.components.SelectionDialog
 import com.example.lostfoundapp.data.model.ReportType
-import com.example.lostfoundapp.data.mock.categories
-import com.example.lostfoundapp.data.mock.locations
 import com.example.lostfoundapp.ui.components.PrimaryButton
 import com.example.lostfoundapp.ui.theme.FoundActionCardForeground
 import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
 import com.example.lostfoundapp.ui.theme.LostActionCardForeground
 
 import com.example.lostfoundapp.data.remote.RetrofitInstance.api
+import com.example.lostfoundapp.ui.viewmodel.PostsViewModel
 import com.example.lostfoundapp.utils.toRequestBodyText
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -183,6 +183,14 @@ fun ReportItemScreen(
 
     val token =
         sessionManager.getToken()
+    val viewModel = remember {
+        PostsViewModel(sessionManager)
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.loadCatalogs()
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -575,7 +583,7 @@ fun ReportItemScreen(
 
             SelectionDialog(
                 title = "Seleccionar categoría",
-                options = categories.map{it.name},
+                options = viewModel.categories.map{it.name},
                 selectedOption = category,
 
                 onDismiss = {
@@ -585,7 +593,7 @@ fun ReportItemScreen(
                 onOptionSelected = { selectedName ->
 
                     val selectedCategory =
-                        categories.find { it.name == selectedName }
+                        viewModel.categories.find { it.name == selectedName }
 
                     category =
                         selectedCategory?.name ?: ""
@@ -603,7 +611,7 @@ fun ReportItemScreen(
 
             SelectionDialog(
                 title = "Seleccionar ubicación",
-                options = locations.map{it.name},
+                options = viewModel.locations.map{it.name},
                 selectedOption = location,
 
                 onDismiss = {
@@ -613,7 +621,7 @@ fun ReportItemScreen(
                 onOptionSelected = { selectedName ->
 
                     val selectedLocation =
-                        locations.find { it.name == selectedName }
+                        viewModel.locations.find { it.name == selectedName }
 
                     location =
                         selectedLocation?.name ?: ""

@@ -29,8 +29,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.lostfoundapp.data.mock.categories
-import com.example.lostfoundapp.data.mock.locations
 import com.example.lostfoundapp.data.model.ItemPost
 import com.example.lostfoundapp.data.model.ReportType
 
@@ -75,6 +73,11 @@ fun SearchScreen(
         PostsViewModel(
             SessionManager(context)
         )
+    }
+
+    LaunchedEffect(Unit) {
+
+        postsViewModel.loadCatalogs()
     }
 
     val posts =
@@ -327,7 +330,7 @@ fun SearchScreen(
 
             SelectionDialog(
                 title = "Seleccionar categoría",
-                options = categories.map{it.name},
+                options = postsViewModel.categories.map{it.name},
                 selectedOption = viewModel.selectedCategory,
 
                 onDismiss = {
@@ -336,7 +339,7 @@ fun SearchScreen(
 
                 onOptionSelected = { optionSelected ->
 
-                    val selectedCategory = categories.find {
+                    val selectedCategory = postsViewModel.categories.find {
                         it.name == optionSelected
                     }
 
@@ -354,7 +357,7 @@ fun SearchScreen(
 
             SelectionDialog(
                 title = "Seleccionar ubicación",
-                options = locations.map{it.name},
+                options = postsViewModel.locations.map{it.name},
                 selectedOption = viewModel.selectedLocation,
 
                 onDismiss = {
@@ -363,7 +366,7 @@ fun SearchScreen(
 
                 onOptionSelected = { optionSelected ->
 
-                    val selectedLocation = locations.find {
+                    val selectedLocation = postsViewModel.locations.find {
                         it.name == optionSelected
                     }
 
