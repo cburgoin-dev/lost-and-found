@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Call
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.ui.platform.LocalContext
@@ -59,6 +60,26 @@ fun SignUpScreen(
 
     var password by remember {
         mutableStateOf("")
+    }
+
+    var phone by remember {
+        mutableStateOf("")
+    }
+
+    var nameError by remember {
+        mutableStateOf<String?>(null)
+    }
+
+    var emailError by remember {
+        mutableStateOf<String?>(null)
+    }
+
+    var passwordError by remember {
+        mutableStateOf<String?>(null)
+    }
+
+    var phoneError by remember {
+        mutableStateOf<String?>(null)
     }
 
     val context = LocalContext.current
@@ -185,9 +206,10 @@ fun SignUpScreen(
                     value = fullname,
                     placeholder = "Ingresa tu nombre completo",
                     leadingIcon = Icons.Outlined.Person,
-
+                    errorMessage = nameError,
                     onValueChange = {
                         fullname = it
+                        nameError = null
                     }
                 )
 
@@ -213,9 +235,10 @@ fun SignUpScreen(
                     value = email,
                     placeholder = "Ingresa tu correo",
                     leadingIcon = Icons.Outlined.Email,
-
+                    errorMessage = emailError,
                     onValueChange = {
                         email = it
+                        emailError = null
                     }
                 )
 
@@ -240,9 +263,39 @@ fun SignUpScreen(
                 AuthPasswordInput(
                     value = password,
                     placeholder = "Ingresa tu contraseña",
-
+                    errorMessage = passwordError,
                     onValueChange = {
                         password = it
+                        passwordError = null
+                    }
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+
+                    BasicText(
+                        text = "Teléfono",
+                        style = TextStyle(
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Normal,
+                            color = Color.Black
+                        )
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                AuthInput(
+                    value = phone,
+                    placeholder = "Ingresa tu teléfono",
+                    leadingIcon = Icons.Outlined.Call,
+                    errorMessage = phoneError,
+                    onValueChange = {
+                        phone = it
+                        phoneError = null
                     }
                 )
 
@@ -253,11 +306,59 @@ fun SignUpScreen(
 
                     onClick = {
 
-                        authViewModel.signup(
-                            name = fullname,
-                            email = email,
-                            password = password
-                        )
+                        nameError=
+                            when{
+                                fullname.isBlank() ->
+                                    "El nombre es obligatorio"
+                                fullname.length <4 ->
+                                    "El nombre debe tener al menos 4 caracteres"
+                                else -> null
+                            }
+                        emailError =
+                            when {
+                                email.isBlank() ->
+                                    "El correo es obligatorio"
+
+                                !android.util.Patterns.EMAIL_ADDRESS
+                                    .matcher(email)
+                                    .matches() ->
+                                    "Correo inválido"
+
+                                else -> null
+                            }
+
+                        passwordError =
+                            when {
+                                password.isBlank() ->
+                                    "La contraseña es obligatoria"
+
+                                password.length < 6 ->
+                                    "La contraseña debe tener al menos 6 caracteres"
+
+                                else -> null
+                            }
+
+                        phoneError =
+                            when{
+                                phone.isBlank() ->
+                                    "El telefono es obligatorio"    //no se si sea obligatorio en el diseño actual
+                                phone.matches(Regex("^\\d{10}$")) ->
+                                    "El telefono debe contener exactamente 10 números"
+                                else -> null
+                            }
+
+                        if (
+                            nameError == null &&
+                            emailError == null &&
+                            passwordError == null &&
+                            phoneError == null
+                        ) {
+                            authViewModel.signup(
+                                name = fullname,
+                                email = email,
+                                password = password
+                            )
+                        }
                     }
                 )
 

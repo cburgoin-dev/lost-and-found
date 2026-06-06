@@ -50,6 +50,14 @@ fun LoginScreen(
         mutableStateOf("")
     }
 
+    var emailError by remember {
+        mutableStateOf<String?>(null)
+    }
+
+    var passwordError by remember {
+        mutableStateOf<String?>(null)
+    }
+
     val context = LocalContext.current
 
     val authViewModel = remember {
@@ -186,8 +194,10 @@ fun LoginScreen(
                         value = email,
                         placeholder = "Ingresa tu correo",
                         leadingIcon = Icons.Outlined.Email,
+                        errorMessage = emailError,
                         onValueChange = {
                             email = it
+                            emailError = null
                         }
                     )
 
@@ -212,8 +222,10 @@ fun LoginScreen(
                     AuthPasswordInput(
                         value = password,
                         placeholder = "Ingresa tu contraseña",
+                        errorMessage = passwordError,
                         onValueChange = {
                             password = it
+                            passwordError = null
                         }
                     )
 
@@ -223,10 +235,39 @@ fun LoginScreen(
                         text = "Iniciar sesión",
                         onClick = {
 
-                            authViewModel.login(
-                                email,
-                                password
-                            )
+                            emailError =
+                                when {
+                                    email.isBlank() ->
+                                        "El correo es obligatorio"
+
+                                    !android.util.Patterns.EMAIL_ADDRESS
+                                        .matcher(email)
+                                        .matches() ->
+                                        "Correo inválido"
+
+                                    else -> null
+                                }
+
+                            passwordError =
+                                when {
+                                    password.isBlank() ->
+                                        "La contraseña es obligatoria"
+
+                                    password.length < 6 ->
+                                        "La contraseña debe tener al menos 6 caracteres"
+
+                                    else -> null
+                                }
+
+                            if (
+                                emailError == null &&
+                                passwordError == null
+                            ) {
+                                authViewModel.login(
+                                    email,
+                                    password
+                                )
+                            }
                         }
                     )
 

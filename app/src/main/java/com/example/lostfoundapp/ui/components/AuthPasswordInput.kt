@@ -2,6 +2,8 @@ package com.example.lostfoundapp.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
@@ -12,6 +14,7 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,6 +27,8 @@ import androidx.compose.ui.unit.sp
 
 import com.example.lostfoundapp.ui.theme.BorderGray
 import com.example.lostfoundapp.ui.theme.CardWhite
+import com.example.lostfoundapp.ui.theme.ErrorRed
+import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
 import com.example.lostfoundapp.ui.theme.PlaceholderGray
 import com.example.lostfoundapp.ui.theme.TextGray
 
@@ -31,6 +36,7 @@ import com.example.lostfoundapp.ui.theme.TextGray
 fun AuthPasswordInput(
     value: String,
     placeholder: String,
+    errorMessage: String? = null,
     onValueChange: (String) -> Unit
 ) {
 
@@ -38,87 +44,122 @@ fun AuthPasswordInput(
         mutableStateOf(false)
     }
 
-    BasicTextField(
-        value = value,
-        onValueChange = onValueChange,
+    val interactionSource = remember {
+        MutableInteractionSource()
+    }
 
-        visualTransformation =
-            if(passwordVisible)
-                VisualTransformation.None
-            else
-                PasswordVisualTransformation(),
+    val isFocused by interactionSource.collectIsFocusedAsState()
 
-        textStyle = TextStyle(
-            color = Color.Black,
-            fontSize = 16.sp
-        ),
+    val hasError = errorMessage != null
 
-        decorationBox = { innerTextField ->
+    val borderColor =
+        when {
+            hasError -> ErrorRed
+            isFocused -> HomeHeaderBlue
+            else -> BorderGray
+        }
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(58.dp)
-                    .border(
-                        1.dp,
-                        BorderGray,
-                        RoundedCornerShape(12.dp)
-                    )
-                    .background(
-                        CardWhite,
-                        RoundedCornerShape(12.dp)
-                    )
-                    .padding(horizontal = 16.dp),
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
 
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+        BasicTextField(
+            value = value,
+            onValueChange = onValueChange,
+            interactionSource = interactionSource,
 
-                Icon(
-                    imageVector = Icons.Outlined.Lock,
-                    contentDescription = null,
-                    tint = TextGray
-                )
+            visualTransformation =
+                if (passwordVisible)
+                    VisualTransformation.None
+                else
+                    PasswordVisualTransformation(),
 
-                Spacer(modifier = Modifier.width(12.dp))
+            textStyle = TextStyle(
+                color = Color.Black,
+                fontSize = 16.sp
+            ),
 
-                Box(
-                    modifier = Modifier.weight(1f),
-                    contentAlignment = Alignment.CenterStart
-                ) {
+            decorationBox = { innerTextField ->
 
-                    if(value.isEmpty()) {
-
-                        BasicText(
-                            text = placeholder,
-
-                            style = TextStyle(
-                                color = PlaceholderGray,
-                                fontSize = 16.sp
-                            )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(58.dp)
+                        .border(
+                            1.dp,
+                            borderColor,
+                            RoundedCornerShape(12.dp)
                         )
-                    }
+                        .background(
+                            CardWhite,
+                            RoundedCornerShape(12.dp)
+                        )
+                        .padding(horizontal = 16.dp),
 
-                    innerTextField()
-                }
-
-                IconButton(
-                    onClick = {
-                        passwordVisible = !passwordVisible
-                    }
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
 
                     Icon(
-                        imageVector =
-                            if(passwordVisible)
-                                Icons.Default.Visibility
-                            else
-                                Icons.Default.VisibilityOff,
-
+                        imageVector = Icons.Outlined.Lock,
                         contentDescription = null,
                         tint = TextGray
                     )
+
+                    Spacer(
+                        modifier = Modifier.width(12.dp)
+                    )
+
+                    Box(
+                        modifier = Modifier.weight(1f),
+                        contentAlignment = Alignment.CenterStart
+                    ) {
+
+                        if (value.isEmpty()) {
+
+                            BasicText(
+                                text = placeholder,
+                                style = TextStyle(
+                                    color = PlaceholderGray,
+                                    fontSize = 16.sp
+                                )
+                            )
+                        }
+
+                        innerTextField()
+                    }
+
+                    IconButton(
+                        onClick = {
+                            passwordVisible = !passwordVisible
+                        }
+                    ) {
+
+                        Icon(
+                            imageVector =
+                                if (passwordVisible)
+                                    Icons.Default.Visibility
+                                else
+                                    Icons.Default.VisibilityOff,
+
+                            contentDescription = null,
+                            tint = TextGray
+                        )
+                    }
                 }
             }
+        )
+
+        if (hasError) {
+
+            Text(
+                text = errorMessage,
+                color = ErrorRed,
+                fontSize = 13.sp,
+                modifier = Modifier.padding(
+                    start = 4.dp,
+                    top = 4.dp
+                )
+            )
         }
-    )
+    }
 }
