@@ -292,10 +292,10 @@ fun AppNavigation() {
 
                     when(notification.type) {
 
-                        NotificationType.REQUEST_APPROVED,
-                        NotificationType.MATCH_FOUND -> {
+                        "Solicitud aprobada",
+                        "Posible coincidencia" -> {
 
-                            notification.relatedItemId?.let { itemId ->
+                            notification.post_id?.let { itemId ->
 
                                 selectedPost =
                                     mockPosts.firstOrNull {
@@ -306,12 +306,6 @@ fun AppNavigation() {
                                     "item_detail/$itemId"
                                 )
                             }
-                        }
-
-                        NotificationType.REQUEST_REJECTED,
-                        NotificationType.SYSTEM -> {
-
-                            // No navigation
                         }
                     }
                 }

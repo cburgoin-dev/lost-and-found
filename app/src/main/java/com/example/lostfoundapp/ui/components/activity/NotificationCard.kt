@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -49,33 +50,38 @@ fun NotificationCard(
     val icon =
         when(notification.type) {
 
-            NotificationType.REQUEST_APPROVED ->
+            "Solicitud aprobada" ->
                 Icons.Outlined.CheckCircle
 
-            NotificationType.REQUEST_REJECTED ->
+            "Solicitud rechazada" ->
                 Icons.Outlined.Cancel
 
-            NotificationType.MATCH_FOUND ->
+            "Posible coincidencia" ->
                 Icons.Outlined.Search
 
-            NotificationType.SYSTEM ->
+            "Sistema" ->
+                Icons.Outlined.Notifications
+
+            else ->
                 Icons.Outlined.Notifications
         }
 
     val iconColor =
         when(notification.type) {
 
-            NotificationType.REQUEST_APPROVED ->
+            "Solicitud aprobada" ->
                 HomeHeaderBlue
 
-            NotificationType.REQUEST_REJECTED ->
+            "Solicitud rechazada" ->
                 LostBadgeText
 
-            NotificationType.MATCH_FOUND ->
+            "Posible coincidencia" ->
                 HomeHeaderBlue
 
-            NotificationType.SYSTEM ->
+            "Sistema" ->
                 HomeHeaderBlue
+
+            else -> {HomeHeaderBlue}
         }
 
     Box(
@@ -129,7 +135,7 @@ fun NotificationCard(
                 ) {
 
                     Text(
-                        text = notification.title,
+                        text = notification.type,
                         fontSize = 17.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = Color.Black
@@ -157,12 +163,12 @@ fun NotificationCard(
                     ) {
 
                         Text(
-                            text = notification.createdAt,
+                            text = notification.time,
                             fontSize = 14.sp,
                             color = DetailSecondaryText
                         )
 
-                        if (!notification.isRead) {
+                        if (!notification.is_read) {
 
                             Box(
                                 modifier = Modifier
