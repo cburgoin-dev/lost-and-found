@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.lostfoundapp.data.local.SessionManager
+import com.example.lostfoundapp.data.model.ApiResult
 import com.example.lostfoundapp.data.remote.RetrofitInstance
 import com.example.lostfoundapp.data.repository.AuthRepository
 import kotlinx.coroutines.launch
@@ -16,7 +17,6 @@ class AuthViewModel(
 
     private val authRepository =
         AuthRepository(
-            RetrofitInstance.api,
             sessionManager
         )
 
@@ -30,6 +30,11 @@ class AuthViewModel(
         private set
 
     var errorMessage by mutableStateOf<String?>(null)
+        private set
+
+    var requestSuccsess by mutableStateOf(false)
+        private set
+    var message: String? by mutableStateOf("")
         private set
 
     fun login(
@@ -59,6 +64,24 @@ class AuthViewModel(
                     errorMessage = it.message
                 }
         }
+    }
+
+    fun logout(){
+        viewModelScope.launch {
+            isLoading = true;
+            when (val result = authRepository.logout()) {
+                is ApiResult.Success -> {
+                    requestSuccsess = true
+                    message = result.message
+                }
+                is ApiResult.Error<*> -> {
+                    requestSuccsess = false
+                    message = result.message
+                }
+            }
+            isLoading = false;
+        }
+
     }
 
     fun signup(

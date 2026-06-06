@@ -16,6 +16,7 @@ import androidx.compose.material.icons.outlined.Bookmark
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,9 +24,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.lostfoundapp.data.local.SessionManager
 import com.example.lostfoundapp.ui.components.AppBottomBar
 import com.example.lostfoundapp.ui.components.ConfirmationBottomSheet
 import com.example.lostfoundapp.ui.components.PrimaryButton
@@ -33,6 +36,7 @@ import com.example.lostfoundapp.ui.components.profile.ProfileHeader
 import com.example.lostfoundapp.ui.components.profile.ProfileMenuCard
 import com.example.lostfoundapp.ui.theme.BorderGray
 import com.example.lostfoundapp.ui.theme.LostActionCardForeground
+import com.example.lostfoundapp.ui.viewmodel.AuthViewModel
 import com.example.lostfoundapp.ui.viewmodel.UserViewModel
 
 @Composable
@@ -45,11 +49,28 @@ fun ProfileScreen(
     onSearchClick: () -> Unit,
     onActivityClick: () -> Unit,
     onProfileClick: () -> Unit,
+    onLogoutClick:  () ->  Unit,
 
     onEditProfileClick: () -> Unit,
     onMyPostsClick: () -> Unit,
     onSavedPostsClick: () -> Unit
 ) {
+
+    val context = LocalContext.current
+
+    val authViewModel = remember {
+        AuthViewModel(
+            SessionManager(context)
+        )
+    }
+
+    LaunchedEffect(
+        authViewModel.requestSuccsess
+    ) {
+        if(authViewModel.requestSuccsess) {
+            onLogoutClick()
+        }
+    }
 
     var showLogoutConfirmation by remember {
         mutableStateOf(false)
@@ -169,9 +190,8 @@ fun ProfileScreen(
             buttonColor = LostActionCardForeground,
 
             onConfirm = {
-
-                userViewModel.logout()
-
+                authViewModel.logout()
+                // showMessage( authViewModel.requestSuccsess, authViewModel.message )
                 showLogoutConfirmation = false
             },
 
