@@ -1,12 +1,38 @@
 package com.example.lostfoundapp.data.repository
 
+
 import com.example.lostfoundapp.data.local.SessionManager
+import com.example.lostfoundapp.data.model.ApiResult
+import com.example.lostfoundapp.data.model.BkResponse
 import com.example.lostfoundapp.data.remote.ApiService
+import com.example.lostfoundapp.data.remote.RetrofitInstance
+import com.example.lostfoundapp.utils.extractErrorMessage
+import retrofit2.HttpException
+import java.io.IOException
 
 class AuthRepository(
-    private val api: ApiService,
     private val sessionManager: SessionManager
 ) {
+    private val api = RetrofitInstance.createApi(sessionManager)
+
+    suspend fun logout() : ApiResult<Unit> {
+        return try {
+            val response = api.logout()
+            sessionManager.clearSession()
+            ApiResult.Success(
+                data = null,
+                message = response.message
+            )
+        } catch (e: HttpException) {
+            ApiResult.Error(
+                extractErrorMessage(e)
+            )
+        } catch (e: IOException) {
+            ApiResult.Error(
+                "No hay conexión a internet"
+            )
+        }
+    }
 
     suspend fun login(
         email: String,

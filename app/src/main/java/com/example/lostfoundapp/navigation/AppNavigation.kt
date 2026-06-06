@@ -70,7 +70,7 @@ fun AppNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = Routes.Home.route
+        startDestination = Routes.Login.route
     ) {
 
         composable(
@@ -390,6 +390,10 @@ fun AppNavigation() {
                     navController.navigate(
                         Routes.SavedPosts.route
                     )
+                },
+
+                onLogoutClick =  {
+                    navController.navigate(Routes.Login.route)
                 }
             )
         }
