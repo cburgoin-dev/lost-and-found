@@ -19,12 +19,20 @@ import com.example.lostfoundapp.ui.screens.*
 import com.example.lostfoundapp.data.model.ReportType
 import com.example.lostfoundapp.data.model.Request
 import com.example.lostfoundapp.ui.viewmodel.ActivityViewModel
+import com.example.lostfoundapp.ui.viewmodel.AuthViewModel
 import com.example.lostfoundapp.ui.viewmodel.EditProfileViewModel
 import com.example.lostfoundapp.ui.viewmodel.PostsViewModel
 import com.example.lostfoundapp.ui.viewmodel.UserViewModel
 
 @Composable
 fun AppNavigation() {
+    val context = LocalContext.current
+
+    val sessionManager = SessionManager(context)
+
+    val startDestination = if(sessionManager.hasToken()) Routes.Home.route else Routes.Login.route
+
+
     var selectedPost by remember {
         mutableStateOf<ItemPost?>(null)
     }
@@ -82,7 +90,7 @@ fun AppNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = Routes.Login.route
+        startDestination = startDestination
     ) {
 
         composable(
@@ -306,10 +314,10 @@ fun AppNavigation() {
 
                     when(notification.type) {
 
-                        NotificationType.REQUEST_APPROVED,
-                        NotificationType.MATCH_FOUND -> {
+                        "Solicitud aprobada",
+                        "Posible coincidencia" -> {
 
-                            notification.relatedItemId?.let { itemId ->
+                            notification.post_id?.let { itemId ->
 
                                 selectedPost =
                                     mockPosts.firstOrNull {
@@ -320,12 +328,6 @@ fun AppNavigation() {
                                     "item_detail/$itemId"
                                 )
                             }
-                        }
-
-                        NotificationType.REQUEST_REJECTED,
-                        NotificationType.SYSTEM -> {
-
-                            // No navigation
                         }
                     }
                 }
@@ -404,6 +406,10 @@ fun AppNavigation() {
                     navController.navigate(
                         Routes.SavedPosts.route
                     )
+                },
+
+                onLogoutClick =  {
+                    navController.navigate(Routes.Login.route)
                 }
             )
         }

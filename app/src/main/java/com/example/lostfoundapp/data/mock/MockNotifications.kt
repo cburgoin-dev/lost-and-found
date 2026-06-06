@@ -7,22 +7,41 @@ val mockNotifications = listOf(
 
     Notification(
         id = 1,
-        type = NotificationType.REQUEST_APPROVED,
-        title = "Solicitud aprobada",
+        type = "Solicitud aprobada",
         description = "Ya puedes ver la información de contacto del propietario.",
-        createdAt = "Hace 2 h",
-        isRead = true,
-        relatedItemId = 3
+        time = "Hace 2 h",
+        is_read = true,
+        post_id = 3
     ),
 
     Notification(
         id = 2,
-        type = NotificationType.MATCH_FOUND,
-        title = "Posible coincidencia encontrada",
+        type = "Posible coincidencia",
         description =
             "Encontramos una publicación que podría coincidir con tu objeto perdido.",
-        createdAt = "Hace 3 días",
-        isRead = false,
-        relatedItemId = 2
-    )
+        time = "Hace 10 min",
+        is_read = true,
+        post_id = 3
+    ),
+
+
+            Notification(
+            id = 3,
+    type = "Sistema",
+    description =
+        "Encontramos una publicación que podría coincidir con tu objeto perdido.",
+    time = "Hace 10 min",
+    is_read = true,
+    post_id = null
+),
+
+Notification(
+id = 4,
+type = "Solicitud rechazada",
+description =
+"xd",
+time = "Hace 10 min",
+is_read = true,
+post_id = 3
+)
 )
