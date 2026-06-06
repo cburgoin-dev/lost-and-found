@@ -10,7 +10,7 @@ val mockNotifications = listOf(
         type = "Solicitud aprobada",
         description = "Ya puedes ver la información de contacto del propietario.",
         time = "Hace 2 h",
-        is_read = true,
+        is_read = 0,
         post_id = 3
     ),
 
@@ -20,7 +20,7 @@ val mockNotifications = listOf(
         description =
             "Encontramos una publicación que podría coincidir con tu objeto perdido.",
         time = "Hace 10 min",
-        is_read = true,
+        is_read = 0,
         post_id = 3
     ),
 
@@ -31,7 +31,7 @@ val mockNotifications = listOf(
     description =
         "Encontramos una publicación que podría coincidir con tu objeto perdido.",
     time = "Hace 10 min",
-    is_read = true,
+    is_read = 0,
     post_id = null
 ),
 
@@ -41,7 +41,7 @@ type = "Solicitud rechazada",
 description =
 "xd",
 time = "Hace 10 min",
-is_read = true,
-post_id = 3
+is_read = 0,
+post_id = null
 )
 )

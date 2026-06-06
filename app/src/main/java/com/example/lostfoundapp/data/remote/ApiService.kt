@@ -1,6 +1,7 @@
 package com.example.lostfoundapp.data.remote
 
 import com.example.lostfoundapp.data.model.BkResponse
+import com.example.lostfoundapp.data.model.Notification
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -153,4 +154,8 @@ interface ApiService {
         @Path("id")
         requestId : Int
     ): Response<GetRequestsResponse>
+
+    @GET("api/notifications")
+    suspend fun getNotifications(
+    ): BkResponse<List<Notification>>
 }

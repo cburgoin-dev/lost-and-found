@@ -168,7 +168,7 @@ fun NotificationCard(
                             color = DetailSecondaryText
                         )
 
-                        if (!notification.is_read) {
+                        if (notification.is_read == 0) {
 
                             Box(
                                 modifier = Modifier

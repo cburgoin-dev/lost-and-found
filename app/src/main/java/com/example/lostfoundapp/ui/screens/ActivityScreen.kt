@@ -46,11 +46,15 @@ import com.example.lostfoundapp.ui.components.activity.RequestCard
 import com.example.lostfoundapp.ui.theme.HomeBodyBackground
 import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
 import com.example.lostfoundapp.ui.viewmodel.ActivityViewModel
+import com.example.lostfoundapp.ui.viewmodel.NotificationsViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 
 @Composable
 fun ActivityScreen(
     currentRoute: String?,
     activityViewModel: ActivityViewModel = viewModel(),
+    notificationsViewModel: NotificationsViewModel,
     onHomeClick: () -> Unit,
     onSearchClick: () -> Unit,
     onActivityClick: () -> Unit,
@@ -72,8 +76,13 @@ fun ActivityScreen(
 
     LaunchedEffect(Unit) {
 
-        try {
+        while (isActive){
+            notificationsViewModel.getNotifications()
+            delay(3000)
+        }
 
+
+        try {
             val response =
                 RetrofitInstance.api.getRequests(
                     token = "Bearer $token"
@@ -103,6 +112,8 @@ fun ActivityScreen(
             e.printStackTrace()
         }
     }
+
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -214,7 +225,7 @@ fun ActivityScreen(
 
                     } else {
 
-                        if(mockNotifications.isEmpty()) {
+                        if(!notificationsViewModel.hasNotifications) {
 
                             Box(
                                 modifier = Modifier.fillMaxSize(),
@@ -249,7 +260,7 @@ fun ActivityScreen(
                                 verticalArrangement = Arrangement.spacedBy(20.dp)
                             ) {
 
-                                items(mockNotifications) { notification ->
+                                items(notificationsViewModel.notifications) { notification ->
 
                                     NotificationCard(
                                         notification = notification,
@@ -281,17 +292,17 @@ fun ActivityScreen(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun ActivityScreenPreview() {
-
-    ActivityScreen(
-        currentRoute = Routes.Activity.route,
-        onHomeClick = {},
-        onSearchClick = {},
-        onActivityClick = {},
-        onProfileClick = {},
-        onRequestClick = {},
-        onNotificationClick = {}
-    )
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun ActivityScreenPreview() {
+//
+//    ActivityScreen(
+//        currentRoute = Routes.Activity.route,
+//        onHomeClick = {},
+//        onSearchClick = {},
+//        onActivityClick = {},
+//        onProfileClick = {},
+//        onRequestClick = {},
+//        onNotificationClick = {}
+//    )
+//}

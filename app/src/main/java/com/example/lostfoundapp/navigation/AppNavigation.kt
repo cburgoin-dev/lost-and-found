@@ -18,9 +18,11 @@ import com.example.lostfoundapp.data.model.PostsScreenType
 import com.example.lostfoundapp.ui.screens.*
 import com.example.lostfoundapp.data.model.ReportType
 import com.example.lostfoundapp.data.model.Request
+import com.example.lostfoundapp.data.repository.NotificationsRepository
 import com.example.lostfoundapp.ui.viewmodel.ActivityViewModel
 import com.example.lostfoundapp.ui.viewmodel.AuthViewModel
 import com.example.lostfoundapp.ui.viewmodel.EditProfileViewModel
+import com.example.lostfoundapp.ui.viewmodel.NotificationsViewModel
 import com.example.lostfoundapp.ui.viewmodel.UserViewModel
 
 @Composable
@@ -48,6 +50,10 @@ fun AppNavigation() {
     val activityViewModel: ActivityViewModel = viewModel()
 
     val editProfileViewModel: EditProfileViewModel = viewModel()
+
+    val notificationsViewModel = remember {
+        NotificationsViewModel(repository = NotificationsRepository(sessionManager))
+    }
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
@@ -297,6 +303,8 @@ fun AppNavigation() {
                         Routes.RequestDetail.route
                     )
                 },
+
+                notificationsViewModel = notificationsViewModel,
 
                 onNotificationClick = { notification ->
 

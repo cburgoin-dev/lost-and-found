@@ -10,7 +10,7 @@ data class Notification(
 
     val time: String,
 
-    val is_read: Boolean,
+    val is_read: Int,
 
     val post_id: Int? = null
 )
