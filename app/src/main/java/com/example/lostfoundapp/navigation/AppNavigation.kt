@@ -202,8 +202,16 @@ fun AppNavigation() {
 
             ReportItemScreen(
                 reportType = ReportType.LOST,
+
                 onBackClick = {
                     navController.popBackStack()
+                },
+
+                onPostCreated = {
+
+                    navController.navigate(
+                        Routes.Home.route
+                    )
                 }
             )
         }
@@ -214,8 +222,16 @@ fun AppNavigation() {
 
             ReportItemScreen(
                 reportType = ReportType.FOUND,
+
                 onBackClick = {
                     navController.popBackStack()
+                },
+
+                onPostCreated = {
+
+                    navController.navigate(
+                        Routes.Home.route
+                    )
                 }
             )
         }

@@ -1,4 +1,4 @@
-package com.example.lostfoundapp.data.model
+package com.example.lostfoundapp.data.response
 
 data class BkResponse<T> (
     val data: T? = null,

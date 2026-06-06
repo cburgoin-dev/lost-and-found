@@ -2,7 +2,7 @@ package com.example.lostfoundapp.data.repository
 
 
 import com.example.lostfoundapp.data.local.SessionManager
-import com.example.lostfoundapp.data.model.ApiResult
+import com.example.lostfoundapp.data.response.ApiResult
 import com.example.lostfoundapp.data.remote.RetrofitInstance
 import com.example.lostfoundapp.utils.extractErrorMessage
 import retrofit2.HttpException

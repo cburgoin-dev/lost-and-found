@@ -26,6 +26,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import com.example.lostfoundapp.data.local.SessionManager
 import java.util.Calendar
+import android.util.Log
 
 import com.example.lostfoundapp.ui.components.CustomInput
 import com.example.lostfoundapp.ui.components.UploadImageCard
@@ -54,7 +55,8 @@ import java.io.File
 @Composable
 fun ReportItemScreen(
     reportType: ReportType,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onPostCreated: () -> Unit
 ) {
 
     var hasImage by remember {
@@ -540,18 +542,28 @@ fun ReportItemScreen(
 
                                 if(response.isSuccessful){
 
-                                    println("POST CREADO")
+                                    onPostCreated()
 
-                                }else{
+                                } else{
 
                                     println(
                                         response.errorBody()?.string()
+                                    )
+
+                                    Log.e(
+                                        "CREATE_POST",
+                                        response.errorBody()?.string() ?: "Unknown error"
                                     )
                                 }
 
                             } catch (e: Exception){
 
                                 println(e.message)
+
+                                Log.e(
+                                    "CREATE_POST",
+                                    e.stackTraceToString()
+                                )
                             }
                         }
                     }
@@ -615,14 +627,4 @@ fun ReportItemScreen(
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ReportItemScreenPreview() {
-
-    ReportItemScreen(
-        reportType = ReportType.LOST,
-        onBackClick = {}
-    )
 }

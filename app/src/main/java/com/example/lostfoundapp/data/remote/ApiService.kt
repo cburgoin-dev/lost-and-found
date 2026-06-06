@@ -1,6 +1,6 @@
 package com.example.lostfoundapp.data.remote
 
-import com.example.lostfoundapp.data.model.BkResponse
+import com.example.lostfoundapp.data.response.BkResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
