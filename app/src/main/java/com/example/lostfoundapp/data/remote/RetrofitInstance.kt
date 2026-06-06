@@ -56,7 +56,7 @@ object RetrofitInstance {
                 .build()
 
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(baseUrl)
             .client(client)
             .addConverterFactory(
                 ScalarsConverterFactory.create()
