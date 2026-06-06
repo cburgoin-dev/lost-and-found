@@ -57,7 +57,8 @@ class AuthRepository(
     suspend fun signup(
         name: String,
         email: String,
-        password: String
+        password: String,
+        phone: String
     ): Result<Unit> {
 
         return try {
@@ -66,7 +67,8 @@ class AuthRepository(
                 api.signup(
                     name = name,
                     email = email,
-                    password = password
+                    password = password,
+                    phone = phone
                 )
 
             if(signupResponse.isSuccessful) {

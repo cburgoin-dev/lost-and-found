@@ -50,7 +50,8 @@ interface ApiService {
     suspend fun signup(
         @Field("name") name: String,
         @Field("email") email: String,
-        @Field("password") password: String
+        @Field("password") password: String,
+        @Field("phone") phone: String
 
     ): Response<String>
 

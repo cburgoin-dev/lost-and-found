@@ -64,7 +64,8 @@ class AuthViewModel(
     fun signup(
         name: String,
         email: String,
-        password: String
+        password: String,
+        phone: String
     ) {
 
         viewModelScope.launch {
@@ -75,7 +76,8 @@ class AuthViewModel(
                 authRepository.signup(
                     name,
                     email,
-                    password
+                    password,
+                    phone
                 )
 
             isLoading = false
