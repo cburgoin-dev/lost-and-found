@@ -1,6 +1,7 @@
 package com.example.lostfoundapp.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,10 +27,8 @@ import com.example.lostfoundapp.ui.viewmodel.NotificationsViewModel
 import com.example.lostfoundapp.ui.viewmodel.UserViewModel
 
 @Composable
-fun AppNavigation() {
+fun AppNavigation(sessionManager: SessionManager) {
     val context = LocalContext.current
-
-    val sessionManager = SessionManager(context)
 
     val startDestination = if(sessionManager.hasToken()) Routes.Home.route else Routes.Login.route
 
@@ -81,6 +80,20 @@ fun AppNavigation() {
             launchSingleTop = true
 
             restoreState = true
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        sessionManager.isAuthenticated.collect { authenticated ->
+            if (!authenticated) {
+                navController.navigate(
+                    Routes.Login.route
+                ) {
+                    popUpTo(0) {
+                        inclusive = true
+                    }
+                }
+            }
         }
     }
 

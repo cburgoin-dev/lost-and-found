@@ -28,6 +28,12 @@ class AuthInterceptor(
             }
             .build()
 
-        return chain.proceed(request)
+        val response =  chain.proceed(request)
+
+        if(response.code == 401){
+            sessionManager.clearSession()
+        }
+
+        return response;
     }
 }

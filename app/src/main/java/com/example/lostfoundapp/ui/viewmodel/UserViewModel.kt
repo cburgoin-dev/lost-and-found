@@ -37,8 +37,4 @@ class UserViewModel : ViewModel() {
 
         // CALL UPDATE PROFILE ENDPOINT
     }
-
-    fun logout() {
-        // BACKEND
-    }
 }
