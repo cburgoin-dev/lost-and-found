@@ -5,9 +5,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.*
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.lostfoundapp.data.local.SessionManager
 import com.example.lostfoundapp.data.mock.mockPosts
 import com.example.lostfoundapp.data.model.ItemPost
 import com.example.lostfoundapp.data.model.NotificationType
@@ -18,6 +20,7 @@ import com.example.lostfoundapp.data.model.ReportType
 import com.example.lostfoundapp.data.model.Request
 import com.example.lostfoundapp.ui.viewmodel.ActivityViewModel
 import com.example.lostfoundapp.ui.viewmodel.EditProfileViewModel
+import com.example.lostfoundapp.ui.viewmodel.PostsViewModel
 import com.example.lostfoundapp.ui.viewmodel.UserViewModel
 
 @Composable
@@ -33,7 +36,16 @@ fun AppNavigation() {
     val navController =
         rememberNavController()
 
+    val context = LocalContext.current
+
     val userViewModel: UserViewModel = viewModel()
+
+    val postsViewModel = remember {
+
+        PostsViewModel(
+            SessionManager(context)
+        )
+    }
 
     val activityViewModel: ActivityViewModel = viewModel()
 
@@ -132,6 +144,8 @@ fun AppNavigation() {
 
             HomeScreen(
                 userViewModel = userViewModel,
+
+                postsViewModel = postsViewModel,
 
                 hasUnreadActivity = activityViewModel.hasUnreadActivity,
 

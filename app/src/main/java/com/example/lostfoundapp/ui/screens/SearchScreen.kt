@@ -26,17 +26,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostfoundapp.data.mock.categories
 import com.example.lostfoundapp.data.mock.locations
-import com.example.lostfoundapp.data.mock.mockPosts
 import com.example.lostfoundapp.data.model.ItemPost
 import com.example.lostfoundapp.data.model.ReportType
 
-import com.example.lostfoundapp.navigation.Routes
 import com.example.lostfoundapp.ui.components.AppBottomBar
 import com.example.lostfoundapp.ui.components.ItemCard
 import com.example.lostfoundapp.ui.components.SelectionDialog
@@ -54,10 +51,9 @@ import com.example.lostfoundapp.ui.theme.LostBadgeBackground
 import com.example.lostfoundapp.ui.theme.LostBadgeText
 
 import com.example.lostfoundapp.data.local.SessionManager
-import com.example.lostfoundapp.data.remote.RetrofitInstance
-import com.example.lostfoundapp.data.toItemPost
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
+import com.example.lostfoundapp.ui.viewmodel.PostsViewModel
 
 
 @Composable
@@ -72,51 +68,36 @@ fun SearchScreen(
     onProfileClick: () -> Unit
 ) {
 
-    var posts by remember {
-        mutableStateOf<List<ItemPost>>(emptyList())
-    }
-
     val context = LocalContext.current
 
-    val sessionManager = SessionManager(context)
+    val postsViewModel = remember {
 
-    val token = sessionManager.getToken() ?: ""
+        PostsViewModel(
+            SessionManager(context)
+        )
+    }
+
+    val posts =
+        postsViewModel.posts
+
     val viewModel: SearchViewModel = viewModel()
 
+    LaunchedEffect(
+        viewModel.selectedCategoryId,
+        viewModel.selectedLocationId,
+        viewModel.selectedDateFilter
+    ) {
 
-    LaunchedEffect(viewModel.selectedCategoryId,
-            viewModel.selectedLocationId,
-            viewModel.selectedDateFilter) {
+        postsViewModel.loadPosts(
+            categoryId =
+                viewModel.selectedCategoryId,
 
-        try {
+            locationId =
+                viewModel.selectedLocationId,
 
-            val response =
-                RetrofitInstance.api.getPosts(
-                    token = "Bearer $token",
-
-                    categoryId =
-                        viewModel.selectedCategoryId,
-
-                    locationId =
-                        viewModel.selectedLocationId,
-
-                    time =
-                        viewModel.selectedDateFilter.lowercase()
-                )
-
-            if(response.isSuccessful) {
-
-                posts =
-                    response.body()
-                        ?.data
-                        ?.map { it.toItemPost() }
-                        ?: emptyList()
-            }
-
-        } catch (e: Exception) {
-
-            e.printStackTrace()
-        }
+            time =
+                viewModel.selectedDateFilter.lowercase()
+        )
     }
 
     val filteredPosts = posts.filter { post ->
