@@ -8,7 +8,25 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 
 object RetrofitInstance {
 
-    private const val baseUrl = "http://192.168.1.85:8000/"
+    /*
+     * IMPORTANTE:
+     * Antes de hacer push verificar que
+     * USE_LOCAL_SERVER = false
+     */
+
+    private const val USE_LOCAL_SERVER = false
+
+    private const val CLOUD_URL =
+        "https://lostandfound-api-dev-g7m8ub.laravel.cloud/"
+
+    private const val LOCAL_URL =
+        "http://192.168.1.85:8000/" // Manuel local Laravel server
+
+    private val baseUrl =
+        if(USE_LOCAL_SERVER)
+            LOCAL_URL
+        else
+            CLOUD_URL
 
     private val retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
@@ -38,7 +56,7 @@ object RetrofitInstance {
                 .build()
 
         return Retrofit.Builder()
-            .baseUrl(baseUrl)
+            .baseUrl(BASE_URL)
             .client(client)
             .addConverterFactory(
                 ScalarsConverterFactory.create()

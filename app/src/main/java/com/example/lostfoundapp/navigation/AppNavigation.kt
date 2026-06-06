@@ -29,7 +29,7 @@ fun AppNavigation() {
     val sessionManager = SessionManager(context)
 
     val startDestination =
-        if(sessionManager.hasToken()) 
+        if(sessionManager.hasToken())
             Routes.Home.route
         else
             Routes.Login.route
