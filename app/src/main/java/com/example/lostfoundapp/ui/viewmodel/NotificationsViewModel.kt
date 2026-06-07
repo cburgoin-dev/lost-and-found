@@ -6,10 +6,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.lostfoundapp.data.model.ApiResult
 import com.example.lostfoundapp.data.model.Notification
 import com.example.lostfoundapp.data.model.Request
 import com.example.lostfoundapp.data.repository.NotificationsRepository
+import com.example.lostfoundapp.data.response.ApiResult
 import kotlinx.coroutines.launch
 
 class NotificationsViewModel (

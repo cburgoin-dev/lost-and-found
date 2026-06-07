@@ -1,6 +1,5 @@
 package com.example.lostfoundapp.data.remote
 
-import com.example.lostfoundapp.data.model.BkResponse
 import com.example.lostfoundapp.data.model.Notification
 import com.example.lostfoundapp.data.response.BkResponse
 import com.example.lostfoundapp.data.response.CategoriesResponse
