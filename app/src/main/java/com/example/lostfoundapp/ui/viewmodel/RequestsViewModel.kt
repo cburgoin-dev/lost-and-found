@@ -1,7 +1,5 @@
 package com.example.lostfoundapp.ui.viewmodel
 
-import android.content.Context
-import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -9,21 +7,21 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 
 import com.example.lostfoundapp.data.local.SessionManager
-import com.example.lostfoundapp.data.model.ItemPost
-import com.example.lostfoundapp.data.model.ReportType
-import com.example.lostfoundapp.data.repository.PostsRepository
+import com.example.lostfoundapp.data.model.Request
+import com.example.lostfoundapp.data.repository.RequestsRepository
+
 import kotlinx.coroutines.launch
 
-class PostsViewModel(
+class RequestsViewModel(
     sessionManager: SessionManager
 ) : ViewModel() {
 
     private val repository =
-        PostsRepository(
+        RequestsRepository(
             sessionManager
         )
 
-    var posts by mutableStateOf<List<ItemPost>>(emptyList())
+    var requests by mutableStateOf<List<Request>>(emptyList())
         private set
 
     var isLoading by mutableStateOf(false)
@@ -32,19 +30,17 @@ class PostsViewModel(
     var errorMessage by mutableStateOf<String?>(null)
         private set
 
-    fun loadPosts() {
-
-        println("LOAD POSTS CALLED")
+    fun loadRequests() {
 
         viewModelScope.launch {
 
             isLoading = true
 
             repository
-                .getPosts()
+                .getRequests()
                 .onSuccess {
 
-                    posts = it
+                    requests = it
                 }
                 .onFailure {
 
@@ -55,45 +51,10 @@ class PostsViewModel(
         }
     }
 
-    fun loadPosts(
-        categoryId: Int?,
-        locationId: Int?,
-        time: String?
-    ) {
-
-        viewModelScope.launch {
-
-            isLoading = true
-
-            repository
-                .getPosts(
-                    categoryId = categoryId,
-                    locationId = locationId,
-                    time = time
-                )
-                .onSuccess {
-
-                    posts = it
-                }
-                .onFailure {
-
-                    errorMessage = it.message
-                }
-
-            isLoading = false
-        }
-    }
-
-    fun createPost(
-        context: Context,
-        reportType: ReportType,
-        objectName: String,
-        description: String,
-        locationId: Int,
-        categoryId: Int,
-        date: String,
-        publicContact: Boolean,
-        selectedImageUri: Uri?,
+    fun createRequest(
+        postId: Int,
+        content: String,
+        message: String,
         onSuccess: () -> Unit
     ) {
 
@@ -102,16 +63,62 @@ class PostsViewModel(
             isLoading = true
 
             repository
-                .createPost(
-                    context = context,
-                    reportType = reportType,
-                    objectName = objectName,
-                    description = description,
-                    locationId = locationId,
-                    categoryId = categoryId,
-                    date = date,
-                    publicContact = publicContact,
-                    selectedImageUri = selectedImageUri
+                .createRequest(
+                    postId = postId,
+                    content = content,
+                    message = message
+                )
+                .onSuccess {
+
+                    onSuccess()
+                }
+                .onFailure {
+
+                    errorMessage = it.message
+                }
+
+            isLoading = false
+        }
+    }
+
+    fun approveRequest(
+        requestId: Int,
+        onSuccess: () -> Unit
+    ) {
+
+        viewModelScope.launch {
+
+            isLoading = true
+
+            repository
+                .approveRequest(
+                    requestId
+                )
+                .onSuccess {
+
+                    onSuccess()
+                }
+                .onFailure {
+
+                    errorMessage = it.message
+                }
+
+            isLoading = false
+        }
+    }
+
+    fun declineRequest(
+        requestId: Int,
+        onSuccess: () -> Unit
+    ) {
+
+        viewModelScope.launch {
+
+            isLoading = true
+
+            repository
+                .declineRequest(
+                    requestId
                 )
                 .onSuccess {
 

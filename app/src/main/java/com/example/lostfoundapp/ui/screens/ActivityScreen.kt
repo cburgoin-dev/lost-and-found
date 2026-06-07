@@ -16,29 +16,18 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.lostfoundapp.data.local.SessionManager
 
 import com.example.lostfoundapp.data.mock.mockNotifications
-import com.example.lostfoundapp.data.mock.mockRequests
 import com.example.lostfoundapp.data.model.Notification
 import com.example.lostfoundapp.data.model.Request
-import com.example.lostfoundapp.data.remote.RetrofitInstance
-import com.example.lostfoundapp.data.toRequest
-import com.example.lostfoundapp.navigation.Routes
 import com.example.lostfoundapp.ui.components.AppBottomBar
 import com.example.lostfoundapp.ui.components.activity.ActivityTabRow
 import com.example.lostfoundapp.ui.components.activity.NotificationCard
@@ -46,11 +35,14 @@ import com.example.lostfoundapp.ui.components.activity.RequestCard
 import com.example.lostfoundapp.ui.theme.HomeBodyBackground
 import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
 import com.example.lostfoundapp.ui.viewmodel.ActivityViewModel
+import com.example.lostfoundapp.ui.viewmodel.RequestsViewModel
 
 @Composable
 fun ActivityScreen(
     currentRoute: String?,
+    hasUnreadActivity: Boolean,
     activityViewModel: ActivityViewModel = viewModel(),
+    requestsViewModel: RequestsViewModel,
     onHomeClick: () -> Unit,
     onSearchClick: () -> Unit,
     onActivityClick: () -> Unit,
@@ -58,51 +50,16 @@ fun ActivityScreen(
     onRequestClick: (Request) -> Unit,
     onNotificationClick: (Notification) -> Unit
 ) {
-    val context = LocalContext.current
+    val requests =
+        requestsViewModel.requests
 
-    val sessionManager =
-        SessionManager(context)
+    LaunchedEffect(requests) {
 
-    val token =
-        sessionManager.getToken() ?: ""
-
-    var requests by remember {
-        mutableStateOf<List<Request>>(emptyList())
+        activityViewModel.updatePendingRequests(
+            requests
+        )
     }
 
-    LaunchedEffect(Unit) {
-
-        try {
-
-            val response =
-                RetrofitInstance.api.getRequests(
-                    token = "Bearer $token"
-                )
-
-            if(response.isSuccessful){
-
-                requests =
-                    response.body()
-                        ?.data
-                        ?.map { it.toRequest() }
-                        ?: emptyList()
-
-                activityViewModel.updatePendingRequests(
-                    requests
-                )
-
-            } else {
-
-                println(
-                    response.errorBody()?.string()
-                )
-            }
-
-        } catch(e: Exception){
-
-            e.printStackTrace()
-        }
-    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -272,6 +229,7 @@ fun ActivityScreen(
 
             AppBottomBar(
                 currentRoute = currentRoute,
+                hasUnreadActivity = hasUnreadActivity,
                 onHomeClick = onHomeClick,
                 onSearchClick = onSearchClick,
                 onActivityClick = onActivityClick,
@@ -279,19 +237,4 @@ fun ActivityScreen(
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ActivityScreenPreview() {
-
-    ActivityScreen(
-        currentRoute = Routes.Activity.route,
-        onHomeClick = {},
-        onSearchClick = {},
-        onActivityClick = {},
-        onProfileClick = {},
-        onRequestClick = {},
-        onNotificationClick = {}
-    )
 }

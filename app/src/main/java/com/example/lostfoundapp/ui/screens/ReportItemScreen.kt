@@ -12,21 +12,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalContext
 import android.app.DatePickerDialog
-import android.content.Context
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import com.example.lostfoundapp.data.local.SessionManager
 import java.util.Calendar
-import android.util.Log
 
 import com.example.lostfoundapp.ui.components.CustomInput
 import com.example.lostfoundapp.ui.components.UploadImageCard
@@ -43,18 +39,12 @@ import com.example.lostfoundapp.ui.components.PrimaryButton
 import com.example.lostfoundapp.ui.theme.FoundActionCardForeground
 import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
 import com.example.lostfoundapp.ui.theme.LostActionCardForeground
-
-import com.example.lostfoundapp.data.remote.RetrofitInstance.api
-import com.example.lostfoundapp.utils.toRequestBodyText
-import kotlinx.coroutines.launch
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import java.io.File
+import com.example.lostfoundapp.ui.viewmodel.PostsViewModel
 
 @Composable
 fun ReportItemScreen(
     reportType: ReportType,
+    postsViewModel: PostsViewModel,
     onBackClick: () -> Unit,
     onPostCreated: () -> Unit
 ) {
@@ -98,8 +88,7 @@ fun ReportItemScreen(
         mutableStateOf(false)
     }
 
-
-    // ERRORS
+    // VALIDATIONS
 
     var imageError by remember {
         mutableStateOf(false)
@@ -174,15 +163,8 @@ fun ReportItemScreen(
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    val viewModelScope = rememberCoroutineScope()
-
     val context = LocalContext.current
 
-    val sessionManager =
-        SessionManager(context)
-
-    val token =
-        sessionManager.getToken()
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -410,12 +392,17 @@ fun ReportItemScreen(
             ) {
 
                 PrimaryButton(
-                    text = "Crear publicación",
+                    text =
+                        if(postsViewModel.isLoading)
+                            "Creando publicación..."
+                        else
+                            "Crear publicación",
                     backgroundColor =
                         if(reportType == ReportType.LOST)
                             LostActionCardForeground
                         else
                             FoundActionCardForeground,
+                    enabled = !postsViewModel.isLoading,
                     onClick = {
                         focusManager.clearFocus()
                         keyboardController?.hide()
@@ -450,121 +437,20 @@ fun ReportItemScreen(
 
                         if (!hasErrors) {
 
-                            println("FORMULARIO VÁLIDO")
-                        }
-
-                        viewModelScope.launch {
-
-                            try {
-
-                                var imagePart:
-                                        MultipartBody.Part? = null
-
-                                selectedImageUri?.let { uri ->
-
-                                    val inputStream =
-                                        context.contentResolver
-                                            .openInputStream(uri)
-
-                                    val file =
-                                        File(
-                                            context.cacheDir,
-                                            "upload_image.jpg"
-                                        )
-
-                                    file.outputStream().use { output ->
-
-                                        inputStream?.copyTo(output)
-                                    }
-
-                                    val requestFile =
-                                        file.asRequestBody(
-                                            "image/*"
-                                                .toMediaTypeOrNull()
-                                        )
-
-                                    imagePart =
-                                        MultipartBody.Part
-                                            .createFormData(
-                                                "picture",
-                                                file.name,
-                                                requestFile
-                                            )
-                                }
-
-                                val token =
-                                    sessionManager.getToken() ?: ""
-
-
-                                println("TOKEN: $token")
-                                val response =
-                                    api.createPost(
-
-                                        token =
-                                            "Bearer $token",
-
-                                        type =
-                                            if (reportType == ReportType.LOST)
-                                                "Perdido"
-                                                    .toRequestBodyText()
-                                            else
-                                                "Encontrado"
-                                                    .toRequestBodyText(),
-
-                                        title =
-                                            objectName
-                                                .toRequestBodyText(),
-
-                                        description =
-                                            description
-                                                .toRequestBodyText(),
-
-                                        locationId =
-                                            locationId.toString()
-                                                .toRequestBodyText(),
-
-                                        categoryId =
-                                            categoryId.toString()
-                                                .toRequestBodyText(),
-
-                                        incidentDate =
-                                            date
-                                                .toRequestBodyText(),
-
-                                        shareContact =
-                                            publicContact.toString()
-                                                .toRequestBodyText(),
-
-                                        picture =
-                                            imagePart
-                                    )
-
-
-                                if(response.isSuccessful){
-
+                            postsViewModel.createPost(
+                                context = context,
+                                reportType = reportType,
+                                objectName = objectName,
+                                description = description,
+                                locationId = locationId!!,
+                                categoryId = categoryId!!,
+                                date = date,
+                                publicContact = publicContact,
+                                selectedImageUri = selectedImageUri,
+                                onSuccess = {
                                     onPostCreated()
-
-                                } else{
-
-                                    println(
-                                        response.errorBody()?.string()
-                                    )
-
-                                    Log.e(
-                                        "CREATE_POST",
-                                        response.errorBody()?.string() ?: "Unknown error"
-                                    )
                                 }
-
-                            } catch (e: Exception){
-
-                                println(e.message)
-
-                                Log.e(
-                                    "CREATE_POST",
-                                    e.stackTraceToString()
-                                )
-                            }
+                            )
                         }
                     }
                 )

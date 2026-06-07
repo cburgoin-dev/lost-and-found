@@ -11,7 +11,10 @@ import java.io.IOException
 class AuthRepository(
     private val sessionManager: SessionManager
 ) {
-    private val api = RetrofitInstance.createApi(sessionManager)
+    private val api =
+        RetrofitInstance.createApi(
+            sessionManager
+        )
 
     suspend fun logout() : ApiResult<Unit> {
         return try {

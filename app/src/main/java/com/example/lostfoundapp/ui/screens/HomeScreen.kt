@@ -25,8 +25,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.NotificationsNone
 import androidx.compose.material.icons.outlined.NearMe
 import androidx.compose.material.icons.outlined.SearchOff
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -76,8 +79,11 @@ fun HomeScreen(
     onActivityClick: () -> Unit,
     onProfileClick: () -> Unit
 ) {
+
     val posts =
         postsViewModel.posts
+
+    val isLoading = postsViewModel.isLoading
 
     val firstName = userViewModel.userName
         .split(" ")
@@ -274,8 +280,7 @@ fun HomeScreen(
                         color = Color.Black
                     )
                 }
-
-                if (posts.isEmpty()) {
+                if(posts.isEmpty()) {
 
                     item {
 
@@ -312,6 +317,7 @@ fun HomeScreen(
                             )
                         }
                     }
+
                 } else {
 
                     items(posts) { item ->

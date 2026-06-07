@@ -1,6 +1,7 @@
 package com.example.lostfoundapp.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -20,6 +21,8 @@ import com.example.lostfoundapp.data.model.Request
 import com.example.lostfoundapp.ui.viewmodel.ActivityViewModel
 import com.example.lostfoundapp.ui.viewmodel.EditProfileViewModel
 import com.example.lostfoundapp.ui.viewmodel.PostsViewModel
+import com.example.lostfoundapp.ui.viewmodel.RequestsViewModel
+import com.example.lostfoundapp.ui.viewmodel.SearchViewModel
 import com.example.lostfoundapp.ui.viewmodel.UserViewModel
 
 @Composable
@@ -54,7 +57,35 @@ fun AppNavigation() {
         )
     }
 
+    val searchViewModel = remember {
+
+        SearchViewModel(
+            SessionManager(context)
+        )
+    }
+
+    val requestsViewModel = remember {
+
+        RequestsViewModel(
+            SessionManager(context)
+        )
+    }
+
+    LaunchedEffect(Unit) {
+
+        requestsViewModel.loadRequests()
+    }
+
     val activityViewModel: ActivityViewModel = viewModel()
+
+    LaunchedEffect(
+        requestsViewModel.requests
+    ) {
+
+        activityViewModel.updatePendingRequests(
+            requestsViewModel.requests
+        )
+    }
 
     val editProfileViewModel: EditProfileViewModel = viewModel()
 
@@ -85,6 +116,12 @@ fun AppNavigation() {
 
             restoreState = true
         }
+    }
+
+    println("APP NAVIGATION RECOMPOSE")
+
+    LaunchedEffect(Unit) {
+        println("APP NAVIGATION CREATED")
     }
 
     NavHost(
@@ -203,6 +240,8 @@ fun AppNavigation() {
             ReportItemScreen(
                 reportType = ReportType.LOST,
 
+                postsViewModel = postsViewModel,
+
                 onBackClick = {
                     navController.popBackStack()
                 },
@@ -223,6 +262,8 @@ fun AppNavigation() {
             ReportItemScreen(
                 reportType = ReportType.FOUND,
 
+                postsViewModel = postsViewModel,
+
                 onBackClick = {
                     navController.popBackStack()
                 },
@@ -241,6 +282,8 @@ fun AppNavigation() {
         ) {
 
             SearchScreen(
+                searchViewModel = searchViewModel,
+
                 currentRoute = currentRoute,
 
                 hasUnreadActivity = activityViewModel.hasUnreadActivity,
@@ -279,6 +322,9 @@ fun AppNavigation() {
 
                 ItemDetailScreen(
                     itemPost = itemPost,
+
+                    requestsViewModel = requestsViewModel,
+
                     onBackClick = {
                         navController.popBackStack()
                     }
@@ -293,7 +339,12 @@ fun AppNavigation() {
             ActivityScreen(
                 currentRoute = currentRoute,
 
+                hasUnreadActivity =
+                    activityViewModel.hasUnreadActivity,
+
                 activityViewModel = activityViewModel,
+
+                requestsViewModel = requestsViewModel,
 
                 onHomeClick = {
                     navigateToBottomBarRoute(
@@ -357,10 +408,15 @@ fun AppNavigation() {
 
                 RequestDetailScreen(
                     request = request,
+
+                    requestsViewModel = requestsViewModel,
+
                     onBackClick = {
                         navController.popBackStack()
                     },
+
                     onApproveClick = {},
+
                     onRejectClick = {}
                 )
             }
