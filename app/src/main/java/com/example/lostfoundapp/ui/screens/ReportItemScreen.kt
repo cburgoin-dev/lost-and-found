@@ -33,8 +33,6 @@ import com.example.lostfoundapp.ui.components.VisibilitySwitch
 import com.example.lostfoundapp.ui.components.BackButton
 import com.example.lostfoundapp.ui.components.SelectionDialog
 import com.example.lostfoundapp.data.model.ReportType
-import com.example.lostfoundapp.data.mock.categories
-import com.example.lostfoundapp.data.mock.locations
 import com.example.lostfoundapp.ui.components.PrimaryButton
 import com.example.lostfoundapp.ui.theme.FoundActionCardForeground
 import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
@@ -164,6 +162,11 @@ fun ReportItemScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
 
     val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+
+        postsViewModel.loadCatalogs()
+    }
 
     Box(
         modifier = Modifier
@@ -376,8 +379,6 @@ fun ReportItemScreen(
             }
         }
 
-        // FIXED BUTTON
-
         if (!isKeyboardVisible) {
 
             Box(
@@ -461,7 +462,7 @@ fun ReportItemScreen(
 
             SelectionDialog(
                 title = "Seleccionar categoría",
-                options = categories.map{it.name},
+                options = postsViewModel.categories.map{it.name},
                 selectedOption = category,
 
                 onDismiss = {
@@ -471,7 +472,7 @@ fun ReportItemScreen(
                 onOptionSelected = { selectedName ->
 
                     val selectedCategory =
-                        categories.find { it.name == selectedName }
+                        postsViewModel.categories.find { it.name == selectedName }
 
                     category =
                         selectedCategory?.name ?: ""
@@ -489,7 +490,7 @@ fun ReportItemScreen(
 
             SelectionDialog(
                 title = "Seleccionar ubicación",
-                options = locations.map{it.name},
+                options = postsViewModel.locations.map{it.name},
                 selectedOption = location,
 
                 onDismiss = {
@@ -499,7 +500,7 @@ fun ReportItemScreen(
                 onOptionSelected = { selectedName ->
 
                     val selectedLocation =
-                        locations.find { it.name == selectedName }
+                        postsViewModel.locations.find { it.name == selectedName }
 
                     location =
                         selectedLocation?.name ?: ""

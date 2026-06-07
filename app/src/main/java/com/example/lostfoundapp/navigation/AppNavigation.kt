@@ -284,6 +284,8 @@ fun AppNavigation() {
             SearchScreen(
                 searchViewModel = searchViewModel,
 
+                postsViewModel = postsViewModel,
+
                 currentRoute = currentRoute,
 
                 hasUnreadActivity = activityViewModel.hasUnreadActivity,

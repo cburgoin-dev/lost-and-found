@@ -1,6 +1,7 @@
 package com.example.lostfoundapp.data.remote
 
 import com.example.lostfoundapp.data.response.BkResponse
+import com.example.lostfoundapp.data.response.CategoriesResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -16,6 +17,7 @@ import retrofit2.http.Query
 
 import com.example.lostfoundapp.data.response.CreateRequestResponse
 import com.example.lostfoundapp.data.response.GetRequestsResponse
+import com.example.lostfoundapp.data.response.LocationsResponse
 import com.example.lostfoundapp.data.response.PostsResponse
 import retrofit2.http.DELETE
 
@@ -116,4 +118,12 @@ interface ApiService {
         @Path("id")
         requestId : Int
     ): Response<GetRequestsResponse>
+
+    @GET("api/locations")
+    suspend fun getLocations():
+        Response<LocationsResponse>
+
+    @GET("api/categories")
+    suspend fun getCategories():
+        Response<CategoriesResponse>
 }

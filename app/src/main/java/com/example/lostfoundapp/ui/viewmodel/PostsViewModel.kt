@@ -9,8 +9,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 
 import com.example.lostfoundapp.data.local.SessionManager
+import com.example.lostfoundapp.data.model.Category
 import com.example.lostfoundapp.data.model.ItemPost
 import com.example.lostfoundapp.data.model.ReportType
+import com.example.lostfoundapp.data.model.Location
+import com.example.lostfoundapp.data.repository.CatalogRepository
 import com.example.lostfoundapp.data.repository.PostsRepository
 import kotlinx.coroutines.launch
 
@@ -23,7 +26,15 @@ class PostsViewModel(
             sessionManager
         )
 
+    private val catalogRepository =
+        CatalogRepository(sessionManager)
     var posts by mutableStateOf<List<ItemPost>>(emptyList())
+        private set
+
+    var categories by mutableStateOf<List<Category>>(emptyList())
+        private set
+
+    var locations by mutableStateOf<List<Location>>(emptyList())
         private set
 
     var isLoading by mutableStateOf(false)
@@ -83,7 +94,6 @@ class PostsViewModel(
             isLoading = false
         }
     }
-
     fun createPost(
         context: Context,
         reportType: ReportType,
@@ -123,6 +133,26 @@ class PostsViewModel(
                 }
 
             isLoading = false
+        }
+    }
+
+    fun loadCatalogs() {
+
+        viewModelScope.launch {
+
+            catalogRepository
+                .getCategories()
+                .onSuccess {
+
+                    categories = it
+                }
+
+            catalogRepository
+                .getLocations()
+                .onSuccess {
+
+                    locations = it
+                }
         }
     }
 }

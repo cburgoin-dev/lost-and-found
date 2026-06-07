@@ -27,8 +27,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.lostfoundapp.data.mock.categories
-import com.example.lostfoundapp.data.mock.locations
+
 import com.example.lostfoundapp.data.model.ItemPost
 import com.example.lostfoundapp.data.model.ReportType
 
@@ -47,12 +46,14 @@ import com.example.lostfoundapp.ui.theme.LostBadgeBackground
 import com.example.lostfoundapp.ui.theme.LostBadgeText
 
 import androidx.compose.runtime.LaunchedEffect
+import com.example.lostfoundapp.ui.viewmodel.PostsViewModel
 import com.example.lostfoundapp.ui.viewmodel.SearchViewModel
 
 
 @Composable
 fun SearchScreen(
     searchViewModel: SearchViewModel,
+    postsViewModel: PostsViewModel,
 
     currentRoute: String?,
     hasUnreadActivity: Boolean,
@@ -63,6 +64,11 @@ fun SearchScreen(
     onActivityClick: () -> Unit,
     onProfileClick: () -> Unit
 ) {
+
+    LaunchedEffect(Unit) {
+
+        postsViewModel.loadCatalogs()
+    }
 
     val posts =
         searchViewModel.searchResults
@@ -312,7 +318,7 @@ fun SearchScreen(
 
             SelectionDialog(
                 title = "Seleccionar categoría",
-                options = categories.map{it.name},
+                options = postsViewModel.categories.map{it.name},
                 selectedOption = searchViewModel.selectedCategory,
 
                 onDismiss = {
@@ -321,7 +327,7 @@ fun SearchScreen(
 
                 onOptionSelected = { optionSelected ->
 
-                    val selectedCategory = categories.find {
+                    val selectedCategory = postsViewModel.categories.find {
                         it.name == optionSelected
                     }
 
@@ -339,7 +345,7 @@ fun SearchScreen(
 
             SelectionDialog(
                 title = "Seleccionar ubicación",
-                options = locations.map{it.name},
+                options = postsViewModel.locations.map{it.name},
                 selectedOption = searchViewModel.selectedLocation,
 
                 onDismiss = {
@@ -348,7 +354,7 @@ fun SearchScreen(
 
                 onOptionSelected = { optionSelected ->
 
-                    val selectedLocation = locations.find {
+                    val selectedLocation = postsViewModel.locations.find {
                         it.name == optionSelected
                     }
 
