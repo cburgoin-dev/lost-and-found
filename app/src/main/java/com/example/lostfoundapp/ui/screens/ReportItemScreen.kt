@@ -12,19 +12,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalContext
 import android.app.DatePickerDialog
-import android.content.Context
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import com.example.lostfoundapp.data.local.SessionManager
 import java.util.Calendar
 
 import com.example.lostfoundapp.ui.components.CustomInput
@@ -36,25 +33,18 @@ import com.example.lostfoundapp.ui.components.VisibilitySwitch
 import com.example.lostfoundapp.ui.components.BackButton
 import com.example.lostfoundapp.ui.components.SelectionDialog
 import com.example.lostfoundapp.data.model.ReportType
-import com.example.lostfoundapp.data.mock.categories
-import com.example.lostfoundapp.data.mock.locations
 import com.example.lostfoundapp.ui.components.PrimaryButton
 import com.example.lostfoundapp.ui.theme.FoundActionCardForeground
 import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
 import com.example.lostfoundapp.ui.theme.LostActionCardForeground
-
-import com.example.lostfoundapp.data.remote.RetrofitInstance.api
-import com.example.lostfoundapp.utils.toRequestBodyText
-import kotlinx.coroutines.launch
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import java.io.File
+import com.example.lostfoundapp.ui.viewmodel.PostsViewModel
 
 @Composable
 fun ReportItemScreen(
     reportType: ReportType,
-    onBackClick: () -> Unit
+    postsViewModel: PostsViewModel,
+    onBackClick: () -> Unit,
+    onPostCreated: () -> Unit
 ) {
 
     var hasImage by remember {
@@ -96,8 +86,7 @@ fun ReportItemScreen(
         mutableStateOf(false)
     }
 
-
-    // ERRORS
+    // VALIDATIONS
 
     var imageError by remember {
         mutableStateOf(false)
@@ -172,15 +161,13 @@ fun ReportItemScreen(
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    val viewModelScope = rememberCoroutineScope()
-
     val context = LocalContext.current
 
-    val sessionManager =
-        SessionManager(context)
+    LaunchedEffect(Unit) {
 
-    val token =
-        sessionManager.getToken()
+        postsViewModel.loadCatalogs()
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -392,8 +379,6 @@ fun ReportItemScreen(
             }
         }
 
-        // FIXED BUTTON
-
         if (!isKeyboardVisible) {
 
             Box(
@@ -408,12 +393,17 @@ fun ReportItemScreen(
             ) {
 
                 PrimaryButton(
-                    text = "Crear publicación",
+                    text =
+                        if(postsViewModel.isLoading)
+                            "Creando publicación..."
+                        else
+                            "Crear publicación",
                     backgroundColor =
                         if(reportType == ReportType.LOST)
                             LostActionCardForeground
                         else
                             FoundActionCardForeground,
+                    enabled = !postsViewModel.isLoading,
                     onClick = {
                         focusManager.clearFocus()
                         keyboardController?.hide()
@@ -448,111 +438,20 @@ fun ReportItemScreen(
 
                         if (!hasErrors) {
 
-                            println("FORMULARIO VÁLIDO")
-                        }
-
-                        viewModelScope.launch {
-
-                            try {
-
-                                var imagePart:
-                                        MultipartBody.Part? = null
-
-                                selectedImageUri?.let { uri ->
-
-                                    val inputStream =
-                                        context.contentResolver
-                                            .openInputStream(uri)
-
-                                    val file =
-                                        File(
-                                            context.cacheDir,
-                                            "upload_image.jpg"
-                                        )
-
-                                    file.outputStream().use { output ->
-
-                                        inputStream?.copyTo(output)
-                                    }
-
-                                    val requestFile =
-                                        file.asRequestBody(
-                                            "image/*"
-                                                .toMediaTypeOrNull()
-                                        )
-
-                                    imagePart =
-                                        MultipartBody.Part
-                                            .createFormData(
-                                                "picture",
-                                                file.name,
-                                                requestFile
-                                            )
+                            postsViewModel.createPost(
+                                context = context,
+                                reportType = reportType,
+                                objectName = objectName,
+                                description = description,
+                                locationId = locationId!!,
+                                categoryId = categoryId!!,
+                                date = date,
+                                publicContact = publicContact,
+                                selectedImageUri = selectedImageUri,
+                                onSuccess = {
+                                    onPostCreated()
                                 }
-
-                                val token =
-                                    sessionManager.getToken() ?: ""
-
-
-                                println("TOKEN: $token")
-                                val response =
-                                    api.createPost(
-
-                                        token =
-                                            "Bearer $token",
-
-                                        type =
-                                            if (reportType == ReportType.LOST)
-                                                "Perdido"
-                                                    .toRequestBodyText()
-                                            else
-                                                "Encontrado"
-                                                    .toRequestBodyText(),
-
-                                        title =
-                                            objectName
-                                                .toRequestBodyText(),
-
-                                        description =
-                                            description
-                                                .toRequestBodyText(),
-
-                                        locationId =
-                                            locationId.toString()
-                                                .toRequestBodyText(),
-
-                                        categoryId =
-                                            categoryId.toString()
-                                                .toRequestBodyText(),
-
-                                        incidentDate =
-                                            date
-                                                .toRequestBodyText(),
-
-                                        shareContact =
-                                            publicContact.toString()
-                                                .toRequestBodyText(),
-
-                                        picture =
-                                            imagePart
-                                    )
-
-
-                                if(response.isSuccessful){
-
-                                    println("POST CREADO")
-
-                                }else{
-
-                                    println(
-                                        response.errorBody()?.string()
-                                    )
-                                }
-
-                            } catch (e: Exception){
-
-                                println(e.message)
-                            }
+                            )
                         }
                     }
                 )
@@ -563,7 +462,7 @@ fun ReportItemScreen(
 
             SelectionDialog(
                 title = "Seleccionar categoría",
-                options = categories.map{it.name},
+                options = postsViewModel.categories.map{it.name},
                 selectedOption = category,
 
                 onDismiss = {
@@ -573,7 +472,7 @@ fun ReportItemScreen(
                 onOptionSelected = { selectedName ->
 
                     val selectedCategory =
-                        categories.find { it.name == selectedName }
+                        postsViewModel.categories.find { it.name == selectedName }
 
                     category =
                         selectedCategory?.name ?: ""
@@ -591,7 +490,7 @@ fun ReportItemScreen(
 
             SelectionDialog(
                 title = "Seleccionar ubicación",
-                options = locations.map{it.name},
+                options = postsViewModel.locations.map{it.name},
                 selectedOption = location,
 
                 onDismiss = {
@@ -601,7 +500,7 @@ fun ReportItemScreen(
                 onOptionSelected = { selectedName ->
 
                     val selectedLocation =
-                        locations.find { it.name == selectedName }
+                        postsViewModel.locations.find { it.name == selectedName }
 
                     location =
                         selectedLocation?.name ?: ""
@@ -615,14 +514,4 @@ fun ReportItemScreen(
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ReportItemScreenPreview() {
-
-    ReportItemScreen(
-        reportType = ReportType.LOST,
-        onBackClick = {}
-    )
 }

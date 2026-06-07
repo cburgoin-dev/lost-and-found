@@ -2,12 +2,15 @@ package com.example.lostfoundapp.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Icon
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,6 +21,8 @@ import androidx.compose.ui.unit.sp
 
 import com.example.lostfoundapp.ui.theme.BorderGray
 import com.example.lostfoundapp.ui.theme.CardWhite
+import com.example.lostfoundapp.ui.theme.ErrorRed
+import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
 import com.example.lostfoundapp.ui.theme.PlaceholderGray
 import com.example.lostfoundapp.ui.theme.TextGray
 
@@ -26,66 +31,102 @@ fun AuthInput(
     value: String,
     placeholder: String,
     leadingIcon: ImageVector,
+    errorMessage: String? = null,
     onValueChange: (String) -> Unit
 ) {
 
-    BasicTextField(
-        value = value,
-        onValueChange = onValueChange,
+    val interactionSource = remember {
+        MutableInteractionSource()
+    }
 
-        textStyle = TextStyle(
-            color = Color.Black,
-            fontSize = 16.sp
-        ),
+    val isFocused by interactionSource.collectIsFocusedAsState()
 
-        decorationBox = { innerTextField ->
+    val hasError = errorMessage != null
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(58.dp)
-                    .border(
-                        1.dp,
-                        BorderGray,
-                        RoundedCornerShape(12.dp)
-                    )
-                    .background(
-                        CardWhite,
-                        RoundedCornerShape(12.dp)
-                    )
-                    .padding(horizontal = 16.dp),
+    val borderColor =
+        when {
+            hasError -> ErrorRed
+            isFocused -> HomeHeaderBlue
+            else -> BorderGray
+        }
 
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
 
-                Icon(
-                    imageVector = leadingIcon,
-                    contentDescription = null,
-                    tint = TextGray
-                )
+        BasicTextField(
+            value = value,
+            onValueChange = onValueChange,
+            interactionSource = interactionSource,
 
-                Spacer(modifier = Modifier.width(12.dp))
+            textStyle = TextStyle(
+                color = Color.Black,
+                fontSize = 16.sp
+            ),
 
-                Box(
-                    modifier = Modifier.weight(1f),
-                    contentAlignment = Alignment.CenterStart
+            decorationBox = { innerTextField ->
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(58.dp)
+                        .border(
+                            width = 1.dp,
+                            color = borderColor,
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                        .background(
+                            color = CardWhite,
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                        .padding(horizontal = 16.dp),
+
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
 
-                    if(value.isEmpty()) {
+                    Icon(
+                        imageVector = leadingIcon,
+                        contentDescription = null,
+                        tint = TextGray
+                    )
 
-                        BasicText(
-                            text = placeholder,
+                    Spacer(
+                        modifier = Modifier.width(12.dp)
+                    )
 
-                            style = TextStyle(
-                                color = PlaceholderGray,
-                                fontSize = 16.sp
+                    Box(
+                        modifier = Modifier.weight(1f),
+                        contentAlignment = Alignment.CenterStart
+                    ) {
+
+                        if (value.isEmpty()) {
+
+                            BasicText(
+                                text = placeholder,
+                                style = TextStyle(
+                                    color = PlaceholderGray,
+                                    fontSize = 16.sp
+                                )
                             )
-                        )
-                    }
+                        }
 
-                    innerTextField()
+                        innerTextField()
+                    }
                 }
             }
+        )
+
+        if (hasError) {
+
+            Text(
+                text = errorMessage,
+                color = ErrorRed,
+                fontSize = 13.sp,
+                modifier = Modifier.padding(
+                    start = 4.dp,
+                    top = 4.dp
+                )
+            )
         }
-    )
+    }
 }

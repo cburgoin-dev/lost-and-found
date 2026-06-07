@@ -1,6 +1,6 @@
 package com.example.lostfoundapp.utils
 
-import com.example.lostfoundapp.data.model.BkResponse
+import com.example.lostfoundapp.data.response.BkResponse
 import com.google.gson.Gson
 import retrofit2.HttpException
 

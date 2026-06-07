@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,7 +18,6 @@ import androidx.compose.ui.unit.sp
 
 import com.example.lostfoundapp.ui.theme.CardWhite
 import com.example.lostfoundapp.ui.theme.FoundActionCardForeground
-import com.example.lostfoundapp.ui.theme.PrimaryDarkBlue
 
 @Composable
 fun PrimaryButton(
@@ -28,6 +26,7 @@ fun PrimaryButton(
     backgroundColor: Color = FoundActionCardForeground,
     textColor: Color = CardWhite,
     height: Dp = 58.dp,
+    enabled: Boolean = true,
     onClick: () -> Unit
 ) {
 
@@ -40,10 +39,15 @@ fun PrimaryButton(
                 shape = RoundedCornerShape(18.dp)
             )
             .background(
-                backgroundColor,
+                if(enabled)
+                    backgroundColor
+                else
+                    backgroundColor.copy(alpha = 0.5f),
                 RoundedCornerShape(18.dp)
             )
-            .clickable {
+            .clickable(
+                enabled = enabled
+            ) {
                 onClick()
             },
 

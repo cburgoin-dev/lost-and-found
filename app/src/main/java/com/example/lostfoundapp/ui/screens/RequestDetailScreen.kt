@@ -41,7 +41,7 @@ import com.example.lostfoundapp.data.local.SessionManager
 import com.example.lostfoundapp.data.model.Request
 import com.example.lostfoundapp.data.model.RequestStatus
 import com.example.lostfoundapp.data.model.RequestType
-import com.example.lostfoundapp.data.remote.RetrofitInstance.api
+import com.example.lostfoundapp.data.remote.RetrofitInstance
 import com.example.lostfoundapp.ui.components.BackButton
 import com.example.lostfoundapp.ui.components.PrimaryButton
 import com.example.lostfoundapp.ui.components.ConfirmationBottomSheet
@@ -52,26 +52,16 @@ import com.example.lostfoundapp.ui.components.ContactInfoBottomSheet
 import com.example.lostfoundapp.ui.components.UserInfoSection
 import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
 import com.example.lostfoundapp.ui.theme.LostActionCardForeground
-import kotlinx.coroutines.launch
+import com.example.lostfoundapp.ui.viewmodel.RequestsViewModel
 
 @Composable
 fun RequestDetailScreen(
     request: Request,
+    requestsViewModel: RequestsViewModel,
     onBackClick: () -> Unit,
     onApproveClick: () -> Unit,
     onRejectClick: () -> Unit
 ) {
-
-    val context = LocalContext.current
-
-    val sessionManager =
-        SessionManager(context)
-
-    val token =
-        sessionManager.getToken() ?: ""
-
-    val scope = rememberCoroutineScope()
-
 
     var showContactSheet by remember {
         mutableStateOf(false)
@@ -361,15 +351,21 @@ fun RequestDetailScreen(
                 buttonColor = HomeHeaderBlue,
 
                 onConfirm = {
-                    scope.launch {
-                        //enviar peticion aceptar
-                        api.approveRequest(
-                            token = "Bearer $token",
-                            requestId = request.id
-                        )
-                        showApproveSheet = false
-                        onApproveClick()
-                    }
+
+                    requestsViewModel.approveRequest(
+
+                        requestId = request.id,
+
+                        onSuccess = {
+
+                            showApproveSheet = false
+
+                            requestsViewModel.loadRequests()
+
+                            onApproveClick()
+
+                        }
+                    )
                 },
 
                 onDismiss = {
@@ -387,16 +383,20 @@ fun RequestDetailScreen(
                 buttonColor = LostActionCardForeground,
 
                 onConfirm = {
-                    //enviar peticion rechazar
-                    scope.launch {
-                        //enviar peticion aceptar
-                        api.declineRequest(
-                            token = "Bearer $token",
-                            requestId = request.id
-                        )
-                        showRejectSheet = false
-                        onRejectClick()
-                    }
+
+                    requestsViewModel.declineRequest(
+
+                        requestId = request.id,
+
+                        onSuccess = {
+
+                            showRejectSheet = false
+
+                            requestsViewModel.loadRequests()
+
+                            onRejectClick()
+                        }
+                    )
                 },
 
                 onDismiss = {

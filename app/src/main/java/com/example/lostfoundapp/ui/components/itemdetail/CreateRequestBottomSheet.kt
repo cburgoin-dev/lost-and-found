@@ -16,26 +16,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+
 import com.example.lostfoundapp.data.model.ReportType
-import com.example.lostfoundapp.ui.components.CustomInput
 import com.example.lostfoundapp.ui.components.DescriptionInput
 import com.example.lostfoundapp.ui.components.PrimaryButton
 import com.example.lostfoundapp.ui.theme.DetailSecondaryText
-import androidx.compose.ui.platform.LocalContext
-import kotlinx.coroutines.launch
-import androidx.compose.runtime.rememberCoroutineScope
-import com.example.lostfoundapp.data.local.SessionManager
-import com.example.lostfoundapp.data.remote.RetrofitInstance
-import com.example.lostfoundapp.utils.toRequestBodyText
+import com.example.lostfoundapp.ui.viewmodel.RequestsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateRequestBottomSheet(
     postId: Int,
     reportType: ReportType,
+    requestsViewModel: RequestsViewModel,
     onDismiss: () -> Unit
 ) {
-
 
     val title =
         if(reportType == ReportType.LOST)
@@ -55,10 +50,6 @@ fun CreateRequestBottomSheet(
 
     var secondaryInput by remember {
         mutableStateOf("")
-    }
-
-    var shareContactInfo by remember {
-        mutableStateOf(true)
     }
 
     val primaryLabel =
@@ -88,12 +79,6 @@ fun CreateRequestBottomSheet(
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
     )
-
-    val viewModelScope = rememberCoroutineScope()
-
-    val context = LocalContext.current
-
-    val sessionManager = SessionManager(context)
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
@@ -164,51 +149,22 @@ fun CreateRequestBottomSheet(
                     if(primaryInput.isBlank()){
                         return@PrimaryButton
                     }
-                    viewModelScope.launch {
 
-                        try {
+                    requestsViewModel.createRequest(
 
-                            val token =
-                                sessionManager.getToken() ?: ""
+                        postId = postId,
 
-                            val response =
-                                RetrofitInstance.api.createRequest(
+                        content = primaryInput,
 
-                                    token =
-                                        "Bearer $token",
+                        message = secondaryInput,
 
-                                    postId =
-                                        postId
-                                            .toString()
-                                            .toRequestBodyText(),
+                        onSuccess = {
 
-                                    content =
-                                        primaryInput
-                                            .toRequestBodyText(),
+                            println("SOLICITUD ENVIADA")
 
-                                    message =
-                                        secondaryInput
-                                            .toRequestBodyText()
-                                )
-
-                            if(response.isSuccessful){
-
-                                println("SOLICITUD ENVIADA")
-
-                                onDismiss()
-
-                            }else{
-
-                                println(
-                                    response.errorBody()?.string()
-                                )
-                            }
-
-                        } catch(e: Exception){
-
-                            e.printStackTrace()
+                            onDismiss()
                         }
-                    }
+                    )
                 }
             )
         }

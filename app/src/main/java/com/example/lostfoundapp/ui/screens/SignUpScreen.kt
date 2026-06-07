@@ -6,8 +6,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.verticalScroll
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -25,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Call
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.ui.platform.LocalContext
@@ -59,6 +62,26 @@ fun SignUpScreen(
 
     var password by remember {
         mutableStateOf("")
+    }
+
+    var phone by remember {
+        mutableStateOf("")
+    }
+
+    var nameError by remember {
+        mutableStateOf<String?>(null)
+    }
+
+    var emailError by remember {
+        mutableStateOf<String?>(null)
+    }
+
+    var passwordError by remember {
+        mutableStateOf<String?>(null)
+    }
+
+    var phoneError by remember {
+        mutableStateOf<String?>(null)
     }
 
     val context = LocalContext.current
@@ -153,129 +176,228 @@ fun SignUpScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .height(462.dp)
                     .clip(RoundedCornerShape(28.dp))
-                    .background(CardWhite)
-                    .padding(
-                        start = 28.dp,
-                        end = 28.dp,
-                        top = 28.dp,
-                        bottom = 28.dp
-                    ),
-
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .background(CardWhite),
             ) {
 
-                Row(
-                    modifier = Modifier.fillMaxWidth()
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .verticalScroll(
+                            rememberScrollState()
+                        )
+                        .padding(
+                            start = 28.dp,
+                            end = 28.dp,
+                            top = 28.dp
+                        )
                 ) {
 
-                    BasicText(
-                        text = "Nombre completo",
-                        style = TextStyle(
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Normal,
-                            color = Color.Black
+                    Row(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+
+                        BasicText(
+                            text = "Nombre completo",
+                            style = TextStyle(
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Normal,
+                                color = Color.Black
+                            )
                         )
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    AuthInput(
+                        value = fullname,
+                        placeholder = "Ingresa tu nombre completo",
+                        leadingIcon = Icons.Outlined.Person,
+                        errorMessage = nameError,
+                        onValueChange = {
+                            fullname = it
+                            nameError = null
+                        }
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+
+                        BasicText(
+                            text = "Correo electrónico",
+                            style = TextStyle(
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Normal,
+                                color = Color.Black
+                            )
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    AuthInput(
+                        value = email,
+                        placeholder = "Ingresa tu correo",
+                        leadingIcon = Icons.Outlined.Email,
+                        errorMessage = emailError,
+                        onValueChange = {
+                            email = it
+                            emailError = null
+                        }
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+
+                        BasicText(
+                            text = "Contraseña",
+                            style = TextStyle(
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Normal,
+                                color = Color.Black
+                            )
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    AuthPasswordInput(
+                        value = password,
+                        placeholder = "Ingresa tu contraseña",
+                        errorMessage = passwordError,
+                        onValueChange = {
+                            password = it
+                            passwordError = null
+                        }
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+
+                        BasicText(
+                            text = "Teléfono",
+                            style = TextStyle(
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Normal,
+                                color = Color.Black
+                            )
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    AuthInput(
+                        value = phone,
+                        placeholder = "Ingresa tu teléfono",
+                        leadingIcon = Icons.Outlined.Call,
+                        errorMessage = phoneError,
+                        onValueChange = {
+                            phone = it
+                            phoneError = null
+                        }
                     )
                 }
 
-                Spacer(modifier = Modifier.height(8.dp))
-
-                AuthInput(
-                    value = fullname,
-                    placeholder = "Ingresa tu nombre completo",
-                    leadingIcon = Icons.Outlined.Person,
-
-                    onValueChange = {
-                        fullname = it
-                    }
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth()
+                Column(
+                    modifier = Modifier.padding(
+                        start = 28.dp,
+                        end = 28.dp,
+                        bottom = 28.dp
+                    )
                 ) {
 
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    PrimaryButton(
+                        text = "Crear cuenta",
+
+                        onClick = {
+
+                            nameError=
+                                when{
+                                    fullname.isBlank() ->
+                                        "El nombre es obligatorio"
+                                    fullname.length <4 ->
+                                        "El nombre debe tener al menos 4 caracteres"
+                                    else -> null
+                                }
+                            emailError =
+                                when {
+                                    email.isBlank() ->
+                                        "El correo es obligatorio"
+
+                                    !android.util.Patterns.EMAIL_ADDRESS
+                                        .matcher(email)
+                                        .matches() ->
+                                        "Correo inválido"
+
+                                    else -> null
+                                }
+
+                            passwordError =
+                                when {
+                                    password.isBlank() ->
+                                        "La contraseña es obligatoria"
+
+                                    password.length < 6 ->
+                                        "La contraseña debe tener al menos 6 caracteres"
+
+                                    else -> null
+                                }
+
+                            phoneError =
+                                when{
+                                    phone.isBlank() ->
+                                        "El telefono es obligatorio"    //no se si sea obligatorio en el diseño actual
+                                    !phone.matches(Regex("^\\d{10}$")) ->
+                                        "El telefono debe contener exactamente 10 números"
+                                    else -> null
+                                }
+
+                            if (
+                                nameError == null &&
+                                emailError == null &&
+                                passwordError == null &&
+                                phoneError == null
+                            ) {
+                                authViewModel.signup(
+                                    name = fullname,
+                                    email = email,
+                                    password = password,
+                                    phone = phone
+                                )
+                            }
+                        }
+                    )
+
+                    Spacer(modifier = Modifier.height(20.dp))
+
                     BasicText(
-                        text = "Correo electrónico",
+                        text = "Iniciar sesión",
+
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .clickable{
+                                onLoginClick()
+                            },
+
                         style = TextStyle(
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Normal,
-                            color = Color.Black
+                            color = GoldAccent,
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.SemiBold
                         )
                     )
                 }
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                AuthInput(
-                    value = email,
-                    placeholder = "Ingresa tu correo",
-                    leadingIcon = Icons.Outlined.Email,
-
-                    onValueChange = {
-                        email = it
-                    }
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-
-                    BasicText(
-                        text = "Contraseña",
-                        style = TextStyle(
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Normal,
-                            color = Color.Black
-                        )
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                AuthPasswordInput(
-                    value = password,
-                    placeholder = "Ingresa tu contraseña",
-
-                    onValueChange = {
-                        password = it
-                    }
-                )
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                PrimaryButton(
-                    text = "Crear cuenta",
-
-                    onClick = {
-
-                        authViewModel.signup(
-                            name = fullname,
-                            email = email,
-                            password = password
-                        )
-                    }
-                )
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                BasicText(
-                    text = "Iniciar sesión",
-
-                    modifier = Modifier.clickable {
-                        onLoginClick()
-                    },
-
-                    style = TextStyle(
-                        color = GoldAccent,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                )
             }
         }
     }

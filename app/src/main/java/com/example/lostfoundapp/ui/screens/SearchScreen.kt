@@ -19,24 +19,18 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.lostfoundapp.data.mock.categories
-import com.example.lostfoundapp.data.mock.locations
-import com.example.lostfoundapp.data.mock.mockPosts
+
 import com.example.lostfoundapp.data.model.ItemPost
 import com.example.lostfoundapp.data.model.ReportType
 
-import com.example.lostfoundapp.navigation.Routes
 import com.example.lostfoundapp.ui.components.AppBottomBar
 import com.example.lostfoundapp.ui.components.ItemCard
 import com.example.lostfoundapp.ui.components.SelectionDialog
@@ -46,22 +40,21 @@ import com.example.lostfoundapp.ui.theme.HomeBodyBackground
 import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
 import com.example.lostfoundapp.ui.components.search.SearchInput
 
-import com.example.lostfoundapp.ui.viewmodel.SearchViewModel
-
 import com.example.lostfoundapp.ui.theme.FoundBadgeBackground
 import com.example.lostfoundapp.ui.theme.FoundBadgeText
 import com.example.lostfoundapp.ui.theme.LostBadgeBackground
 import com.example.lostfoundapp.ui.theme.LostBadgeText
 
-import com.example.lostfoundapp.data.local.SessionManager
-import com.example.lostfoundapp.data.remote.RetrofitInstance
-import com.example.lostfoundapp.data.toItemPost
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.platform.LocalContext
+import com.example.lostfoundapp.ui.viewmodel.PostsViewModel
+import com.example.lostfoundapp.ui.viewmodel.SearchViewModel
 
 
 @Composable
 fun SearchScreen(
+    searchViewModel: SearchViewModel,
+    postsViewModel: PostsViewModel,
+
     currentRoute: String?,
     hasUnreadActivity: Boolean,
     onItemClick: (ItemPost) -> Unit,
@@ -72,78 +65,57 @@ fun SearchScreen(
     onProfileClick: () -> Unit
 ) {
 
-    var posts by remember {
-        mutableStateOf<List<ItemPost>>(emptyList())
+    LaunchedEffect(Unit) {
+
+        postsViewModel.loadCatalogs()
     }
 
-    val context = LocalContext.current
+    val posts =
+        searchViewModel.searchResults
 
-    val sessionManager = SessionManager(context)
+    LaunchedEffect(
+        searchViewModel.selectedCategoryId,
+        searchViewModel.selectedLocationId,
+        searchViewModel.selectedDateFilter
+    ) {
 
-    val token = sessionManager.getToken() ?: ""
-    val viewModel: SearchViewModel = viewModel()
+        searchViewModel.searchPosts(
+            categoryId =
+                searchViewModel.selectedCategoryId,
 
+            locationId =
+                searchViewModel.selectedLocationId,
 
-    LaunchedEffect(viewModel.selectedCategoryId,
-            viewModel.selectedLocationId,
-            viewModel.selectedDateFilter) {
-
-        try {
-
-            val response =
-                RetrofitInstance.api.getPosts(
-                    token = "Bearer $token",
-
-                    categoryId =
-                        viewModel.selectedCategoryId,
-
-                    locationId =
-                        viewModel.selectedLocationId,
-
-                    time =
-                        viewModel.selectedDateFilter.lowercase()
-                )
-
-            if(response.isSuccessful) {
-
-                posts =
-                    response.body()
-                        ?.data
-                        ?.map { it.toItemPost() }
-                        ?: emptyList()
-            }
-
-        } catch (e: Exception) {
-
-            e.printStackTrace()
-        }
+            time =
+                searchViewModel.selectedDateFilter.lowercase()
+        )
     }
 
     val filteredPosts = posts.filter { post ->
 
         val matchesCategory =
-            viewModel.selectedCategory.isEmpty() ||
-            post.category == viewModel.selectedCategory
+            searchViewModel.selectedCategory.isEmpty() ||
+            post.category == searchViewModel.selectedCategory
 
         val matchesLocation =
-            viewModel.selectedLocation.isEmpty() ||
+            searchViewModel.selectedLocation.isEmpty() ||
             post.location.contains(
-                viewModel.selectedLocation,
+                searchViewModel.selectedLocation,
                 ignoreCase = true
             )
 
         val matchesSearch =
-            viewModel.searchQuery.isEmpty() ||
+            searchViewModel.searchQuery.isEmpty() ||
             post.title.contains(
-                viewModel.searchQuery,
+                searchViewModel.searchQuery,
                 ignoreCase = true
             ) ||
             post.location.contains(
-                viewModel.searchQuery,
+                searchViewModel.searchQuery,
                 ignoreCase = true
             ) ||
             post.category.contains(
-                viewModel.searchQuery,
+                searchViewModel.searchQuery,
                 ignoreCase = true
             )
 
@@ -185,9 +157,9 @@ fun SearchScreen(
             ) {
 
                 SearchInput(
-                    value = viewModel.searchQuery,
+                    value = searchViewModel.searchQuery,
                     onValueChange = {
-                        viewModel.updateSearchQuery(it)
+                        searchViewModel.updateSearchQuery(it)
                     }
                 )
             }
@@ -215,24 +187,24 @@ fun SearchScreen(
                 ) {
 
                     SearchFiltersSection(
-                        selectedCategory = viewModel.selectedCategory,
-                        selectedLocation = viewModel.selectedLocation,
+                        selectedCategory = searchViewModel.selectedCategory,
+                        selectedLocation = searchViewModel.selectedLocation,
 
                         onCategoryClick = {
-                            viewModel.showCategoryDialog()
+                            searchViewModel.showCategoryDialog()
                         },
 
                         onLocationClick = {
-                            viewModel.showLocationDialog()
+                            searchViewModel.showLocationDialog()
                         }
                     )
 
                     Spacer(modifier = Modifier.height(20.dp))
 
                     DateFilterRow(
-                        selectedFilter = viewModel.selectedDateFilter,
+                        selectedFilter = searchViewModel.selectedDateFilter,
                         onFilterSelected = {
-                            viewModel.updateDateFilter(it)
+                            searchViewModel.updateDateFilter(it)
                         }
                     )
 
@@ -342,56 +314,56 @@ fun SearchScreen(
             }
         }
 
-        if(viewModel.showCategoryDialog) {
+        if(searchViewModel.showCategoryDialog) {
 
             SelectionDialog(
                 title = "Seleccionar categoría",
-                options = categories.map{it.name},
-                selectedOption = viewModel.selectedCategory,
+                options = postsViewModel.categories.map{it.name},
+                selectedOption = searchViewModel.selectedCategory,
 
                 onDismiss = {
-                    viewModel.hideCategoryDialog()
+                    searchViewModel.hideCategoryDialog()
                 },
 
                 onOptionSelected = { optionSelected ->
 
-                    val selectedCategory = categories.find {
+                    val selectedCategory = postsViewModel.categories.find {
                         it.name == optionSelected
                     }
 
-                    viewModel.updateCategory(
+                    searchViewModel.updateCategory(
                         id = selectedCategory?.id,
                         name = selectedCategory?.name ?: ""
                     )
 
-                    viewModel.hideCategoryDialog()
+                    searchViewModel.hideCategoryDialog()
                 }
             )
         }
 
-        if(viewModel.showLocationDialog) {
+        if(searchViewModel.showLocationDialog) {
 
             SelectionDialog(
                 title = "Seleccionar ubicación",
-                options = locations.map{it.name},
-                selectedOption = viewModel.selectedLocation,
+                options = postsViewModel.locations.map{it.name},
+                selectedOption = searchViewModel.selectedLocation,
 
                 onDismiss = {
-                    viewModel.hideLocationDialog()
+                    searchViewModel.hideLocationDialog()
                 },
 
                 onOptionSelected = { optionSelected ->
 
-                    val selectedLocation = locations.find {
+                    val selectedLocation = postsViewModel.locations.find {
                         it.name == optionSelected
                     }
 
-                    viewModel.updateLocation(
+                    searchViewModel.updateLocation(
                         id = selectedLocation?.id,
                         name = selectedLocation?.name ?: ""
                     )
 
-                    viewModel.hideLocationDialog()
+                    searchViewModel.hideLocationDialog()
                 }
             )
         }

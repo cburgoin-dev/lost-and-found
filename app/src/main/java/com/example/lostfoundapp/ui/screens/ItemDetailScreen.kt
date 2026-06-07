@@ -36,11 +36,13 @@ import com.example.lostfoundapp.ui.theme.BorderGray
 import com.example.lostfoundapp.ui.theme.FoundActionCardForeground
 import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
 import com.example.lostfoundapp.ui.viewmodel.ItemDetailViewModel
+import com.example.lostfoundapp.ui.viewmodel.RequestsViewModel
 import kotlinx.coroutines.launch
 
 @Composable
 fun ItemDetailScreen(
     itemPost: ItemPost,
+    requestsViewModel: RequestsViewModel,
     onBackClick: () -> Unit
 ) {
 
@@ -198,21 +200,15 @@ fun ItemDetailScreen(
 
             CreateRequestBottomSheet(
                 postId = itemPost.id,
+
                 reportType = itemPost.reportType,
+
+                requestsViewModel = requestsViewModel,
+
                 onDismiss = {
                     showRequestSheet = false
                 }
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ItemDetailScreenPreview() {
-
-    ItemDetailScreen(
-        itemPost = mockPosts[0],
-        onBackClick = {}
-    )
 }

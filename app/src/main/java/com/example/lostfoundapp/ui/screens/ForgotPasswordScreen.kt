@@ -137,7 +137,7 @@ fun ForgotPasswordScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             BasicText(
-                text = "Ingresa tu correo institucional para recuperar tu cuenta",
+                text = "Ingresa tu correo electrónico para recuperar tu cuenta",
                 modifier = Modifier.fillMaxWidth(),
                 style = TextStyle(
                     color = CardWhite.copy(alpha = 0.82f),

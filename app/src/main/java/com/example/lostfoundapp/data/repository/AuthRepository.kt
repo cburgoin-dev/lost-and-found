@@ -2,7 +2,7 @@ package com.example.lostfoundapp.data.repository
 
 
 import com.example.lostfoundapp.data.local.SessionManager
-import com.example.lostfoundapp.data.model.ApiResult
+import com.example.lostfoundapp.data.response.ApiResult
 import com.example.lostfoundapp.data.remote.RetrofitInstance
 import com.example.lostfoundapp.utils.extractErrorMessage
 import retrofit2.HttpException
@@ -11,7 +11,10 @@ import java.io.IOException
 class AuthRepository(
     private val sessionManager: SessionManager
 ) {
-    private val api = RetrofitInstance.createApi(sessionManager)
+    private val api =
+        RetrofitInstance.createApi(
+            sessionManager
+        )
 
     suspend fun logout() : ApiResult<Unit> {
         return try {
@@ -81,7 +84,8 @@ class AuthRepository(
     suspend fun signup(
         name: String,
         email: String,
-        password: String
+        password: String,
+        phone: String
     ): Result<Unit> {
 
         return try {
@@ -90,7 +94,8 @@ class AuthRepository(
                 api.signup(
                     name = name,
                     email = email,
-                    password = password
+                    password = password,
+                    phone = phone
                 )
 
             if(signupResponse.isSuccessful) {

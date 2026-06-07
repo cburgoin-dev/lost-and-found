@@ -13,7 +13,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.lostfoundapp.data.local.SessionManager
 import com.example.lostfoundapp.data.mock.mockPosts
 import com.example.lostfoundapp.data.model.ItemPost
-import com.example.lostfoundapp.data.model.NotificationType
 import com.example.lostfoundapp.data.model.PostsScreenType
 
 import com.example.lostfoundapp.ui.screens.*
@@ -21,17 +20,24 @@ import com.example.lostfoundapp.data.model.ReportType
 import com.example.lostfoundapp.data.model.Request
 import com.example.lostfoundapp.data.repository.NotificationsRepository
 import com.example.lostfoundapp.ui.viewmodel.ActivityViewModel
-import com.example.lostfoundapp.ui.viewmodel.AuthViewModel
 import com.example.lostfoundapp.ui.viewmodel.EditProfileViewModel
 import com.example.lostfoundapp.ui.viewmodel.NotificationsViewModel
+import com.example.lostfoundapp.ui.viewmodel.PostsViewModel
+import com.example.lostfoundapp.ui.viewmodel.RequestsViewModel
+import com.example.lostfoundapp.ui.viewmodel.SearchViewModel
 import com.example.lostfoundapp.ui.viewmodel.UserViewModel
 
 @Composable
 fun AppNavigation(sessionManager: SessionManager) {
     val context = LocalContext.current
 
-    val startDestination = if(sessionManager.hasToken()) Routes.Home.route else Routes.Login.route
+    val sessionManager = SessionManager(context)
 
+    val startDestination =
+        if(sessionManager.hasToken())
+            Routes.Home.route
+        else
+            Routes.Login.route
 
     var selectedPost by remember {
         mutableStateOf<ItemPost?>(null)
@@ -46,7 +52,42 @@ fun AppNavigation(sessionManager: SessionManager) {
 
     val userViewModel: UserViewModel = viewModel()
 
+    val postsViewModel = remember {
+
+        PostsViewModel(
+            SessionManager(context)
+        )
+    }
+
+    val searchViewModel = remember {
+
+        SearchViewModel(
+            SessionManager(context)
+        )
+    }
+
+    val requestsViewModel = remember {
+
+        RequestsViewModel(
+            SessionManager(context)
+        )
+    }
+
+    LaunchedEffect(Unit) {
+
+        requestsViewModel.loadRequests()
+    }
+
     val activityViewModel: ActivityViewModel = viewModel()
+
+    LaunchedEffect(
+        requestsViewModel.requests
+    ) {
+
+        activityViewModel.updatePendingRequests(
+            requestsViewModel.requests
+        )
+    }
 
     val editProfileViewModel: EditProfileViewModel = viewModel()
 
@@ -162,6 +203,8 @@ fun AppNavigation(sessionManager: SessionManager) {
             HomeScreen(
                 userViewModel = userViewModel,
 
+                postsViewModel = postsViewModel,
+
                 hasUnreadActivity = activityViewModel.hasUnreadActivity,
 
                 onLostClick = {
@@ -210,8 +253,18 @@ fun AppNavigation(sessionManager: SessionManager) {
 
             ReportItemScreen(
                 reportType = ReportType.LOST,
+
+                postsViewModel = postsViewModel,
+
                 onBackClick = {
                     navController.popBackStack()
+                },
+
+                onPostCreated = {
+
+                    navController.navigate(
+                        Routes.Home.route
+                    )
                 }
             )
         }
@@ -222,8 +275,18 @@ fun AppNavigation(sessionManager: SessionManager) {
 
             ReportItemScreen(
                 reportType = ReportType.FOUND,
+
+                postsViewModel = postsViewModel,
+
                 onBackClick = {
                     navController.popBackStack()
+                },
+
+                onPostCreated = {
+
+                    navController.navigate(
+                        Routes.Home.route
+                    )
                 }
             )
         }
@@ -233,6 +296,10 @@ fun AppNavigation(sessionManager: SessionManager) {
         ) {
 
             SearchScreen(
+                searchViewModel = searchViewModel,
+
+                postsViewModel = postsViewModel,
+
                 currentRoute = currentRoute,
 
                 hasUnreadActivity = activityViewModel.hasUnreadActivity,
@@ -271,6 +338,9 @@ fun AppNavigation(sessionManager: SessionManager) {
 
                 ItemDetailScreen(
                     itemPost = itemPost,
+
+                    requestsViewModel = requestsViewModel,
+
                     onBackClick = {
                         navController.popBackStack()
                     }
@@ -285,7 +355,12 @@ fun AppNavigation(sessionManager: SessionManager) {
             ActivityScreen(
                 currentRoute = currentRoute,
 
+                hasUnreadActivity =
+                    activityViewModel.hasUnreadActivity,
+
                 activityViewModel = activityViewModel,
+
+                requestsViewModel = requestsViewModel,
 
                 onHomeClick = {
                     navigateToBottomBarRoute(
@@ -351,10 +426,15 @@ fun AppNavigation(sessionManager: SessionManager) {
 
                 RequestDetailScreen(
                     request = request,
+
+                    requestsViewModel = requestsViewModel,
+
                     onBackClick = {
                         navController.popBackStack()
                     },
+
                     onApproveClick = {},
+
                     onRejectClick = {}
                 )
             }

@@ -6,8 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.lostfoundapp.data.local.SessionManager
-import com.example.lostfoundapp.data.model.ApiResult
-import com.example.lostfoundapp.data.remote.RetrofitInstance
+import com.example.lostfoundapp.data.response.ApiResult
 import com.example.lostfoundapp.data.repository.AuthRepository
 import kotlinx.coroutines.launch
 
@@ -87,7 +86,8 @@ class AuthViewModel(
     fun signup(
         name: String,
         email: String,
-        password: String
+        password: String,
+        phone: String
     ) {
 
         viewModelScope.launch {
@@ -98,7 +98,8 @@ class AuthViewModel(
                 authRepository.signup(
                     name,
                     email,
-                    password
+                    password,
+                    phone
                 )
 
             isLoading = false
