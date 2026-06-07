@@ -16,8 +16,11 @@ val mockPosts = listOf(
         reportType = ReportType.LOST,
         imageRes = R.drawable.airpods_case,
         reporterName = "anaUser",
+        reporterEmail = null,
+        reporterPhone = null,
         isAnonymous = false,
-        isContactVisible = true
+        isContactVisible = true,
+        isMine = false,
     ),
 
     ItemPost(
@@ -30,8 +33,11 @@ val mockPosts = listOf(
         reportType = ReportType.FOUND,
         imageRes = R.drawable.student_id,
         reporterName = "carlosUser",
+        reporterEmail = null,
+        reporterPhone = null,
         isAnonymous = false,
-        isContactVisible = true
+        isContactVisible = true,
+        isMine = false
     ),
 
     ItemPost(
@@ -44,8 +50,11 @@ val mockPosts = listOf(
         reportType = ReportType.LOST,
         imageRes = R.drawable.backpack,
         reporterName = "anonymousUser",
+        reporterEmail = null,
+        reporterPhone = null,
         isAnonymous = true,
-        isContactVisible = false
+        isContactVisible = false,
+        isMine = false
     ),
 
     ItemPost(
@@ -58,7 +67,10 @@ val mockPosts = listOf(
         reportType = ReportType.FOUND,
         imageRes = R.drawable.water_bottle,
         reporterName = "sofiaUser",
+        reporterEmail = null,
+        reporterPhone = null,
         isAnonymous = false,
-        isContactVisible = true
+        isContactVisible = true,
+        isMine = false
     )
 )

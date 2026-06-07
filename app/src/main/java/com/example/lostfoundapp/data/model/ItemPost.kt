@@ -22,9 +22,15 @@ data class ItemPost(
 
     val reporterName: String,
 
+    val reporterEmail: String?,
+
+    val reporterPhone: String?,
+
     val reporterImageRes: Int? = null,
 
     val isAnonymous: Boolean,
 
-    val isContactVisible: Boolean
+    val isContactVisible: Boolean,
+
+    val isMine: Boolean
 )

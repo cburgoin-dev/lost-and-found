@@ -9,7 +9,9 @@ data class PostResponse(
 
     val id: Int,
 
-    val user_id: Int,
+    val hidden_user: Boolean,
+
+    val user: PostUserResponse?,
 
     val title: String,
 
@@ -23,7 +25,20 @@ data class PostResponse(
 
     val type: String,
 
-    val picture: PictureResponse?
+    val picture: PictureResponse?,
+
+    val yours: Boolean
+)
+
+data class PostUserResponse(
+
+    val id: Int,
+
+    val name: String,
+
+    val email: String?,
+
+    val phone: String?
 )
 
 data class CategoryResponse(

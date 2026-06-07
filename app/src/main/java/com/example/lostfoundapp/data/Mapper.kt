@@ -58,13 +58,26 @@ fun PostResponse.toItemPost(): ItemPost {
                 }
             },
 
-        reporterName = "Usuario",
+        reporterName =
+            if(hidden_user)
+                "Usuario anónimo"
+            else
+                user?.name ?: "Usuario",
 
-        reporterImageRes = null,
+        reporterEmail =
+            user?.email,
 
-        isAnonymous = false,
+        reporterPhone =
+            user?.phone,
 
-        isContactVisible = true
+        isAnonymous =
+            hidden_user,
+
+        isContactVisible =
+            !hidden_user,
+
+        isMine =
+            yours
     )
 }
 
@@ -93,9 +106,6 @@ fun RequestDto.toRequest(): Request {
                 phone = user?.phone ?: "-",
                 profileImageRes = R.drawable.airpods_case
             ),
-
-
-
 
         description = content,
 

@@ -187,8 +187,8 @@ fun ItemDetailScreen(
             ContactInfoBottomSheet(
                 userName = itemPost.reporterName,
                 userImageRes = itemPost.reporterImageRes,
-                email = "",
-                phone = "",
+                email = itemPost.reporterEmail,
+                phone = itemPost.reporterPhone,
 
                 onDismiss = {
                     showContactSheet = false
