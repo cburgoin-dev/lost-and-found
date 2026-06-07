@@ -1,5 +1,6 @@
 package com.example.lostfoundapp.ui.screens
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,6 +20,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.Text
 import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
@@ -39,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -62,6 +65,8 @@ import com.example.lostfoundapp.data.model.ItemPost
 import com.example.lostfoundapp.data.model.ReportType
 import com.example.lostfoundapp.ui.viewmodel.PostsViewModel
 import com.example.lostfoundapp.ui.viewmodel.UserViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.time.delay
 
 @Composable
 fun HomeScreen(
@@ -94,8 +99,21 @@ fun HomeScreen(
         mutableStateOf(false)
     }
 
+    val showMessage =
+        postsViewModel.showPostCreatedMessage
+
     LaunchedEffect(Unit) {
         postsViewModel.loadPosts()
+    }
+
+    LaunchedEffect(showMessage) {
+
+        if(showMessage) {
+
+            delay(3000)
+
+            postsViewModel.clearPostCreatedMessage()
+        }
     }
 
     Box(
@@ -349,7 +367,41 @@ fun HomeScreen(
                     }
                 }
             }
+
+            AnimatedVisibility(
+                visible = showMessage,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(
+                        start =6.dp,
+                        end = 6.dp,
+                        bottom = 130.dp
+
+
+                    )
+            ) {
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            Color(0xFF4CAF50),
+                            RoundedCornerShape(12.dp)
+                        )
+                ) {
+
+                    BasicText(
+                        text = "Publicación creada con éxito",
+                        style = TextStyle(color = Color.White),
+                        modifier = Modifier.padding(
+                            horizontal = 26.dp,
+                            vertical = 8.dp
+                        )
+                    )
+                }
+            }
         }
+
 
         Column(
             modifier = Modifier.fillMaxSize(),

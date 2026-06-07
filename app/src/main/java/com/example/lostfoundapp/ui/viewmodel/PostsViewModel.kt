@@ -36,6 +36,17 @@ class PostsViewModel(
     var errorMessage by mutableStateOf<String?>(null)
         private set
 
+    var showPostCreatedMessage by mutableStateOf(false)
+        private set
+
+    fun notifyPostCreated() {
+        showPostCreatedMessage = true
+    }
+
+    fun clearPostCreatedMessage() {
+        showPostCreatedMessage = false
+    }
+
     fun loadPosts() {
 
         viewModelScope.launch {
@@ -115,7 +126,7 @@ class PostsViewModel(
                     selectedImageUri = selectedImageUri
                 )
                 .onSuccess {
-
+                    showPostCreatedMessage = true
                     onSuccess()
                 }
                 .onFailure {
