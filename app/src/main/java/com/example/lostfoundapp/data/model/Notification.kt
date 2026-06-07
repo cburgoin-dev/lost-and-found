@@ -4,20 +4,15 @@ data class Notification(
 
     val id: Int,
 
-    val type: String,
+    val type: NotificationType,
+
+    val title: String,
 
     val description: String,
 
     val time: String,
 
-    val is_read: Int,
+    val isRead: Int,
 
-    val post_id: Int? = null
+    val postId: Int? = null
 )
-
-// "id": 1, es id
-// "type": "Solicitud aprobada"
-// "description": "Ya puedes ver la información de contacto del propietario."
-// "is_read": 0,
-// "post_id": 1,
-// "time": "hace 18 minutos"

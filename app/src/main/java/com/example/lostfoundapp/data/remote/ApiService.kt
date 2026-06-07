@@ -152,6 +152,12 @@ interface ApiService {
     suspend fun getNotifications(
     ): BkResponse<List<NotificationResponse>>
 
+    @PATCH("api/notifications/{id}/read")
+    suspend fun markNotificationAsRead(
+        @Path("id")
+        notificationId: Int
+    ): Response<MessageResponse>
+
     @GET("api/user/posts")
     suspend fun getMyPosts():
         Response<PostsResponse>

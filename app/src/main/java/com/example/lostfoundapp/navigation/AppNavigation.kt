@@ -13,6 +13,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.lostfoundapp.data.local.SessionManager
 import com.example.lostfoundapp.data.mock.mockPosts
 import com.example.lostfoundapp.data.model.ItemPost
+import com.example.lostfoundapp.data.model.NotificationType
 import com.example.lostfoundapp.data.model.PostsScreenType
 
 import com.example.lostfoundapp.ui.screens.*
@@ -413,13 +414,13 @@ fun AppNavigation(
 
                     when(notification.type) {
 
-                        "Solicitud aprobada",
-                        "Posible coincidencia" -> {
+                        NotificationType.REQUEST_APPROVED,
+                        NotificationType.MATCH_FOUND -> {
 
-                            notification.post_id?.let { itemId ->
+                            notification.postId?.let { itemId ->
 
                                 selectedPost =
-                                    mockPosts.firstOrNull {
+                                    postsViewModel.posts.firstOrNull {
                                         it.id == itemId
                                     }
 
@@ -428,6 +429,9 @@ fun AppNavigation(
                                 )
                             }
                         }
+
+                        NotificationType.REQUEST_REJECTED,
+                        NotificationType.SYSTEM -> Unit
                     }
                 }
             )

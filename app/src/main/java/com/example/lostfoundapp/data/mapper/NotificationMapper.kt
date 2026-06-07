@@ -1,22 +1,41 @@
 package com.example.lostfoundapp.data.mapper
 
 import com.example.lostfoundapp.data.model.Notification
+import com.example.lostfoundapp.data.model.NotificationType
 import com.example.lostfoundapp.data.response.NotificationResponse
 
 fun NotificationResponse.toNotification(): Notification {
+
+    val notificationType =
+        when(type) {
+
+            "Solicitud aprobada" ->
+                NotificationType.REQUEST_APPROVED
+
+            "Solicitud rechazada" ->
+                NotificationType.REQUEST_REJECTED
+
+            "Posible coincidencia" ->
+                NotificationType.MATCH_FOUND
+
+            else ->
+                NotificationType.SYSTEM
+        }
 
     return Notification(
 
         id = id,
 
-        type = type,
+        type = notificationType,
+
+        title = type,
 
         description = description,
 
         time = time,
 
-        is_read = is_read,
+        isRead = is_read,
 
-        post_id = post_id
+        postId = post_id
     )
 }

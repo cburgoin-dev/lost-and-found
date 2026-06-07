@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +28,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 
 import com.example.lostfoundapp.data.mock.mockNotifications
 import com.example.lostfoundapp.data.model.Notification
+import com.example.lostfoundapp.data.model.NotificationType
 import com.example.lostfoundapp.data.model.Request
 import com.example.lostfoundapp.ui.components.AppBottomBar
 import com.example.lostfoundapp.ui.components.activity.ActivityTabRow
@@ -64,6 +66,24 @@ fun ActivityScreen(
         )
     }
 
+    LaunchedEffect(
+        notificationsViewModel.notifications
+    ) {
+
+        activityViewModel.updateUnreadNotifications(
+            notificationsViewModel.notifications
+        )
+    }
+
+    DisposableEffect(Unit) {
+
+        onDispose {
+
+            notificationsViewModel
+                .markAllNotificationsAsRead()
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -91,11 +111,8 @@ fun ActivityScreen(
             ActivityTabRow(
                 selectedTab = activityViewModel.selectedTab,
                 onTabSelected = {
-                    activityViewModel.selectTab(it)
 
-                    if (it == "Notificaciones") {
-                        activityViewModel.markNotificationsAsRead()
-                    }
+                    activityViewModel.selectTab(it)
                 },
                 modifier = Modifier.padding(horizontal = 24.dp)
             )
@@ -215,6 +232,19 @@ fun ActivityScreen(
                                     NotificationCard(
                                         notification = notification,
                                         onClick = {
+
+                                            if(
+
+                                                notification.type == NotificationType.REQUEST_APPROVED ||
+                                                notification.type == NotificationType.MATCH_FOUND
+                                            ) {
+
+                                                notificationsViewModel
+                                                    .markNotificationAsRead(
+                                                        notification.id
+                                                    )
+                                            }
+
                                             onNotificationClick(notification)
                                         }
                                     )

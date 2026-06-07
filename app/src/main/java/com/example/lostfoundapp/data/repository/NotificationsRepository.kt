@@ -34,4 +34,33 @@ class NotificationsRepository (
             Result.failure(e)
         }
     }
+
+    suspend fun markNotificationAsRead(
+        notificationId: Int
+    ): Result<Unit> {
+
+        return try {
+
+            val response =
+                api.markNotificationAsRead(
+                    notificationId
+                )
+
+            if (response.isSuccessful) {
+
+                Result.success(Unit)
+
+            } else {
+
+                Result.failure(
+                    Exception(
+                        "Error marking notification as read"
+                    )
+                )
+            }
+        } catch (e: Exception) {
+
+            Result.failure(e)
+        }
+    }
 }
