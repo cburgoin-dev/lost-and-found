@@ -66,10 +66,7 @@ fun ActivityScreen(
 
     LaunchedEffect(Unit) {
 
-        while (isActive){
-            notificationsViewModel.getNotifications()
-            delay(3000)
-        }
+
     }
 
 

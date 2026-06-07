@@ -26,6 +26,8 @@ import com.example.lostfoundapp.ui.viewmodel.PostsViewModel
 import com.example.lostfoundapp.ui.viewmodel.RequestsViewModel
 import com.example.lostfoundapp.ui.viewmodel.SearchViewModel
 import com.example.lostfoundapp.ui.viewmodel.UserViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 
 @Composable
 fun AppNavigation(sessionManager: SessionManager) {
@@ -73,10 +75,7 @@ fun AppNavigation(sessionManager: SessionManager) {
         )
     }
 
-    LaunchedEffect(Unit) {
 
-        requestsViewModel.loadRequests()
-    }
 
     val activityViewModel: ActivityViewModel = viewModel()
 
@@ -125,16 +124,10 @@ fun AppNavigation(sessionManager: SessionManager) {
     }
 
     LaunchedEffect(Unit) {
-        sessionManager.isAuthenticated.collect { authenticated ->
-            if (!authenticated) {
-                navController.navigate(
-                    Routes.Login.route
-                ) {
-                    popUpTo(0) {
-                        inclusive = true
-                    }
-                }
-            }
+        while (isActive){
+            notificationsViewModel.getNotifications()
+            requestsViewModel.loadRequests()
+            delay(3000)
         }
     }
 
