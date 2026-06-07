@@ -19,7 +19,10 @@ import retrofit2.http.Query
 import com.example.lostfoundapp.data.response.CreateRequestResponse
 import com.example.lostfoundapp.data.response.GetRequestsResponse
 import com.example.lostfoundapp.data.response.LocationsResponse
+import com.example.lostfoundapp.data.response.MessageResponse
+import com.example.lostfoundapp.data.response.NotificationResponse
 import com.example.lostfoundapp.data.response.PostsResponse
+import com.example.lostfoundapp.data.response.UserResponse
 import retrofit2.http.DELETE
 
 interface ApiService {
@@ -30,9 +33,6 @@ interface ApiService {
         @Field("password") password: String
     ): Response<String>
 
-    @DELETE("api/logout")
-    suspend fun logout( ): BkResponse<Unit>
-
     @FormUrlEncoded
     @POST("api/sign-up")
     suspend fun signup(
@@ -41,6 +41,22 @@ interface ApiService {
         @Field("password") password: String,
         @Field("phone") phone: String
     ): Response<String>
+
+    @DELETE("api/logout")
+    suspend fun logout():
+        BkResponse<Unit>
+
+    @GET("api/user")
+    suspend fun getUser():
+        Response<UserResponse>
+
+    @GET("api/locations")
+    suspend fun getLocations():
+        Response<LocationsResponse>
+
+    @GET("api/categories")
+    suspend fun getCategories():
+        Response<CategoriesResponse>
 
     @Multipart
     @POST("api/posts")
@@ -89,6 +105,18 @@ interface ApiService {
 
     ): Response<PostsResponse>
 
+    @DELETE("api/posts/{id}")
+    suspend fun deletePost(
+        @Path("id")
+        postId: Int
+    ): Response<MessageResponse>
+
+    @POST("api/posts/{id}/bookmark")
+    suspend fun toggleBookmark(
+        @Path("id")
+        postId: Int
+    ): Response<MessageResponse>
+
     @Multipart
     @POST("api/requests")
     suspend fun createRequest(
@@ -114,20 +142,21 @@ interface ApiService {
         requestId : Int
     ): Response<GetRequestsResponse>
 
-    @GET("api/notifications")
-    suspend fun getNotifications(
-    ): BkResponse<List<Notification>>
     @PATCH("api/requests/{id}/decline")
     suspend fun declineRequest(
         @Path("id")
         requestId : Int
     ): Response<GetRequestsResponse>
 
-    @GET("api/locations")
-    suspend fun getLocations():
-        Response<LocationsResponse>
+    @GET("api/notifications")
+    suspend fun getNotifications(
+    ): BkResponse<List<NotificationResponse>>
 
-    @GET("api/categories")
-    suspend fun getCategories():
-        Response<CategoriesResponse>
+    @GET("api/user/posts")
+    suspend fun getMyPosts():
+        Response<PostsResponse>
+
+    @GET("api/user/saved-posts")
+    suspend fun getBookmarks():
+        Response<PostsResponse>
 }

@@ -6,20 +6,14 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 
-import com.example.lostfoundapp.data.local.SessionManager
 import com.example.lostfoundapp.data.model.Request
 import com.example.lostfoundapp.data.repository.RequestsRepository
 
 import kotlinx.coroutines.launch
 
 class RequestsViewModel(
-    sessionManager: SessionManager
+    private val repository: RequestsRepository
 ) : ViewModel() {
-
-    private val repository =
-        RequestsRepository(
-            sessionManager
-        )
 
     var requests by mutableStateOf<List<Request>>(emptyList())
         private set

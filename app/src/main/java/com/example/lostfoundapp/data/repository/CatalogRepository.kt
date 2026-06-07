@@ -9,10 +9,10 @@ class CatalogRepository(
     sessionManager: SessionManager
 ) {
 
-    private val api
-    = RetrofitInstance.createApi(
-        sessionManager
-    )
+    private val api =
+        RetrofitInstance.createApi(
+            sessionManager
+        )
     suspend fun getCategories(): Result<List<Category>> {
 
         return try {

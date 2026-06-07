@@ -5,17 +5,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.lostfoundapp.data.local.SessionManager
+
 import com.example.lostfoundapp.data.model.ItemPost
 import com.example.lostfoundapp.data.repository.PostsRepository
 import kotlinx.coroutines.launch
 
 class SearchViewModel(
-    sessionManager: SessionManager
+    private val repository: PostsRepository
 ) : ViewModel() {
-
-    private val repository =
-        PostsRepository(sessionManager)
 
     var searchResults by mutableStateOf<List<ItemPost>>(emptyList())
         private set

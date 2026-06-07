@@ -1,14 +1,8 @@
-package com.example.lostfoundapp.data
+package com.example.lostfoundapp.data.mapper
 
-import com.example.lostfoundapp.R
 import com.example.lostfoundapp.data.model.ItemPost
 import com.example.lostfoundapp.data.model.ReportType
-import com.example.lostfoundapp.data.model.Request
-import com.example.lostfoundapp.data.model.RequestStatus
-import com.example.lostfoundapp.data.model.RequestType
-import com.example.lostfoundapp.data.model.User
 import com.example.lostfoundapp.data.response.PostResponse
-import com.example.lostfoundapp.data.response.RequestDto
 
 fun PostResponse.toItemPost(): ItemPost {
 
@@ -78,52 +72,5 @@ fun PostResponse.toItemPost(): ItemPost {
 
         isMine =
             yours
-    )
-}
-
-fun RequestDto.toRequest(): Request {
-
-    return Request(
-
-        id = id,
-
-        requestType =
-            if(type.contains("Información"))
-                RequestType.INFORMATION
-            else
-                RequestType.CLAIM,
-
-        itemName = title,
-
-        itemImageRes =
-            R.drawable.airpods_case,
-
-        sender =
-            User(
-                id = user?.id ?: -1,
-                name = user?.name ?: "Usuario pendiente",
-                email = user?.email ?: "-",
-                phone = user?.phone ?: "-",
-                profileImageRes = R.drawable.airpods_case
-            ),
-
-        description = content,
-
-        additionalMessage = message,
-
-        status =
-            when(status) {
-
-                "Aprobada" ->
-                    RequestStatus.APPROVED
-
-                "Rechazada" ->
-                    RequestStatus.REJECTED
-
-                else ->
-                    RequestStatus.PENDING
-            },
-
-        createdAt = time
     )
 }

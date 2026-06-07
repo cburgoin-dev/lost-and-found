@@ -3,11 +3,11 @@ package com.example.lostfoundapp.data.repository
 import com.example.lostfoundapp.data.local.SessionManager
 import com.example.lostfoundapp.data.model.Request
 import com.example.lostfoundapp.data.remote.RetrofitInstance
-import com.example.lostfoundapp.data.toRequest
+import com.example.lostfoundapp.data.mapper.toRequest
 import com.example.lostfoundapp.utils.toRequestBodyText
 
 class RequestsRepository(
-    private val sessionManager: SessionManager
+    sessionManager: SessionManager
 ) {
 
     private val api =

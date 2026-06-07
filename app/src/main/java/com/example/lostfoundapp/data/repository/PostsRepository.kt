@@ -7,12 +7,12 @@ import com.example.lostfoundapp.data.local.SessionManager
 import com.example.lostfoundapp.data.model.ItemPost
 import com.example.lostfoundapp.data.model.ReportType
 import com.example.lostfoundapp.data.remote.RetrofitInstance
-import com.example.lostfoundapp.data.toItemPost
+import com.example.lostfoundapp.data.mapper.toItemPost
 import com.example.lostfoundapp.utils.toRequestBodyText
 import com.example.lostfoundapp.utils.uriToMultipart
 
 class PostsRepository(
-    private val sessionManager: SessionManager
+    sessionManager: SessionManager
 ) {
 
     private val api =

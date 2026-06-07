@@ -8,7 +8,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 
-import com.example.lostfoundapp.data.local.SessionManager
 import com.example.lostfoundapp.data.model.Category
 import com.example.lostfoundapp.data.model.ItemPost
 import com.example.lostfoundapp.data.model.ReportType
@@ -18,16 +17,10 @@ import com.example.lostfoundapp.data.repository.PostsRepository
 import kotlinx.coroutines.launch
 
 class PostsViewModel(
-    sessionManager: SessionManager
+    private val postsRepository: PostsRepository,
+    private val catalogRepository: CatalogRepository
 ) : ViewModel() {
 
-    private val repository =
-        PostsRepository(
-            sessionManager
-        )
-
-    private val catalogRepository =
-        CatalogRepository(sessionManager)
     var posts by mutableStateOf<List<ItemPost>>(emptyList())
         private set
 
@@ -45,13 +38,11 @@ class PostsViewModel(
 
     fun loadPosts() {
 
-        println("LOAD POSTS CALLED")
-
         viewModelScope.launch {
 
             isLoading = true
 
-            repository
+            postsRepository
                 .getPosts()
                 .onSuccess {
 
@@ -76,7 +67,7 @@ class PostsViewModel(
 
             isLoading = true
 
-            repository
+            postsRepository
                 .getPosts(
                     categoryId = categoryId,
                     locationId = locationId,
@@ -111,7 +102,7 @@ class PostsViewModel(
 
             isLoading = true
 
-            repository
+            postsRepository
                 .createPost(
                     context = context,
                     reportType = reportType,

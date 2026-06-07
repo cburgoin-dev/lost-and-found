@@ -64,12 +64,6 @@ fun ActivityScreen(
         )
     }
 
-    LaunchedEffect(Unit) {
-
-
-    }
-
-
     Box(
         modifier = Modifier
             .fillMaxSize()

@@ -18,7 +18,10 @@ import com.example.lostfoundapp.data.model.PostsScreenType
 import com.example.lostfoundapp.ui.screens.*
 import com.example.lostfoundapp.data.model.ReportType
 import com.example.lostfoundapp.data.model.Request
+import com.example.lostfoundapp.data.repository.CatalogRepository
 import com.example.lostfoundapp.data.repository.NotificationsRepository
+import com.example.lostfoundapp.data.repository.PostsRepository
+import com.example.lostfoundapp.data.repository.RequestsRepository
 import com.example.lostfoundapp.ui.viewmodel.ActivityViewModel
 import com.example.lostfoundapp.ui.viewmodel.EditProfileViewModel
 import com.example.lostfoundapp.ui.viewmodel.NotificationsViewModel
@@ -30,10 +33,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 
 @Composable
-fun AppNavigation(sessionManager: SessionManager) {
-    val context = LocalContext.current
-
-    val sessionManager = SessionManager(context)
+fun AppNavigation(
+    sessionManager: SessionManager
+) {
 
     val startDestination =
         if(sessionManager.hasToken())
@@ -52,30 +54,45 @@ fun AppNavigation(sessionManager: SessionManager) {
     val navController =
         rememberNavController()
 
+    val postsRepository = remember {
+        PostsRepository(sessionManager)
+    }
+
+    val catalogRepository = remember {
+        CatalogRepository(sessionManager)
+    }
+
+    val requestsRepository = remember {
+        RequestsRepository(sessionManager)
+    }
+
+    val notificationsRepository = remember {
+        NotificationsRepository(sessionManager)
+    }
+
     val userViewModel: UserViewModel = viewModel()
 
     val postsViewModel = remember {
 
         PostsViewModel(
-            SessionManager(context)
+            postsRepository = postsRepository,
+            catalogRepository = catalogRepository
         )
     }
 
     val searchViewModel = remember {
 
         SearchViewModel(
-            SessionManager(context)
+            repository = postsRepository
         )
     }
 
     val requestsViewModel = remember {
 
         RequestsViewModel(
-            SessionManager(context)
+            repository = requestsRepository
         )
     }
-
-
 
     val activityViewModel: ActivityViewModel = viewModel()
 
@@ -91,7 +108,10 @@ fun AppNavigation(sessionManager: SessionManager) {
     val editProfileViewModel: EditProfileViewModel = viewModel()
 
     val notificationsViewModel = remember {
-        NotificationsViewModel(repository = NotificationsRepository(sessionManager))
+
+        NotificationsViewModel(
+            repository = notificationsRepository
+        )
     }
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -123,11 +143,13 @@ fun AppNavigation(sessionManager: SessionManager) {
         }
     }
 
+    // Poll backend every 5 seconds
+    // to keep notifications and requests updated
     LaunchedEffect(Unit) {
         while (isActive){
-            notificationsViewModel.getNotifications()
+            notificationsViewModel.loadNotifications()
             requestsViewModel.loadRequests()
-            delay(3000)
+            delay(5000)
         }
     }
 

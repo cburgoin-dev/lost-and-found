@@ -1,7 +1,5 @@
 package com.example.lostfoundapp.data.response
 
-import com.example.lostfoundapp.data.model.User
-
 data class CreateRequestResponse(
 
     val message: String,
@@ -23,7 +21,7 @@ data class RequestData(
 
     val message: String,
 
-    val user: User?,
+    val user: RequestUserDto?,
 
     val time: String
 )
@@ -43,11 +41,22 @@ data class RequestDto(
 
     val title: String,
 
-    val user: User?,
+    val user: RequestUserDto?,
 
     val time: String,
 
     val content: String,
 
     val message: String
+)
+
+data class RequestUserDto(
+
+    val id: Int,
+
+    val name: String,
+
+    val email: String?,
+
+    val phone: String?
 )

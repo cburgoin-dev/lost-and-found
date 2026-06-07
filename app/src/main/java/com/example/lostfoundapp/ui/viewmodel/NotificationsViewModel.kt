@@ -2,14 +2,12 @@ package com.example.lostfoundapp.ui.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+
 import com.example.lostfoundapp.data.model.Notification
-import com.example.lostfoundapp.data.model.Request
 import com.example.lostfoundapp.data.repository.NotificationsRepository
-import com.example.lostfoundapp.data.response.ApiResult
 import kotlinx.coroutines.launch
 
 class NotificationsViewModel (
@@ -20,27 +18,36 @@ class NotificationsViewModel (
         private set
 
     var notifications by mutableStateOf(emptyList<Notification>())
+        private set
 
     var hasNotifications by mutableStateOf(false)
+        private set
 
-    fun getNotifications(){
+    var errorMessage by mutableStateOf<String?>(null)
+        private set
+
+    fun loadNotifications() {
+
         if(isLoading) return;
 
         viewModelScope.launch {
+
             isLoading = true
 
-            when (val result = repository.getNotifications()) {
+            repository
+                .getNotifications()
+                .onSuccess {
 
-                is ApiResult.Success -> {
-                    notifications = result.data ?: emptyList()
-                    hasNotifications  = notifications.isNotEmpty()
+                    notifications = it
+
+                    hasNotifications = it.isNotEmpty()
                 }
+                .onFailure {
 
-                is ApiResult.Error<*> -> {
                     hasNotifications = false
-                    println(result.message)
+
+                    errorMessage = it.message
                 }
-            }
 
             isLoading = false
         }

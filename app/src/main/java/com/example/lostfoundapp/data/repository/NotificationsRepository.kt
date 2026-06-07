@@ -1,28 +1,37 @@
 package com.example.lostfoundapp.data.repository
 
 import com.example.lostfoundapp.data.local.SessionManager
+import com.example.lostfoundapp.data.mapper.toNotification
 import com.example.lostfoundapp.data.model.Notification
 import com.example.lostfoundapp.data.remote.RetrofitInstance
-import com.example.lostfoundapp.data.response.ApiResult
-import com.example.lostfoundapp.utils.extractErrorMessage
-import retrofit2.HttpException
 
 class NotificationsRepository (
-    private val sessionManager: SessionManager
+    sessionManager: SessionManager
 ) {
 
     private val api = RetrofitInstance.createApi(sessionManager)
 
-    suspend fun getNotifications() : ApiResult<List<Notification>> {
+    suspend fun getNotifications():
+        Result<List<Notification>> {
+
         return try {
+
             val response = api.getNotifications()
-            ApiResult.Success(
-                data = response.data
+
+            val notifications =
+                response.data
+                    ?.map {
+                        it.toNotification()
+                    }
+                    ?: emptyList()
+
+            Result.success(
+                notifications
             )
-        } catch (e : HttpException){
-            ApiResult.Error<Nothing>(
-                message = extractErrorMessage(e)
-            )
+
+        } catch(e: Exception) {
+
+            Result.failure(e)
         }
     }
 }
