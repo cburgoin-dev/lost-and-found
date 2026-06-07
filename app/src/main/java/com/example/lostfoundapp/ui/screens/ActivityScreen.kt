@@ -70,37 +70,6 @@ fun ActivityScreen(
             notificationsViewModel.getNotifications()
             delay(3000)
         }
-
-
-        try {
-            val response =
-                RetrofitInstance.api.getRequests(
-                    token = "Bearer $token"
-                )
-
-            if(response.isSuccessful){
-
-                requests =
-                    response.body()
-                        ?.data
-                        ?.map { it.toRequest() }
-                        ?: emptyList()
-
-                activityViewModel.updatePendingRequests(
-                    requests
-                )
-
-            } else {
-
-                println(
-                    response.errorBody()?.string()
-                )
-            }
-
-        } catch(e: Exception){
-
-            e.printStackTrace()
-        }
     }
 
 
