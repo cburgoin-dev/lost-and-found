@@ -164,4 +164,96 @@ class PostsRepository(
             Result.failure(e)
         }
     }
+
+    suspend fun getMyPosts(): Result<List<ItemPost>> {
+
+        return try {
+
+            val response =
+                api.getMyPosts()
+
+            if(response.isSuccessful) {
+
+                val posts =
+                    response.body()
+                        ?.data
+                        ?.map { it.toItemPost() }
+                        ?: emptyList()
+
+                Result.success(posts)
+
+            } else {
+
+                Result.failure(
+                    Exception("Error loading my posts")
+                )
+            }
+
+        } catch(e: Exception) {
+
+            Result.failure(e)
+        }
+    }
+
+    suspend fun toggleBookmark(
+        postId: Int
+    ): Result<String> {
+
+        return try {
+
+            val response =
+                api.toggleBookmark(postId)
+
+            if(response.isSuccessful) {
+
+                Result.success(
+                    response.body()?.message
+                        ?: "Operación realizada"
+                )
+
+            } else {
+
+                Result.failure(
+                    Exception("Error al guardar publicación")
+                )
+            }
+
+        } catch(e: Exception) {
+
+            Result.failure(e)
+        }
+    }
+
+    suspend fun reportPost(
+        postId: Int,
+        reason: String
+    ): Result<String> {
+
+        return try {
+
+            val response =
+                api.reportPost(
+                    postId = postId,
+                    reason = reason
+                )
+
+            if(response.isSuccessful) {
+
+                Result.success(
+                    response.body()?.message
+                        ?: "Publicación reportada"
+                )
+
+            } else {
+
+                Result.failure(
+                    Exception("Error al reportar publicación")
+                )
+            }
+
+        } catch(e: Exception) {
+
+            Result.failure(e)
+        }
+    }
 }

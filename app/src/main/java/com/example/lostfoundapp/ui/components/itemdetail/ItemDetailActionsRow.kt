@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.Flag
 import androidx.compose.material.icons.outlined.Bookmark
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.Flag
@@ -25,6 +26,7 @@ import com.example.lostfoundapp.ui.theme.FoundActionCardForeground
 @Composable
 fun ItemDetailActionsRow(
     isSaved: Boolean,
+    isReported: Boolean,
     onSaveClick: () -> Unit,
     onShareClick: () -> Unit,
     onReportClick: () -> Unit
@@ -79,7 +81,11 @@ fun ItemDetailActionsRow(
             icon = {
                 Icon(
                     modifier = Modifier.size(28.dp),
-                    imageVector = Icons.Outlined.Flag,
+                    imageVector =
+                        if (isReported)
+                            Icons.Filled.Flag
+                        else
+                            Icons.Outlined.Flag,
                     contentDescription = null,
                     tint = FoundActionCardForeground
                 )

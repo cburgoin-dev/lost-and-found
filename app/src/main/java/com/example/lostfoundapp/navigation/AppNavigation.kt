@@ -364,6 +364,8 @@ fun AppNavigation(
                 ItemDetailScreen(
                     itemPost = itemPost,
 
+                    postsViewModel = postsViewModel,
+
                     requestsViewModel = requestsViewModel,
 
                     onBackClick = {
@@ -555,9 +557,13 @@ fun AppNavigation(
             Routes.UserPosts.route
         ) {
 
+            LaunchedEffect(Unit) {
+                postsViewModel.loadMyPosts()
+            }
+
             PostsScreen(
                 title = "Mis publicaciones",
-                posts = mockPosts,
+                posts = postsViewModel.myPosts,
                 screenType = PostsScreenType.USER_POSTS,
 
                 onBackClick = {

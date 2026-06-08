@@ -24,6 +24,9 @@ class PostsViewModel(
     var posts by mutableStateOf<List<ItemPost>>(emptyList())
         private set
 
+    var myPosts by mutableStateOf<List<ItemPost>>(emptyList())
+        private set
+
     var categories by mutableStateOf<List<Category>>(emptyList())
         private set
 
@@ -37,6 +40,12 @@ class PostsViewModel(
         private set
 
     var showPostCreatedMessage by mutableStateOf(false)
+        private set
+
+    var isSaved by mutableStateOf(false)
+        private set
+
+    var isReported by mutableStateOf(false)
         private set
 
     fun clearPostCreatedMessage() {
@@ -92,6 +101,48 @@ class PostsViewModel(
             isLoading = false
         }
     }
+
+    fun loadCatalogs() {
+
+        viewModelScope.launch {
+
+            catalogRepository
+                .getCategories()
+                .onSuccess {
+
+                    categories = it
+                }
+
+            catalogRepository
+                .getLocations()
+                .onSuccess {
+
+                    locations = it
+                }
+        }
+    }
+
+    fun loadMyPosts() {
+
+        viewModelScope.launch {
+
+            isLoading = true
+
+            postsRepository
+                .getMyPosts()
+                .onSuccess {
+
+                    myPosts = it
+                }
+                .onFailure {
+
+                    errorMessage = it.message
+                }
+
+            isLoading = false
+        }
+    }
+
     fun createPost(
         context: Context,
         postType: PostType,
@@ -134,22 +185,44 @@ class PostsViewModel(
         }
     }
 
-    fun loadCatalogs() {
+    fun toggleBookmark(
+        postId: Int
+    ) {
 
         viewModelScope.launch {
 
-            catalogRepository
-                .getCategories()
+            postsRepository
+                .toggleBookmark(postId)
                 .onSuccess {
 
-                    categories = it
+                    isSaved = !isSaved
                 }
+                .onFailure {
 
-            catalogRepository
-                .getLocations()
+                    errorMessage = it.message
+                }
+        }
+    }
+
+    fun reportPost(
+        postId: Int,
+        reason: String
+    ) {
+
+        viewModelScope.launch {
+
+            postsRepository
+                .reportPost(
+                    postId = postId,
+                    reason = reason
+                )
                 .onSuccess {
 
-                    locations = it
+                    isReported = true
+                }
+                .onFailure {
+
+                    errorMessage = it.message
                 }
         }
     }

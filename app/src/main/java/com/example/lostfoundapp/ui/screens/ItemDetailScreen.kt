@@ -25,19 +25,22 @@ import com.example.lostfoundapp.ui.components.itemdetail.ItemHeroSection
 import com.example.lostfoundapp.ui.components.itemdetail.ItemInfoSection
 import com.example.lostfoundapp.ui.components.itemdetail.OwnershipNoticeSection
 import com.example.lostfoundapp.ui.components.UserInfoSection
+import com.example.lostfoundapp.ui.components.itemdetail.ReportPostBottomSheet
 import com.example.lostfoundapp.ui.theme.BorderGray
 import com.example.lostfoundapp.ui.theme.FoundActionCardForeground
 import com.example.lostfoundapp.ui.viewmodel.ItemDetailViewModel
+import com.example.lostfoundapp.ui.viewmodel.PostsViewModel
 import com.example.lostfoundapp.ui.viewmodel.RequestsViewModel
 
 @Composable
 fun ItemDetailScreen(
     itemPost: ItemPost,
+    postsViewModel: PostsViewModel,
     requestsViewModel: RequestsViewModel,
     onBackClick: () -> Unit
 ) {
 
-    val viewModel: ItemDetailViewModel = viewModel()
+    val itemDetailViewModel: ItemDetailViewModel = viewModel()
 
     val context = LocalContext.current
 
@@ -46,6 +49,10 @@ fun ItemDetailScreen(
     }
 
     var showRequestSheet by remember {
+        mutableStateOf(false)
+    }
+
+    var showReportSheet by remember {
         mutableStateOf(false)
     }
 
@@ -114,7 +121,8 @@ fun ItemDetailScreen(
                     Spacer(modifier = Modifier.height(28.dp))
 
                     ItemDetailActionsRow(
-                        isSaved = viewModel.isSaved,
+                        isSaved = postsViewModel.isSaved,
+                        isReported = postsViewModel.isReported,
 
                         onShareClick = {
 
@@ -123,12 +131,12 @@ fun ItemDetailScreen(
                         onSaveClick = {
 
                             val message =
-                                if(viewModel.isSaved)
+                                if(postsViewModel.isSaved)
                                     "Publicación eliminada de guardados"
                                 else
                                     "Publicación guardada"
 
-                            viewModel.toggleSaved()
+                            postsViewModel.toggleBookmark(itemPost.id)
 
                             Toast.makeText(
                                 context,
@@ -138,7 +146,7 @@ fun ItemDetailScreen(
                         },
 
                         onReportClick = {
-
+                            showReportSheet = true
                         }
                     )
 
@@ -200,6 +208,32 @@ fun ItemDetailScreen(
 
                 onDismiss = {
                     showRequestSheet = false
+                }
+            )
+        }
+
+        if (showReportSheet) {
+
+            ReportPostBottomSheet(
+
+                onConfirm = { reason ->
+
+                    postsViewModel.reportPost(
+                        postId = itemPost.id,
+                        reason = reason
+                    )
+
+                    Toast.makeText(
+                        context,
+                        "Reporte enviado correctamente",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    showReportSheet = false
+                },
+
+                onDismiss = {
+                    showReportSheet = false
                 }
             )
         }

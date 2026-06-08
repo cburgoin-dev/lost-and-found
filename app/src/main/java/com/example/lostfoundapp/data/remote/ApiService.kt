@@ -118,6 +118,18 @@ interface ApiService {
         postId: Int
     ): Response<MessageResponse>
 
+    @FormUrlEncoded
+    @POST("api/posts/{id}/report")
+    suspend fun reportPost(
+
+        @Path("id")
+        postId: Int,
+
+        @Field("reason")
+        reason: String
+
+    ): Response<MessageResponse>
+
     @Multipart
     @POST("api/requests")
     suspend fun createRequest(
