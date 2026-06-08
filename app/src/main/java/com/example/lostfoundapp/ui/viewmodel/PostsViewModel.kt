@@ -52,6 +52,17 @@ class PostsViewModel(
         showPostCreatedMessage = false
     }
 
+    var showPostCompletedMessage by mutableStateOf(false)
+        private set
+
+    fun notifyPostCompleted() {
+        showPostCompletedMessage = true
+    }
+
+    fun clearPostCompletedMessage() {
+        showPostCompletedMessage = false
+    }
+
     fun findPostById(
         postId: Int
     ): ItemPost? {

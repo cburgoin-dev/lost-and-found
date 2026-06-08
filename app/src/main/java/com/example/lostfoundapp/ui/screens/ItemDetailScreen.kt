@@ -1,17 +1,21 @@
 package com.example.lostfoundapp.ui.screens
 
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
@@ -69,6 +73,20 @@ fun ItemDetailScreen(
             ?: itemPost
 
     val isOwner = currentPost.isMine
+
+    var showSuccessMessage by remember {
+        mutableStateOf(false)
+    }
+
+    LaunchedEffect(showSuccessMessage) {
+
+        if(showSuccessMessage) {
+
+            kotlinx.coroutines.delay(3000)
+
+            showSuccessMessage = false
+        }
+    }
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -202,7 +220,38 @@ fun ItemDetailScreen(
                 }
             }
         }
+        AnimatedVisibility(
+            visible = showSuccessMessage,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(
+                    start =6.dp,
+                    end = 6.dp,
+                    bottom = 120.dp
 
+
+                )
+        ) {
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        Color(0xFF4CAF50),
+                        RoundedCornerShape(12.dp)
+                    )
+            ) {
+
+                BasicText(
+                    text = "Solicitud de contacto enviada con exito",
+                    style = TextStyle(color = Color.White),
+                    modifier = Modifier.padding(
+                        horizontal = 26.dp,
+                        vertical = 8.dp
+                    )
+                )
+            }
+        }
         Box(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
@@ -271,7 +320,11 @@ fun ItemDetailScreen(
                 postType = itemPost.postType,
 
                 requestsViewModel = requestsViewModel,
+                onSuccess = {
 
+                    showRequestSheet = false
+                    showSuccessMessage = true
+                },
                 onDismiss = {
                     showRequestSheet = false
                 }
@@ -335,7 +388,7 @@ fun ItemDetailScreen(
                     ) {
 
                         showClosePostSheet = false
-
+                        postsViewModel.notifyPostCompleted()
                         onBackClick()
                     }
                 },
