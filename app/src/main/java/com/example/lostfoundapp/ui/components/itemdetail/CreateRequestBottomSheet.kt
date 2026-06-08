@@ -48,6 +48,10 @@ fun CreateRequestBottomSheet(
         mutableStateOf("")
     }
 
+    var primaryInputError by remember {
+        mutableStateOf(false)
+    }
+
     var secondaryInput by remember {
         mutableStateOf("")
     }
@@ -116,8 +120,10 @@ fun CreateRequestBottomSheet(
             DescriptionInput(
                 value = primaryInput,
                 placeholder = primaryLabel,
+                isError = primaryInputError,
                 onValueChange = {
                     primaryInput = it
+                    primaryInputError = false
                 },
             )
 
@@ -146,6 +152,8 @@ fun CreateRequestBottomSheet(
                 text = buttonText,
                 height = 52.dp,
                 onClick = {
+                    primaryInputError = primaryInput.isBlank()
+
                     if(primaryInput.isBlank()){
                         return@PrimaryButton
                     }
