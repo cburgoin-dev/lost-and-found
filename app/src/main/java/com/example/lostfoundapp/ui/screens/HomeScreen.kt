@@ -330,7 +330,7 @@ fun HomeScreen(
                         ItemCard(
                             title = item.title,
                             location = item.location,
-                            time = item.date,
+                            time = item.createdAt,
                             status =
                                 if(item.postType == PostType.LOST)
                                     "Perdido"

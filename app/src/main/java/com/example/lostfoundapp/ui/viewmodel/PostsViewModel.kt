@@ -200,6 +200,98 @@ class PostsViewModel(
         }
     }
 
+    fun updatePost(
+        postId: Int,
+        context: Context,
+        postType: PostType,
+        objectName: String,
+        description: String,
+        locationId: Int,
+        categoryId: Int,
+        date: String,
+        publicContact: Boolean,
+        selectedImageUri: Uri?,
+        onSuccess: () -> Unit
+    ) {
+
+        viewModelScope.launch {
+
+            isLoading = true
+
+            postsRepository
+                .updatePost(
+                    postId = postId,
+                    context = context,
+                    postType = postType,
+                    objectName = objectName,
+                    description = description,
+                    locationId = locationId,
+                    categoryId = categoryId,
+                    date = date,
+                    publicContact = publicContact,
+                    selectedImageUri = selectedImageUri
+                )
+                .onSuccess { updatedPost ->
+
+                    posts = posts.map {
+
+                        if(it.id == updatedPost.id)
+                            updatedPost
+                        else
+                            it
+                    }
+
+                    myPosts = myPosts.map {
+
+                        if(it.id == updatedPost.id)
+                            updatedPost
+                        else
+                            it
+                    }
+
+                    bookmarkedPosts = bookmarkedPosts.map {
+
+                        if(it.id == updatedPost.id)
+                            updatedPost
+                        else
+                            it
+                    }
+
+                    onSuccess()
+                }
+                .onFailure {
+
+                    errorMessage = it.message
+                }
+
+            isLoading = false
+        }
+    }
+
+    fun deletePost(
+        postId: Int,
+        onSuccess: () -> Unit
+    ) {
+
+        viewModelScope.launch {
+
+            postsRepository
+                .deletePost(postId)
+                .onSuccess {
+
+                    loadPosts()
+                    loadMyPosts()
+                    loadBookmarks()
+
+                    onSuccess()
+                }
+                .onFailure {
+
+                    errorMessage = it.message
+                }
+        }
+    }
+
     fun loadBookmarks() {
 
         viewModelScope.launch {

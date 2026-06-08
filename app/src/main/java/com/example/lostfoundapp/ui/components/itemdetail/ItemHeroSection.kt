@@ -3,6 +3,11 @@ package com.example.lostfoundapp.ui.components.itemdetail
 import com.example.lostfoundapp.R
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,12 +20,16 @@ import coil.compose.AsyncImage
 
 import com.example.lostfoundapp.data.model.PostType
 import com.example.lostfoundapp.ui.components.BackButton
+import com.example.lostfoundapp.ui.components.CircleIconButton
 
 @Composable
 fun ItemHeroSection(
     imageUrl: String?,
     postType: PostType,
-    onBackClick: () -> Unit
+    isMine: Boolean,
+    onBackClick: () -> Unit,
+    onEditClick: () -> Unit,
+    onDeleteClick: () -> Unit
 ) {
 
     Box(
@@ -53,11 +62,37 @@ fun ItemHeroSection(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            BackButton(
-                onClick = onBackClick,
-                backgroundColor = Color.Black.copy(alpha = 0.35f),
-                iconColor = Color.White
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                BackButton(
+                    onClick = onBackClick,
+                    backgroundColor = Color.Black.copy(alpha = 0.35f),
+                    iconColor = Color.White
+                )
+
+                if(isMine) {
+
+                    Spacer(
+                        modifier = Modifier.width(12.dp)
+                    )
+
+                    CircleIconButton(
+                        icon = Icons.Outlined.Edit,
+                        onClick = onEditClick
+                    )
+
+                    Spacer(
+                        modifier = Modifier.width(12.dp)
+                    )
+
+                    CircleIconButton(
+                        icon = Icons.Outlined.Delete,
+                        onClick = onDeleteClick
+                    )
+                }
+            }
 
             StatusBadge(
                 postType = postType,

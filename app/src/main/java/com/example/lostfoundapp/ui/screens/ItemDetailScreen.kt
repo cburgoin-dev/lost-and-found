@@ -29,6 +29,7 @@ import com.example.lostfoundapp.ui.components.UserInfoSection
 import com.example.lostfoundapp.ui.components.itemdetail.ReportPostBottomSheet
 import com.example.lostfoundapp.ui.theme.BorderGray
 import com.example.lostfoundapp.ui.theme.FoundActionCardForeground
+import com.example.lostfoundapp.ui.theme.LostActionCardForeground
 import com.example.lostfoundapp.ui.viewmodel.PostsViewModel
 import com.example.lostfoundapp.ui.viewmodel.RequestsViewModel
 
@@ -37,7 +38,8 @@ fun ItemDetailScreen(
     itemPost: ItemPost,
     postsViewModel: PostsViewModel,
     requestsViewModel: RequestsViewModel,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onEditClick: () -> Unit
 ) {
 
     val context = LocalContext.current
@@ -58,6 +60,10 @@ fun ItemDetailScreen(
         mutableStateOf(false)
     }
 
+    var showDeleteSheet by remember {
+        mutableStateOf(false)
+    }
+
     val currentPost =
         postsViewModel.findPostById(itemPost.id)
             ?: itemPost
@@ -75,9 +81,17 @@ fun ItemDetailScreen(
             item {
 
                 ItemHeroSection(
-                    imageUrl = itemPost.imageUrl,
-                    postType = itemPost.postType,
-                    onBackClick = onBackClick
+                    imageUrl = currentPost.imageUrl,
+                    postType = currentPost.postType,
+                    isMine = isOwner,
+
+                    onBackClick = onBackClick,
+
+                    onEditClick = onEditClick,
+
+                    onDeleteClick = {
+                        showDeleteSheet = true
+                    }
                 )
             }
 
@@ -92,7 +106,7 @@ fun ItemDetailScreen(
                     Spacer(modifier = Modifier.height(24.dp))
 
                     ItemInfoSection(
-                        itemPost = itemPost
+                        itemPost = currentPost
                     )
 
                     Spacer(modifier = Modifier.height(28.dp))
@@ -111,19 +125,21 @@ fun ItemDetailScreen(
                                 "Tu publicación"
                             else
                                 "Publicado por",
+
                         userName =
                             if(isOwner)
                                 "Tú"
                             else
-                                itemPost.publisherName,
-                        userImageRes = itemPost.publisherImageRes,
-                        userImageUrl = itemPost.publisherImageUrl,
-                        isAnonymous = itemPost.isAnonymous,
+                                currentPost.publisherName,
+
+                        userImageRes = currentPost.publisherImageRes,
+                        userImageUrl = currentPost.publisherImageUrl,
+                        isAnonymous = currentPost.isAnonymous,
                         isContactVisible =
                             if(isOwner)
                                 false
                             else
-                                itemPost.isContactVisible,
+                                currentPost.isContactVisible,
                         horizontalPadding = 20.dp,
                         secondaryText =
                             if(isOwner)
@@ -143,7 +159,7 @@ fun ItemDetailScreen(
                     Spacer(modifier = Modifier.height(28.dp))
 
                     OwnershipNoticeSection(
-                        postType = itemPost.postType,
+                        postType = currentPost.postType,
                         isOwner = isOwner
                     )
 
@@ -203,13 +219,13 @@ fun ItemDetailScreen(
                 text =
                     when {
 
-                        isOwner && itemPost.postType == PostType.LOST ->
+                        isOwner && currentPost.postType == PostType.LOST ->
                             "Ya recuperé el objeto"
 
-                        isOwner && itemPost.postType == PostType.FOUND ->
+                        isOwner && currentPost.postType == PostType.FOUND ->
                             "Ya entregué el objeto"
 
-                        itemPost.postType == PostType.LOST ->
+                        currentPost.postType == PostType.LOST ->
                             "Tengo información"
 
                         else ->
@@ -235,11 +251,11 @@ fun ItemDetailScreen(
         if (showContactSheet) {
 
             ContactInfoBottomSheet(
-                userName = itemPost.publisherName,
-                userImageRes = itemPost.publisherImageRes,
-                userImageUrl = itemPost.publisherImageUrl,
-                email = itemPost.publisherEmail,
-                phone = itemPost.publisherPhone,
+                userName = currentPost.publisherName,
+                userImageRes = currentPost.publisherImageRes,
+                userImageUrl = currentPost.publisherImageUrl,
+                email = currentPost.publisherEmail,
+                phone = currentPost.publisherPhone,
 
                 onDismiss = {
                     showContactSheet = false
@@ -329,6 +345,37 @@ fun ItemDetailScreen(
                     showClosePostSheet = false
                 }
 
+            )
+        }
+
+        if(showDeleteSheet) {
+
+            ConfirmationBottomSheet(
+
+                title = "¿Eliminar publicación?",
+
+                description =
+                    "Esta acción no se puede deshacer.",
+
+                buttonText = "Eliminar publicación",
+
+                buttonColor = LostActionCardForeground,
+
+                onConfirm = {
+
+                    postsViewModel.deletePost(
+                        itemPost.id
+                    ) {
+
+                        showDeleteSheet = false
+
+                        onBackClick()
+                    }
+                },
+
+                onDismiss = {
+                    showDeleteSheet = false
+                }
             )
         }
     }

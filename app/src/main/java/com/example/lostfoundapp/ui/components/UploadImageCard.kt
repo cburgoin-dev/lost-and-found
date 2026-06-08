@@ -36,6 +36,7 @@ import com.example.lostfoundapp.ui.theme.TextGray
 @Composable
 fun UploadImageCard(
     imageUri: Uri? = null,
+    imageUrl: String? = null,
     isError: Boolean = false,
     errorMessage: String = "Foto obligatoria",
     onClick: () -> Unit
@@ -74,12 +75,12 @@ fun UploadImageCard(
             verticalArrangement = Arrangement.Center
         ) {
 
-            if(imageUri != null) {
+            if(imageUri != null || imageUrl != null) {
 
                 Box {
 
                     AsyncImage(
-                        model = imageUri,
+                        model = imageUri ?: imageUrl,
                         contentDescription = null,
 
                         modifier = Modifier

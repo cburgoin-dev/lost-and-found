@@ -22,6 +22,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import com.example.lostfoundapp.data.model.ItemPost
 import java.util.Calendar
 
 import com.example.lostfoundapp.ui.components.CustomInput
@@ -40,9 +41,11 @@ import com.example.lostfoundapp.ui.theme.LostActionCardForeground
 import com.example.lostfoundapp.ui.viewmodel.PostsViewModel
 
 @Composable
-fun ReportItemScreen(
+fun PostFormScreen(
     postType: PostType,
     postsViewModel: PostsViewModel,
+    existingPost: ItemPost? = null,
+    isEditMode: Boolean = false,
     onBackClick: () -> Unit,
     onPostCreated: () -> Unit
 ) {
@@ -56,34 +59,51 @@ fun ReportItemScreen(
     }
 
     var objectName by remember {
-        mutableStateOf("")
+        mutableStateOf(
+            existingPost?.title ?: ""
+        )
     }
 
     var description by remember {
-        mutableStateOf("")
+        mutableStateOf(
+            existingPost?.description ?: ""
+        )
     }
 
     var location by remember {
-        mutableStateOf("")
+        mutableStateOf(
+            existingPost?.location ?: ""
+        )
     }
 
     var category by remember {
-        mutableStateOf("")
+        mutableStateOf(
+            existingPost?.category ?: ""
+        )
     }
 
     var categoryId by remember {
-        mutableStateOf<Int?>(null)
+        mutableStateOf(
+            existingPost?.categoryId
+        )
     }
 
     var locationId by remember {
-        mutableStateOf<Int?>(null)
+        mutableStateOf(
+            existingPost?.locationId
+        )
     }
+
     var date by remember {
-        mutableStateOf("")
+        mutableStateOf(
+            existingPost?.date ?: ""
+        )
     }
 
     var publicContact by remember {
-        mutableStateOf(false)
+        mutableStateOf(
+            existingPost?.isContactVisible ?: false
+        )
     }
 
     // VALIDATIONS
@@ -216,7 +236,11 @@ fun ReportItemScreen(
                     ) {
 
                         Text(
-                            text = "Nueva publicación",
+                            text =
+                                if(isEditMode)
+                                    "Editar publicación"
+                                else
+                                    "Nueva publicación",
                             color = Color.White,
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold
@@ -245,6 +269,7 @@ fun ReportItemScreen(
 
                 UploadImageCard(
                     imageUri = selectedImageUri,
+                    imageUrl = existingPost?.imageUrl,
                     isError = imageError,
                     onClick = {
 
@@ -376,6 +401,11 @@ fun ReportItemScreen(
                         }
                     )
                 }
+
+                Text(
+                    text = postsViewModel.errorMessage ?: "",
+                    color = Color.Red
+                )
             }
         }
 
@@ -394,10 +424,20 @@ fun ReportItemScreen(
 
                 PrimaryButton(
                     text =
-                        if(postsViewModel.isLoading)
-                            "Creando publicación..."
-                        else
-                            "Crear publicación",
+                        if(postsViewModel.isLoading) {
+
+                            if(isEditMode)
+                                "Guardando cambios..."
+                            else
+                                "Creando publicación..."
+                        } else {
+
+                            if(isEditMode)
+                                "Guardar cambios"
+                            else
+                                "Crear publicación"
+                        },
+
                     backgroundColor =
                         if(postType == PostType.LOST)
                             LostActionCardForeground
@@ -408,9 +448,13 @@ fun ReportItemScreen(
                         focusManager.clearFocus()
                         keyboardController?.hide()
 
+                        val hasExistingImage =
+                            existingPost?.imageUrl != null
+
                         imageError =
-                            postType == PostType.FOUND
-                                    && !hasImage
+                            postType == PostType.FOUND &&
+                            !hasImage &&
+                            !hasExistingImage
 
                         objectNameError =
                             objectName.isBlank()
@@ -438,20 +482,43 @@ fun ReportItemScreen(
 
                         if (!hasErrors) {
 
-                            postsViewModel.createPost(
-                                context = context,
-                                postType = postType,
-                                objectName = objectName,
-                                description = description,
-                                locationId = locationId!!,
-                                categoryId = categoryId!!,
-                                date = date,
-                                publicContact = publicContact,
-                                selectedImageUri = selectedImageUri,
-                                onSuccess = {
-                                    onPostCreated()
-                                }
-                            )
+                            if(isEditMode) {
+
+                                postsViewModel.updatePost(
+                                    postId = existingPost!!.id,
+                                    context = context,
+                                    postType = postType,
+                                    objectName = objectName,
+                                    description = description,
+                                    locationId = locationId!!,
+                                    categoryId = categoryId!!,
+                                    date = date,
+                                    publicContact = publicContact,
+                                    selectedImageUri = selectedImageUri,
+
+                                    onSuccess = {
+                                        onPostCreated()
+                                    }
+                                )
+
+                            } else {
+
+                                postsViewModel.createPost(
+                                    context = context,
+                                    postType = postType,
+                                    objectName = objectName,
+                                    description = description,
+                                    locationId = locationId!!,
+                                    categoryId = categoryId!!,
+                                    date = date,
+                                    publicContact = publicContact,
+                                    selectedImageUri = selectedImageUri,
+
+                                    onSuccess = {
+                                        onPostCreated()
+                                    }
+                                )
+                            }
                         }
                     }
                 )

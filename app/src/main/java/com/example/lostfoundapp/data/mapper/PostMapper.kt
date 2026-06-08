@@ -14,11 +14,17 @@ fun PostResponse.toItemPost(): ItemPost {
 
         description = description,
 
+        locationId = location?.id,
+
         location = location?.name ?: "Sin ubicación",
+
+        categoryId = category?.id,
 
         category = category?.name ?: "Sin nombre",
 
         date = incident_date,
+
+        createdAt = created_at,
 
         postType =
             if(type == "Perdido")

@@ -8,11 +8,17 @@ data class ItemPost(
 
     val description: String,
 
+    val locationId: Int?,
+
     val location: String,
+
+    val categoryId: Int?,
 
     val category: String,
 
     val date: String,
+
+    val createdAt: String,
 
     val postType: PostType,
 

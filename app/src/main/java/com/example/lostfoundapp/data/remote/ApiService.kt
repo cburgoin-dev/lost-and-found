@@ -22,6 +22,7 @@ import com.example.lostfoundapp.data.response.LocationsResponse
 import com.example.lostfoundapp.data.response.MessageResponse
 import com.example.lostfoundapp.data.response.NotificationResponse
 import com.example.lostfoundapp.data.response.PostsResponse
+import com.example.lostfoundapp.data.response.UpdatePostResponse
 import com.example.lostfoundapp.data.response.UpdateUserResponse
 import com.example.lostfoundapp.data.response.UserResponse
 import retrofit2.http.DELETE
@@ -88,6 +89,45 @@ interface ApiService {
 
     ): Response<String>
 
+    @Multipart
+    @PATCH("api/posts/{id}")
+    suspend fun updatePost(
+
+        @Path("id")
+        postId: Int,
+
+        @Part("type")
+        type: RequestBody,
+
+        @Part("title")
+        title: RequestBody,
+
+        @Part("description")
+        description: RequestBody,
+
+        @Part("location_id")
+        locationId: RequestBody,
+
+        @Part("category_id")
+        categoryId: RequestBody,
+
+        @Part("incident_date")
+        incidentDate: RequestBody,
+
+        @Part("share_my_data")
+        shareContact: RequestBody,
+
+        @Part
+        picture: MultipartBody.Part?
+
+    ): Response<UpdatePostResponse>
+
+    @DELETE("api/posts/{id}")
+    suspend fun deletePost(
+        @Path("id")
+        postId: Int
+    ): Response<MessageResponse>
+
     @GET("api/posts")
     suspend fun getPosts():
         Response<PostsResponse>
@@ -108,12 +148,6 @@ interface ApiService {
 
     @PATCH("api/posts/{id}/complete")
     suspend fun completePost(
-        @Path("id")
-        postId: Int
-    ): Response<MessageResponse>
-
-    @DELETE("api/posts/{id}")
-    suspend fun deletePost(
         @Path("id")
         postId: Int
     ): Response<MessageResponse>

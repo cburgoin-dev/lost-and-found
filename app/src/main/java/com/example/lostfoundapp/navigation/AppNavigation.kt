@@ -240,13 +240,13 @@ fun AppNavigation(
 
                 onLostClick = {
                     navController.navigate(
-                        Routes.ReportLost.route
+                        Routes.CreateLostPost.route
                     )
                 },
 
                 onFoundClick = {
                     navController.navigate(
-                        Routes.ReportFound.route
+                        Routes.CreateFoundPost.route
                     )
                 },
 
@@ -279,10 +279,10 @@ fun AppNavigation(
         }
 
         composable(
-            Routes.ReportLost.route
+            Routes.CreateLostPost.route
         ) {
 
-            ReportItemScreen(
+            PostFormScreen(
                 postType = PostType.LOST,
 
                 postsViewModel = postsViewModel,
@@ -301,10 +301,10 @@ fun AppNavigation(
         }
 
         composable(
-            Routes.ReportFound.route
+            Routes.CreateFoundPost.route
         ) {
 
-            ReportItemScreen(
+            PostFormScreen(
                 postType = PostType.FOUND,
 
                 postsViewModel = postsViewModel,
@@ -320,6 +320,48 @@ fun AppNavigation(
                     )
                 }
             )
+        }
+
+        composable(
+            Routes.EditPost.route
+        ) { backStackEntry ->
+
+            val postId =
+                backStackEntry.arguments
+                    ?.getString("postId")
+                    ?.toIntOrNull()
+
+            val post =
+                postId?.let {
+                    postsViewModel.findPostById(it)
+                }
+
+            if(post == null) {
+
+                LaunchedEffect(Unit) {
+                    navController.popBackStack()
+                }
+
+            } else {
+
+                PostFormScreen(
+                    postType = post.postType,
+
+                    postsViewModel = postsViewModel,
+
+                    existingPost = post,
+
+                    isEditMode = true,
+
+                    onBackClick = {
+                        navController.popBackStack()
+                    },
+
+                    onPostCreated = {
+                        navController.popBackStack()
+                    }
+                )
+            }
         }
 
         composable(
@@ -382,6 +424,13 @@ fun AppNavigation(
 
                     onBackClick = {
                         navController.popBackStack()
+                    },
+
+                    onEditClick = {
+
+                        navController.navigate(
+                            "edit_post/${selectedPost!!.id}"
+                        )
                     }
                 )
             }

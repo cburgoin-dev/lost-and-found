@@ -2,6 +2,7 @@ package com.example.lostfoundapp.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -109,64 +110,37 @@ fun ItemCard(
 
                 Spacer(modifier = Modifier.height(2.dp))
 
-                Text(
-                    text = time,
-                    color = DetailSecondaryText,
-                    fontSize = 14.sp,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+
+                    Text(
+                        text = time,
+                        color = DetailSecondaryText,
+                        fontSize = 14.sp
+                    )
+
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(100.dp))
+                            .background(statusBackground)
+                            .padding(
+                                horizontal = 10.dp,
+                                vertical = 4.dp
+                            )
+                    ) {
+
+                        Text(
+                            text = status,
+                            color = statusTextColor,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 14.sp
+                        )
+                    }
+                }
             }
-        }
-
-        Box(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(
-                    end = 14.dp,
-                    bottom = 14.dp
-                )
-                .clip(RoundedCornerShape(100.dp))
-                .background(statusBackground)
-                .padding(
-                    horizontal = 14.dp,
-                    vertical = 6.dp
-                )
-        ) {
-
-            Text(
-                text = status,
-                color = statusTextColor,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 14.sp
-            )
         }
     }
 }
-/*
-@Preview(showBackground = true)
-@Composable
-fun ItemCardPreview() {
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color(0xFFF5F5F5))
-            .padding(16.dp),
-
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-
-        ItemCard(
-            itemPost = mockPosts[0],
-            onClick = {}
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        ItemCard(
-            itemPost = mockPosts[1],
-            onClick = {}
-        )
-    }
-}*/

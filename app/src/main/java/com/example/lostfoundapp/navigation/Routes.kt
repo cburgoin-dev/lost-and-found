@@ -12,9 +12,13 @@ sealed class Routes(
 
     object Home : Routes("home")
 
-    object ReportLost : Routes("report_lost")
+    object CreateLostPost : Routes("report_lost")
 
-    object ReportFound : Routes("report_found")
+    object CreateFoundPost : Routes("report_found")
+
+    object EditPost : Routes(
+        "edit_post/{postId}"
+    )
 
     object Search : Routes("search")
 

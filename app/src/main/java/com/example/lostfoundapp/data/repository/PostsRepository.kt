@@ -165,6 +165,132 @@ class PostsRepository(
         }
     }
 
+    suspend fun updatePost(
+        postId: Int,
+        context: Context,
+        postType: PostType,
+        objectName: String,
+        description: String,
+        locationId: Int,
+        categoryId: Int,
+        date: String,
+        publicContact: Boolean,
+        selectedImageUri: Uri?
+    ): Result<ItemPost> {
+
+        return try {
+
+            val imagePart =
+                selectedImageUri?.let {
+
+                    uriToMultipart(
+                        context = context,
+                        uri = it
+                    )
+                }
+
+            val response =
+                api.updatePost(
+
+                    postId = postId,
+
+                    type =
+                        if(postType == PostType.LOST)
+                            "Perdido".toRequestBodyText()
+                        else
+                            "Encontrado".toRequestBodyText(),
+
+                    title =
+                        objectName.toRequestBodyText(),
+
+                    description =
+                        description.toRequestBodyText(),
+
+                    locationId =
+                        locationId.toString()
+                            .toRequestBodyText(),
+
+                    categoryId =
+                        categoryId.toString()
+                            .toRequestBodyText(),
+
+                    incidentDate =
+                        date.toRequestBodyText(),
+
+                    shareContact =
+                        publicContact.toString()
+                            .toRequestBodyText(),
+
+                    picture =
+                        imagePart
+                )
+
+            if(response.isSuccessful) {
+
+                val updatedPost =
+                    response.body()
+                        ?.data
+                        ?.toItemPost()
+
+                if(updatedPost != null) {
+
+                    Result.success(updatedPost)
+
+                } else {
+
+                    Result.failure(
+                        Exception("Post not found")
+                    )
+                }
+
+            } else {
+
+                Result.failure(
+                    Exception(
+                        response.errorBody()?.string()
+                            ?: "Error updating post"
+                    )
+                )
+            }
+
+        } catch(e: Exception) {
+
+            Result.failure(e)
+        }
+    }
+
+    suspend fun deletePost(
+        postId: Int
+    ): Result<String> {
+
+        return try {
+
+            val response =
+                api.deletePost(postId)
+
+            if(response.isSuccessful) {
+
+                Result.success(
+                    response.body()?.message
+                        ?: "Publicación eliminada"
+                )
+
+            } else {
+
+                Result.failure(
+                    Exception(
+                        response.errorBody()?.string()
+                            ?: "Error al eliminar publicación"
+                    )
+                )
+            }
+
+        } catch(e: Exception) {
+
+            Result.failure(e)
+        }
+    }
+
     suspend fun getMyPosts(): Result<List<ItemPost>> {
 
         return try {
