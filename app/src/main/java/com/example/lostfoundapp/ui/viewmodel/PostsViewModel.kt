@@ -39,10 +39,6 @@ class PostsViewModel(
     var showPostCreatedMessage by mutableStateOf(false)
         private set
 
-    fun notifyPostCreated() {
-        showPostCreatedMessage = true
-    }
-
     fun clearPostCreatedMessage() {
         showPostCreatedMessage = false
     }

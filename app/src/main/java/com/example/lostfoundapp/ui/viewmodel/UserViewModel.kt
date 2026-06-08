@@ -5,19 +5,23 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 
-class UserViewModel : ViewModel() {
+import com.example.lostfoundapp.data.repository.UserRepository
+import com.example.lostfoundapp.data.model.User
+import kotlinx.coroutines.launch
 
-    var userName by mutableStateOf("")
+class UserViewModel(
+    private val repository: UserRepository
+) : ViewModel() {
+
+    var user by mutableStateOf<User?>(null)
         private set
 
-    var email by mutableStateOf("")
+    var isLoading by mutableStateOf(false)
         private set
 
-    var phone by mutableStateOf("")
-        private set
-
-    var profileImageUri by mutableStateOf<Uri?>(null)
+    var errorMessage by mutableStateOf<String?>(null)
         private set
 
     init {
@@ -25,16 +29,31 @@ class UserViewModel : ViewModel() {
     }
 
     fun loadUser() {
-        // LOAD USER FROM BACKEND
+
+        viewModelScope.launch {
+
+            isLoading = true
+
+            repository
+                .getUser()
+                .onSuccess {
+
+                    user = it
+                }
+                .onFailure {
+
+                    errorMessage = it.message
+                }
+
+            isLoading = false
+        }
     }
 
     fun updateUser(
         phone: String,
         imageUri: Uri?
     ) {
-        this.phone = phone
-        this.profileImageUri = imageUri
 
-        // CALL UPDATE PROFILE ENDPOINT
+        // BACKEND
     }
 }

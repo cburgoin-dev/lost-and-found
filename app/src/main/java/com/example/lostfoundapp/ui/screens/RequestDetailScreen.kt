@@ -164,7 +164,8 @@ fun RequestDetailScreen(
                 item {
 
                     AsyncImage(
-                        model = request.itemImageRes,
+                        model = request.itemImageUrl
+                            ?: request.itemImageRes,
                         contentDescription = null,
 
                         modifier = Modifier

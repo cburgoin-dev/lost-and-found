@@ -16,22 +16,32 @@ class AuthRepository(
             sessionManager
         )
 
-    suspend fun logout() : ApiResult<Unit> {
+    suspend fun logout() : Result<Unit> {
+
         return try {
-            val response = api.logout()
+
+            api.logout()
+
             sessionManager.clearSession()
-            ApiResult.Success(
-                data = null,
-                message = response.message
-            )
+
+            Result.success(Unit)
+
         } catch (e: HttpException) {
-            ApiResult.Error<Unit>(
-                extractErrorMessage(e)
+
+            Result.failure(
+                Exception(
+                    extractErrorMessage(e)
+                )
             )
+
         } catch (e: IOException) {
-            ApiResult.Error<Unit>(
-                "No hay conexión a internet"
+
+            Result.failure(
+                Exception(
+                    "No hay conexión a internet"
+                )
             )
+
         }
     }
 

@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+
 import com.example.lostfoundapp.data.model.Notification
 import com.example.lostfoundapp.data.model.NotificationType
 import com.example.lostfoundapp.ui.theme.DetailSecondaryText
@@ -50,38 +51,33 @@ fun NotificationCard(
     val icon =
         when(notification.type) {
 
-            "Solicitud aprobada" ->
+            NotificationType.REQUEST_APPROVED ->
                 Icons.Outlined.CheckCircle
 
-            "Solicitud rechazada" ->
+            NotificationType.REQUEST_REJECTED ->
                 Icons.Outlined.Cancel
 
-            "Posible coincidencia" ->
+            NotificationType.MATCH_FOUND ->
                 Icons.Outlined.Search
 
-            "Sistema" ->
-                Icons.Outlined.Notifications
-
-            else ->
+            NotificationType.SYSTEM ->
                 Icons.Outlined.Notifications
         }
 
     val iconColor =
         when(notification.type) {
 
-            "Solicitud aprobada" ->
+            NotificationType.REQUEST_APPROVED ->
                 HomeHeaderBlue
 
-            "Solicitud rechazada" ->
+            NotificationType.REQUEST_REJECTED ->
                 LostBadgeText
 
-            "Posible coincidencia" ->
+            NotificationType.MATCH_FOUND ->
                 HomeHeaderBlue
 
-            "Sistema" ->
+            NotificationType.SYSTEM ->
                 HomeHeaderBlue
-
-            else -> {HomeHeaderBlue}
         }
 
     Box(
@@ -135,7 +131,7 @@ fun NotificationCard(
                 ) {
 
                     Text(
-                        text = notification.type,
+                        text = notification.title,
                         fontSize = 17.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = Color.Black
@@ -168,7 +164,7 @@ fun NotificationCard(
                             color = DetailSecondaryText
                         )
 
-                        if (notification.is_read == 0) {
+                        if (notification.isRead == 0) {
 
                             Box(
                                 modifier = Modifier

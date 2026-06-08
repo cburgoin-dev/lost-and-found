@@ -52,4 +52,63 @@ class NotificationsViewModel (
             isLoading = false
         }
     }
+
+    fun markNotificationAsRead(
+        notificationId: Int
+    ) {
+
+        viewModelScope.launch {
+
+            repository
+                .markNotificationAsRead(
+                    notificationId
+                )
+                .onSuccess {
+
+                    notifications =
+                        notifications.map {
+
+                            if(it.id == notificationId) {
+
+                                it.copy(
+                                    isRead = 1
+                                )
+
+                            } else {
+
+                                it
+                            }
+                        }
+                }
+                .onFailure {
+
+                    errorMessage = it.message
+                }
+        }
+    }
+
+    fun markAllNotificationsAsRead() {
+
+        viewModelScope.launch {
+
+            notifications
+                .filter { it.isRead == 0 }
+                .forEach { notification ->
+
+                    repository
+                        .markNotificationAsRead(
+                            notification.id
+                        )
+                        .onFailure {
+
+                            errorMessage = it.message
+                        }
+                }
+
+            notifications =
+                notifications.map {
+                    it.copy(isRead = 1)
+                }
+        }
+    }
 }

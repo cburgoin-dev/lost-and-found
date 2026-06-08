@@ -27,15 +27,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.NotificationsNone
 import androidx.compose.material.icons.outlined.NearMe
 import androidx.compose.material.icons.outlined.SearchOff
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -66,7 +59,6 @@ import com.example.lostfoundapp.data.model.ReportType
 import com.example.lostfoundapp.ui.viewmodel.PostsViewModel
 import com.example.lostfoundapp.ui.viewmodel.UserViewModel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.time.delay
 
 @Composable
 fun HomeScreen(
@@ -88,16 +80,11 @@ fun HomeScreen(
     val posts =
         postsViewModel.posts
 
-    val isLoading = postsViewModel.isLoading
-
-    val firstName = userViewModel.userName
-        .split(" ")
-        .firstOrNull()
-        ?: ""
-
-    var showSuccessMessage by remember {
-        mutableStateOf(false)
-    }
+    val firstName =
+        userViewModel.user
+            ?.name
+            ?.substringBefore(" ")
+            ?: ""
 
     val showMessage =
         postsViewModel.showPostCreatedMessage

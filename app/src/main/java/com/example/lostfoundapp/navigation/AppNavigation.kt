@@ -6,13 +6,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.*
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.lostfoundapp.data.local.SessionManager
 import com.example.lostfoundapp.data.mock.mockPosts
 import com.example.lostfoundapp.data.model.ItemPost
+import com.example.lostfoundapp.data.model.NotificationType
 import com.example.lostfoundapp.data.model.PostsScreenType
 
 import com.example.lostfoundapp.ui.screens.*
@@ -22,6 +22,7 @@ import com.example.lostfoundapp.data.repository.CatalogRepository
 import com.example.lostfoundapp.data.repository.NotificationsRepository
 import com.example.lostfoundapp.data.repository.PostsRepository
 import com.example.lostfoundapp.data.repository.RequestsRepository
+import com.example.lostfoundapp.data.repository.UserRepository
 import com.example.lostfoundapp.ui.viewmodel.ActivityViewModel
 import com.example.lostfoundapp.ui.viewmodel.EditProfileViewModel
 import com.example.lostfoundapp.ui.viewmodel.NotificationsViewModel
@@ -54,6 +55,10 @@ fun AppNavigation(
     val navController =
         rememberNavController()
 
+    val userRepository = remember {
+        UserRepository(sessionManager)
+    }
+
     val postsRepository = remember {
         PostsRepository(sessionManager)
     }
@@ -70,7 +75,12 @@ fun AppNavigation(
         NotificationsRepository(sessionManager)
     }
 
-    val userViewModel: UserViewModel = viewModel()
+    val userViewModel = remember {
+
+        UserViewModel(
+            repository = userRepository
+        )
+    }
 
     val postsViewModel = remember {
 
@@ -413,13 +423,13 @@ fun AppNavigation(
 
                     when(notification.type) {
 
-                        "Solicitud aprobada",
-                        "Posible coincidencia" -> {
+                        NotificationType.REQUEST_APPROVED,
+                        NotificationType.MATCH_FOUND -> {
 
-                            notification.post_id?.let { itemId ->
+                            notification.postId?.let { itemId ->
 
                                 selectedPost =
-                                    mockPosts.firstOrNull {
+                                    postsViewModel.posts.firstOrNull {
                                         it.id == itemId
                                     }
 
@@ -428,6 +438,9 @@ fun AppNavigation(
                                 )
                             }
                         }
+
+                        NotificationType.REQUEST_REJECTED,
+                        NotificationType.SYSTEM -> Unit
                     }
                 }
             )
@@ -491,8 +504,9 @@ fun AppNavigation(
                 onEditProfileClick = {
 
                     editProfileViewModel.startEditing(
-                        currentPhone = userViewModel.phone,
-                        currentImage = userViewModel.profileImageUri
+                        currentPhone =
+                            userViewModel.user?.phone ?: "",
+                        currentImage = null
                     )
 
                     navController.navigate(
