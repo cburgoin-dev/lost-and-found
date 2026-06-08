@@ -20,7 +20,8 @@ import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
 
 @Composable
 fun OwnershipNoticeSection(
-    postType: PostType
+    postType: PostType,
+    isOwner: Boolean
 ) {
 
     Row(
@@ -48,16 +49,33 @@ fun OwnershipNoticeSection(
         Column {
 
             val title =
-                if(postType == PostType.FOUND)
-                    "Proceso de reclamación"
-                else
-                    "Compartir información"
+
+                if(isOwner) {
+                    if(postType == PostType.FOUND)
+                        "Estado de reclamación"
+                    else
+                        "Estado de búsqueda"
+
+                } else {
+                    if(postType == PostType.FOUND)
+                        "Proceso de reclamación"
+                    else
+                        "Compartir información"
+                }
 
             val description =
-                if(postType == PostType.FOUND)
-                    "Si este objeto es tuyo, puedes enviar una solicitud de reclamación. El usuario que realizó el reporte deberá confirmar la propiedad."
-                else
-                    "Si tienes información sobre este objeto, puedes contactar al usuario o enviar detalles que ayuden a localizarlo."
+
+                if(isOwner) {
+                    if(postType == PostType.FOUND)
+                        "Los usuarios pueden enviar solicitudes para reclamar este objeto. Revisa las solicitudes recibidas desde Actividad."
+                    else
+                        "Tu publicación está visible para otros usuarios. Si alguien tiene información podrá enviarte una solicitud."
+                } else {
+                    if(postType == PostType.FOUND)
+                        "Si este objeto es tuyo, puedes enviar una solicitud de reclamación. El usuario que realizó el reporte deberá confirmar la propiedad."
+                    else
+                        "Si tienes información sobre este objeto, puedes contactar al usuario o enviar detalles que ayuden a localizarlo."
+                }
 
             Text(
                 text = title,

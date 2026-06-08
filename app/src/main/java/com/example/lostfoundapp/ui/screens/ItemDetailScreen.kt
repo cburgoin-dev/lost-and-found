@@ -17,6 +17,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 
 import com.example.lostfoundapp.data.model.ItemPost
 import com.example.lostfoundapp.data.model.PostType
+import com.example.lostfoundapp.ui.components.ConfirmationBottomSheet
 import com.example.lostfoundapp.ui.components.PrimaryButton
 import com.example.lostfoundapp.ui.components.itemdetail.CreateRequestBottomSheet
 import com.example.lostfoundapp.ui.components.ContactInfoBottomSheet
@@ -53,9 +54,15 @@ fun ItemDetailScreen(
         mutableStateOf(false)
     }
 
+    var showClosePostSheet by remember {
+        mutableStateOf(false)
+    }
+
     val currentPost =
         postsViewModel.findPostById(itemPost.id)
             ?: itemPost
+
+    val isOwner = currentPost.isMine
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -99,57 +106,81 @@ fun ItemDetailScreen(
                     Spacer(modifier = Modifier.height(24.dp))
 
                     UserInfoSection(
-                        title = "Publicado por",
-                        userName = itemPost.publisherName,
+                        title =
+                            if(isOwner)
+                                "Tu publicación"
+                            else
+                                "Publicado por",
+                        userName =
+                            if(isOwner)
+                                "Tú"
+                            else
+                                itemPost.publisherName,
                         userImageRes = itemPost.publisherImageRes,
                         userImageUrl = itemPost.publisherImageUrl,
                         isAnonymous = itemPost.isAnonymous,
-                        isContactVisible = itemPost.isContactVisible,
+                        isContactVisible =
+                            if(isOwner)
+                                false
+                            else
+                                itemPost.isContactVisible,
                         horizontalPadding = 20.dp,
+                        secondaryText =
+                            if(isOwner)
+                                "Eres el propietario de esta publicación."
+                            else
+                                null,
                         showAsCard = false,
 
-                        onClick = {
-                            showContactSheet = true
-                        }
+                        onClick =
+                            if(isOwner)
+                                null
+                            else {
+                                { showContactSheet = true }
+                            }
                     )
 
                     Spacer(modifier = Modifier.height(28.dp))
 
                     OwnershipNoticeSection(
-                        postType = itemPost.postType
+                        postType = itemPost.postType,
+                        isOwner = isOwner
                     )
 
-                    Spacer(modifier = Modifier.height(28.dp))
+                    if(!isOwner) {
 
-                    ItemDetailActionsRow(
-                        isSaved = currentPost.isBookmarked,
-                        isReported = postsViewModel.isReported,
+                        Spacer(modifier = Modifier.height(28.dp))
 
-                        onShareClick = {
+                        ItemDetailActionsRow(
+                            isSaved = currentPost.isBookmarked,
+                            isReported = postsViewModel.isReported,
 
-                        },
+                            onShareClick = {
 
-                        onSaveClick = {
+                            },
 
-                            val message =
-                                if(currentPost.isBookmarked)
-                                    "Publicación eliminada de guardados"
-                                else
-                                    "Publicación guardada"
+                            onSaveClick = {
 
-                            postsViewModel.toggleBookmark(itemPost.id)
+                                val message =
+                                    if(currentPost.isBookmarked)
+                                        "Publicación eliminada de guardados"
+                                    else
+                                        "Publicación guardada"
 
-                            Toast.makeText(
-                                context,
-                                message,
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        },
+                                postsViewModel.toggleBookmark(itemPost.id)
 
-                        onReportClick = {
-                            showReportSheet = true
-                        }
-                    )
+                                Toast.makeText(
+                                    context,
+                                    message,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            },
+
+                            onReportClick = {
+                                showReportSheet = true
+                            }
+                        )
+                    }
 
                     Spacer(modifier = Modifier.height(140.dp))
                 }
@@ -170,15 +201,33 @@ fun ItemDetailScreen(
 
             PrimaryButton(
                 text =
-                    if(itemPost.postType == PostType.LOST)
-                        "Tengo información"
-                    else
-                        "Solicitar reclamación",
+                    when {
+
+                        isOwner && itemPost.postType == PostType.LOST ->
+                            "Ya recuperé el objeto"
+
+                        isOwner && itemPost.postType == PostType.FOUND ->
+                            "Ya entregué el objeto"
+
+                        itemPost.postType == PostType.LOST ->
+                            "Tengo información"
+
+                        else ->
+                            "Solicitar reclamación"
+                    },
 
                 backgroundColor = FoundActionCardForeground,
 
                 onClick = {
-                    showRequestSheet = true
+
+                    if(isOwner) {
+
+                        showClosePostSheet = true
+
+                    } else {
+
+                        showRequestSheet = true
+                    }
                 }
             )
         }
@@ -236,6 +285,50 @@ fun ItemDetailScreen(
                 onDismiss = {
                     showReportSheet = false
                 }
+            )
+        }
+
+        if (showClosePostSheet) {
+
+            ConfirmationBottomSheet(
+
+                title =
+                    if(itemPost.postType == PostType.LOST)
+                        "¿Ya recuperaste el objeto?"
+                    else
+                        "¿Ya entregaste el objeto?",
+
+                description =
+                    if(itemPost.postType == PostType.LOST)
+                        "La publicación dejará de aparecer en las búsquedas y se marcará como resuelta."
+                    else
+                        "La publicación dejará de aparecer en las búsquedas y se marcará como resuelta.",
+
+                buttonText =
+                    if(itemPost.postType == PostType.LOST)
+                        "Sí, ya lo recuperé"
+                    else
+                        "Sí, ya lo entregué",
+
+                buttonColor = FoundActionCardForeground,
+
+                onConfirm = {
+
+                    postsViewModel.completePost(
+                        itemPost.id
+                    ) {
+
+                        showClosePostSheet = false
+
+                        onBackClick()
+                    }
+                },
+
+                onDismiss = {
+
+                    showClosePostSheet = false
+                }
+
             )
         }
     }

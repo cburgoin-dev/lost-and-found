@@ -285,4 +285,36 @@ class PostsRepository(
             Result.failure(e)
         }
     }
+
+    suspend fun completePost(
+        postId: Int
+    ): Result<String> {
+
+        return try {
+
+            val response =
+                api.completePost(postId)
+
+            if(response.isSuccessful) {
+
+                Result.success(
+                    response.body()?.message
+                        ?: "Publicación completada"
+                )
+
+            } else {
+
+                Result.failure(
+                    Exception(
+                        response.errorBody()?.string()
+                            ?: "Error al completar publicación"
+                    )
+                )
+            }
+
+        } catch(e: Exception) {
+
+            Result.failure(e)
+        }
+    }
 }

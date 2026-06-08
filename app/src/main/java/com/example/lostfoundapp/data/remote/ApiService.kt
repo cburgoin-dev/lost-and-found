@@ -106,6 +106,12 @@ interface ApiService {
 
     ): Response<PostsResponse>
 
+    @PATCH("api/posts/{id}/complete")
+    suspend fun completePost(
+        @Path("id")
+        postId: Int
+    ): Response<MessageResponse>
+
     @DELETE("api/posts/{id}")
     suspend fun deletePost(
         @Path("id")

@@ -238,7 +238,7 @@ class PostsViewModel(
                         updateBookmark(myPosts, postId)
 
                     bookmarkedPosts =
-                        updateBookmark(myPosts, postId)
+                        updateBookmark(bookmarkedPosts, postId)
 
                     loadBookmarks()
                 }
@@ -284,6 +284,30 @@ class PostsViewModel(
                 .onSuccess {
 
                     isReported = true
+                }
+                .onFailure {
+
+                    errorMessage = it.message
+                }
+        }
+    }
+
+    fun completePost(
+        postId: Int,
+        onSuccess: () -> Unit
+    ) {
+
+        viewModelScope.launch {
+
+            postsRepository
+                .completePost(postId)
+                .onSuccess {
+
+                    onSuccess()
+
+                    loadPosts()
+                    loadMyPosts()
+                    loadBookmarks()
                 }
                 .onFailure {
 
