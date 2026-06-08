@@ -174,6 +174,9 @@ fun AppNavigation(
 
             LoginScreen(
                 onLoginClick = {
+
+                    userViewModel.loadUser()
+
                     navController.navigate(
                         Routes.Home.route
                     )
@@ -203,6 +206,9 @@ fun AppNavigation(
                 },
 
                 onSignupSuccess = {
+
+                    userViewModel.loadUser()
+
                     navController.navigate(
                         Routes.Home.route
                     )
