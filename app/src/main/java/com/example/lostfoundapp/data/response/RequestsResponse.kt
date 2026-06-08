@@ -41,6 +41,8 @@ data class RequestDto(
 
     val title: String,
 
+    val post: PostResponse?,
+
     val user: RequestUserDto?,
 
     val time: String,

@@ -10,6 +10,8 @@ data class Request(
 
     val itemImageRes: Int? = null,
 
+    val itemImageUrl: String? = null,
+
     val sender: User,
 
     val description: String,

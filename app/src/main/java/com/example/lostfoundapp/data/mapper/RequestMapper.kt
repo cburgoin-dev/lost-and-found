@@ -21,8 +21,10 @@ fun RequestDto.toRequest(): Request {
 
         itemName = title,
 
-        itemImageRes =
-            R.drawable.airpods_case,
+        itemImageRes = null,
+
+        itemImageUrl =
+            post?.picture?.url,
 
         sender =
             user?.toUser()
