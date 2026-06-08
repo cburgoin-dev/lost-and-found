@@ -359,10 +359,16 @@ fun AppNavigation(
             route = Routes.ItemDetail.route
         ) {
 
-            selectedPost?.let { itemPost ->
+            if(selectedPost == null) {
+
+                LaunchedEffect(Unit) {
+                    navController.popBackStack()
+                }
+
+            } else {
 
                 ItemDetailScreen(
-                    itemPost = itemPost,
+                    itemPost = selectedPost!!,
 
                     postsViewModel = postsViewModel,
 
@@ -430,14 +436,17 @@ fun AppNavigation(
 
                             notification.postId?.let { itemId ->
 
-                                selectedPost =
-                                    postsViewModel.posts.firstOrNull {
-                                        it.id == itemId
-                                    }
+                                val post =
+                                    postsViewModel.findPostById(itemId)
 
-                                navController.navigate(
-                                    "item_detail/$itemId"
-                                )
+                                if(post != null) {
+
+                                    selectedPost = post
+
+                                    navController.navigate(
+                                        "item_detail/$itemId"
+                                    )
+                                }
                             }
                         }
 
@@ -452,10 +461,16 @@ fun AppNavigation(
             Routes.RequestDetail.route
         ) {
 
-            selectedRequest?.let { request ->
+            if(selectedRequest == null) {
+
+                LaunchedEffect(Unit) {
+                    navController.popBackStack()
+                }
+
+            } else {
 
                 RequestDetailScreen(
-                    request = request,
+                    request = selectedRequest!!,
 
                     requestsViewModel = requestsViewModel,
 
