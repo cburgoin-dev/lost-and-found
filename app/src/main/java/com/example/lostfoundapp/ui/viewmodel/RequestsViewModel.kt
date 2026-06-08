@@ -89,7 +89,7 @@ class RequestsViewModel(
                     requestId
                 )
                 .onSuccess {
-
+                    loadRequests()
                     onSuccess()
                 }
                 .onFailure {
@@ -115,7 +115,7 @@ class RequestsViewModel(
                     requestId
                 )
                 .onSuccess {
-
+                    loadRequests()
                     onSuccess()
                 }
                 .onFailure {
