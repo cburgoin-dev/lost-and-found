@@ -219,7 +219,7 @@ fun RequestDetailScreen(
                     )
                 }
 
-                if (request.additionalMessage.isNotBlank()) {
+                if (request.additionalMessage?.isNotBlank() ?: false) {
 
                     item {
 
