@@ -103,6 +103,18 @@ fun HomeScreen(
         }
     }
 
+    LaunchedEffect(
+        postsViewModel.showPostCompletedMessage
+    ) {
+
+        if(postsViewModel.showPostCompletedMessage) {
+
+            delay(3000)
+
+            postsViewModel.clearPostCompletedMessage()
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -356,13 +368,47 @@ fun HomeScreen(
             }
 
             AnimatedVisibility(
+                visible = postsViewModel.showPostCompletedMessage,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(
+                        start =6.dp,
+                        end = 6.dp,
+                        bottom = 120.dp
+
+
+                    )
+            ) {
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            Color(0xFF4CAF50),
+                            RoundedCornerShape(12.dp)
+                        )
+                ) {
+
+                    BasicText(
+                        text = "Estado de publicación actualizado con éxito",
+                        style = TextStyle(color = Color.White),
+                        modifier = Modifier.padding(
+                            horizontal = 26.dp,
+                            vertical = 8.dp
+                        )
+                    )
+                }
+            }
+
+
+            AnimatedVisibility(
                 visible = showMessage,
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .padding(
                         start =6.dp,
                         end = 6.dp,
-                        bottom = 130.dp
+                        bottom = 120.dp
 
 
                     )

@@ -31,6 +31,7 @@ fun CreateRequestBottomSheet(
     postId: Int,
     postType: PostType,
     requestsViewModel: RequestsViewModel,
+    onSuccess: () -> Unit,
     onDismiss: () -> Unit
 ) {
 
@@ -197,7 +198,7 @@ fun CreateRequestBottomSheet(
 
                         onSuccess = {
 
-                            onDismiss()
+                            onSuccess()
                         }
                     )
                 }

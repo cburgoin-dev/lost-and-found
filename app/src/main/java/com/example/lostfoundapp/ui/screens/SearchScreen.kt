@@ -1,5 +1,7 @@
 package com.example.lostfoundapp.ui.screens
 
+import android.R.attr.delay
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
@@ -46,8 +49,10 @@ import com.example.lostfoundapp.ui.theme.LostBadgeBackground
 import com.example.lostfoundapp.ui.theme.LostBadgeText
 
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.text.TextStyle
 import com.example.lostfoundapp.ui.viewmodel.PostsViewModel
 import com.example.lostfoundapp.ui.viewmodel.SearchViewModel
+import kotlinx.coroutines.delay
 
 
 @Composable
@@ -68,6 +73,18 @@ fun SearchScreen(
     LaunchedEffect(Unit) {
 
         postsViewModel.loadCatalogs()
+    }
+
+    LaunchedEffect(
+        postsViewModel.showPostCompletedMessage
+    ) {
+
+        if(postsViewModel.showPostCompletedMessage) {
+
+            delay(3000)
+
+            postsViewModel.clearPostCompletedMessage()
+        }
     }
 
     val posts =
@@ -367,6 +384,40 @@ fun SearchScreen(
                 }
             )
         }
+
+        AnimatedVisibility(
+            visible = postsViewModel.showPostCompletedMessage,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(
+                    start =6.dp,
+                    end = 6.dp,
+                    bottom = 120.dp
+
+
+                )
+        ) {
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        Color(0xFF4CAF50),
+                        RoundedCornerShape(12.dp)
+                    )
+            ) {
+
+                BasicText(
+                    text = "Estado de publicación actualizado con éxito",
+                    style = TextStyle(color = Color.White),
+                    modifier = Modifier.padding(
+                        horizontal = 26.dp,
+                        vertical = 8.dp
+                    )
+                )
+            }
+        }
+
 
         Column(
             modifier = Modifier.fillMaxSize(),
