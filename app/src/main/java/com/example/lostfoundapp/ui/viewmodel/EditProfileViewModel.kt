@@ -8,6 +8,9 @@ import androidx.lifecycle.ViewModel
 
 class EditProfileViewModel : ViewModel() {
 
+    var name by mutableStateOf("")
+        private set
+
     var phone by mutableStateOf("")
         private set
 
@@ -15,11 +18,17 @@ class EditProfileViewModel : ViewModel() {
         private set
 
     fun startEditing(
+        currentName: String,
         currentPhone: String,
         currentImage: Uri?
     ) {
+        name = currentName
         phone = currentPhone
         profileImageUri = currentImage
+    }
+
+    fun updateName(value: String) {
+        name = value
     }
 
     fun updatePhone(value: String) {

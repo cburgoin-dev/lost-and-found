@@ -1,5 +1,6 @@
 package com.example.lostfoundapp.ui.viewmodel
 
+import android.content.Context
 import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,6 +23,9 @@ class UserViewModel(
         private set
 
     var errorMessage by mutableStateOf<String?>(null)
+        private set
+
+    var updateSuccess by mutableStateOf(false)
         private set
 
     init {
@@ -49,11 +53,42 @@ class UserViewModel(
         }
     }
 
+    fun clearUpdateSuccess() {
+        updateSuccess = false
+    }
+
     fun updateUser(
+        context: Context,
+        name: String,
         phone: String,
         imageUri: Uri?
     ) {
 
-        // BACKEND
+        updateSuccess = false
+
+        viewModelScope.launch {
+
+            isLoading = true
+
+            repository
+                .updateUser(
+                    context = context,
+                    name = name,
+                    phone = phone,
+                    imageUri = imageUri
+                )
+                .onSuccess {
+
+                    user = it
+
+                    updateSuccess = true
+                }
+                .onFailure {
+
+                    errorMessage = it.message
+                }
+
+            isLoading = false
+        }
     }
 }

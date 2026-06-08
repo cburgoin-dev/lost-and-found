@@ -503,12 +503,6 @@ fun AppNavigation(
 
                 onEditProfileClick = {
 
-                    editProfileViewModel.startEditing(
-                        currentPhone =
-                            userViewModel.user?.phone ?: "",
-                        currentImage = null
-                    )
-
                     navController.navigate(
                         Routes.EditProfile.route
                     )
@@ -545,6 +539,8 @@ fun AppNavigation(
                 },
 
                 onSaveClick = {
+
+                    userViewModel.clearUpdateSuccess()
 
                     navController.popBackStack()
                 },

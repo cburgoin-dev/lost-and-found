@@ -24,9 +24,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 
 import com.example.lostfoundapp.ui.theme.DetailSecondaryText
 import com.example.lostfoundapp.ui.theme.TextGray
@@ -56,32 +58,39 @@ fun ProfileHeader(
 
             if (!profileImageUrl.isNullOrBlank()) {
 
-                AsyncImage(
+                SubcomposeAsyncImage(
+
                     model = profileImageUrl,
+
                     contentDescription = null,
+
                     modifier = Modifier
                         .size(132.dp)
                         .clip(CircleShape),
-                    contentScale = ContentScale.Crop
+
+                    contentScale = ContentScale.Crop,
+
+                    loading = {
+                        ProfilePlaceholder(
+                            size = 132.dp,
+                            iconSize = 64.dp,
+                        )
+                    },
+
+                    error = {
+                        ProfilePlaceholder(
+                            size = 132.dp,
+                            iconSize = 64.dp,
+                        )
+                    }
                 )
 
             } else {
 
-                Box(
-                    modifier = Modifier
-                        .size(132.dp)
-                        .clip(CircleShape)
-                        .background(Color(0xFFF1F1F1)),
-                    contentAlignment = Alignment.Center
-                ) {
-
-                    Icon(
-                        imageVector = Icons.Outlined.Person,
-                        contentDescription = null,
-                        tint = TextGray,
-                        modifier = Modifier.size(64.dp)
-                    )
-                }
+                ProfilePlaceholder(
+                    size = 132.dp,
+                    iconSize = 64.dp,
+                )
             }
         }
 
@@ -139,5 +148,28 @@ fun ProfileHeader(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun ProfilePlaceholder(
+    size: Dp = 132.dp,
+    iconSize: Dp = 64.dp
+) {
+
+    Box(
+        modifier = Modifier
+            .size(size)
+            .clip(CircleShape)
+            .background(Color(0xFFF1F1F1)),
+        contentAlignment = Alignment.Center
+    ) {
+
+        Icon(
+            imageVector = Icons.Outlined.Person,
+            contentDescription = null,
+            tint = TextGray,
+            modifier = Modifier.size(iconSize)
+        )
     }
 }

@@ -22,6 +22,7 @@ import com.example.lostfoundapp.data.response.LocationsResponse
 import com.example.lostfoundapp.data.response.MessageResponse
 import com.example.lostfoundapp.data.response.NotificationResponse
 import com.example.lostfoundapp.data.response.PostsResponse
+import com.example.lostfoundapp.data.response.UpdateUserResponse
 import com.example.lostfoundapp.data.response.UserResponse
 import retrofit2.http.DELETE
 
@@ -157,6 +158,21 @@ interface ApiService {
         @Path("id")
         notificationId: Int
     ): Response<MessageResponse>
+
+    @Multipart
+    @PATCH("api/user")
+    suspend fun updateUser(
+
+        @Part("name")
+        name: RequestBody,
+
+        @Part("phone")
+        phone: RequestBody,
+
+        @Part
+        picture: MultipartBody.Part?
+
+    ): Response<UpdateUserResponse>
 
     @GET("api/user/posts")
     suspend fun getMyPosts():

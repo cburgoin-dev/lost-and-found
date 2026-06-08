@@ -23,12 +23,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 
 import com.example.lostfoundapp.ui.components.AuthInput
 import com.example.lostfoundapp.ui.components.BackButton
@@ -39,6 +41,7 @@ import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
 import com.example.lostfoundapp.ui.theme.TextGray
 import com.example.lostfoundapp.ui.viewmodel.EditProfileViewModel
 import com.example.lostfoundapp.ui.viewmodel.UserViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun EditProfileScreen(
@@ -49,7 +52,33 @@ fun EditProfileScreen(
     onChangePhotoClick: (Uri) -> Unit
 ) {
 
-    val selectedImageUri = editProfileViewModel.profileImageUri
+    LaunchedEffect(userViewModel.user) {
+
+        userViewModel.user?.let {
+
+            editProfileViewModel.startEditing(
+                currentName = it.name,
+                currentPhone = it.phone ?: "",
+                currentImage = null
+            )
+        }
+    }
+
+    LaunchedEffect(userViewModel.updateSuccess) {
+
+        if(userViewModel.updateSuccess) {
+
+            delay(250)
+
+            onSaveClick()
+        }
+    }
+
+    val context = LocalContext.current
+
+    val currentProfileImage =
+        editProfileViewModel.profileImageUri
+            ?: userViewModel.user?.profileImageUrl
 
     val imagePickerLauncher =
         rememberLauncherForActivityResult(
@@ -143,10 +172,12 @@ fun EditProfileScreen(
                     modifier = Modifier.height(24.dp)
                 )
 
-                if (selectedImageUri != null) {
+                if (currentProfileImage != null) {
 
-                    AsyncImage(
-                        model = selectedImageUri,
+                    SubcomposeAsyncImage(
+
+                        model = currentProfileImage,
+
                         contentDescription = null,
 
                         modifier = Modifier
@@ -156,30 +187,29 @@ fun EditProfileScreen(
                                 imagePickerLauncher.launch("image/*")
                             },
 
-                        contentScale = ContentScale.Crop
+                        contentScale = ContentScale.Crop,
+
+                        loading = {
+                            ProfilePlaceholder(
+                                size = 120.dp,
+                                iconSize = 56.dp
+                            )
+                        },
+
+                        error = {
+                            ProfilePlaceholder(
+                                size = 120.dp,
+                                iconSize = 56.dp
+                            )
+                        }
                     )
 
                 } else {
 
-                    Box(
-                        modifier = Modifier
-                            .size(120.dp)
-                            .clip(CircleShape)
-                            .background(Color(0xFFF1F1F1))
-                            .clickable {
-                                imagePickerLauncher.launch("image/*")
-                            },
-
-                        contentAlignment = Alignment.Center
-                    ) {
-
-                        Icon(
-                            imageVector = Icons.Outlined.Person,
-                            contentDescription = null,
-                            tint = TextGray,
-                            modifier = Modifier.size(56.dp)
-                        )
-                    }
+                    ProfilePlaceholder(
+                        size = 120.dp,
+                        iconSize = 56.dp
+                    )
                 }
 
                 Spacer(
@@ -199,49 +229,30 @@ fun EditProfileScreen(
                     modifier = Modifier.height(28.dp)
                 )
 
-                Text(
-                    text = "Nombre completo",
-                    modifier = Modifier.fillMaxWidth(),
-                    fontWeight = FontWeight.Medium
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+
+                    Text(
+                        text = "Nombre completo",
+                        fontWeight = FontWeight.Medium,
+                        color = Color.Black
+                    )
+                }
 
                 Spacer(
                     modifier = Modifier.height(8.dp)
                 )
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(58.dp)
-                        .border(
-                            1.dp,
-                            BorderGray,
-                            RoundedCornerShape(12.dp)
-                        )
-                        .background(
-                            CardWhite,
-                            RoundedCornerShape(12.dp)
-                        )
-                        .padding(horizontal = 16.dp),
+                AuthInput(
+                    value = editProfileViewModel.name,
+                    placeholder = "Ingresa tu nombre",
+                    leadingIcon = Icons.Outlined.Person,
 
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-
-                    Icon(
-                        imageVector = Icons.Outlined.Person,
-                        contentDescription = null,
-                        tint = Color.Gray
-                    )
-
-                    Spacer(
-                        modifier = Modifier.width(12.dp)
-                    )
-
-                    Text(
-                        text = userViewModel.user?.name ?: "",
-                        color = Color.Gray
-                    )
-                }
+                    onValueChange = {
+                        editProfileViewModel.updateName(it)
+                    }
+                )
 
                 Spacer(
                     modifier = Modifier.height(16.dp)
@@ -331,14 +342,41 @@ fun EditProfileScreen(
                         focusManager.clearFocus()
                         keyboardController?.hide()
                         userViewModel.updateUser(
+
+                            context = context,
+
+                            name = editProfileViewModel.name,
+
                             phone = editProfileViewModel.phone,
+
                             imageUri = editProfileViewModel.profileImageUri
                         )
-
-                        onSaveClick()
                     }
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun ProfilePlaceholder(
+    size: Dp = 120.dp,
+    iconSize: Dp = 56.dp
+) {
+
+    Box(
+        modifier = Modifier
+            .size(size)
+            .clip(CircleShape)
+            .background(Color(0xFFF1F1F1)),
+        contentAlignment = Alignment.Center
+    ) {
+
+        Icon(
+            imageVector = Icons.Outlined.Person,
+            contentDescription = null,
+            tint = TextGray,
+            modifier = Modifier.size(iconSize)
+        )
     }
 }
