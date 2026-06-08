@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.lostfoundapp.data.local.SessionManager
-import com.example.lostfoundapp.data.response.ApiResult
 import com.example.lostfoundapp.data.repository.AuthRepository
 import kotlinx.coroutines.launch
 
@@ -31,9 +30,7 @@ class AuthViewModel(
     var errorMessage by mutableStateOf<String?>(null)
         private set
 
-    var requestSuccsess by mutableStateOf(false)
-        private set
-    var message: String? by mutableStateOf("")
+    var logoutSuccess by mutableStateOf(false)
         private set
 
     fun login(
@@ -66,19 +63,25 @@ class AuthViewModel(
     }
 
     fun logout(){
+
         viewModelScope.launch {
-            isLoading = true;
-            when (val result = authRepository.logout()) {
-                is ApiResult.Success -> {
-                    requestSuccsess = true
-                    message = result.message
+
+            isLoading = true
+
+            authRepository
+                .logout()
+                .onSuccess {
+
+                    logoutSuccess = true
                 }
-                is ApiResult.Error<*> -> {
-                    requestSuccsess = false
-                    message = result.message
+                .onFailure {
+
+                    logoutSuccess = false
+
+                    errorMessage = it.message
                 }
-            }
-            isLoading = false;
+
+            isLoading = false
         }
 
     }

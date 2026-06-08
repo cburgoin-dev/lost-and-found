@@ -80,10 +80,11 @@ fun HomeScreen(
     val posts =
         postsViewModel.posts
 
-    val firstName = userViewModel.userName
-        .split(" ")
-        .firstOrNull()
-        ?: ""
+    val firstName =
+        userViewModel.user
+            ?.name
+            ?.substringBefore(" ")
+            ?: ""
 
     val showMessage =
         postsViewModel.showPostCreatedMessage

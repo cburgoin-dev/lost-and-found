@@ -8,6 +8,8 @@ data class User(
 
     val profileImageRes: Int? = null,
 
+    val profileImageUrl: String? = null,
+
     val email: String? = null,
 
     val phone: String? = null,

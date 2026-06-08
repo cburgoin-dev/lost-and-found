@@ -238,7 +238,7 @@ fun EditProfileScreen(
                     )
 
                     Text(
-                        text = userViewModel.userName,
+                        text = userViewModel.user?.name ?: "",
                         color = Color.Gray
                     )
                 }
@@ -286,7 +286,7 @@ fun EditProfileScreen(
                     )
 
                     Text(
-                        text = userViewModel.email,
+                        text = userViewModel.user?.email ?: "",
                         color = Color.Gray
                     )
                 }

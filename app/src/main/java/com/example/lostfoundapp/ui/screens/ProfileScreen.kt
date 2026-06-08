@@ -65,9 +65,9 @@ fun ProfileScreen(
     }
 
     LaunchedEffect(
-        authViewModel.requestSuccsess
+        authViewModel.logoutSuccess
     ) {
-        if(authViewModel.requestSuccsess) {
+        if(authViewModel.logoutSuccess) {
             onLogoutClick()
         }
     }
@@ -101,10 +101,17 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.height(48.dp))
 
                 ProfileHeader(
-                    userName = userViewModel.userName,
-                    email = userViewModel.email,
-                    phone = userViewModel.phone,
-                    profileImageUri = userViewModel.profileImageUri
+                    userName =
+                        userViewModel.user?.name ?: "",
+
+                    email =
+                        userViewModel.user?.email ?: "",
+
+                    phone =
+                        userViewModel.user?.phone ?: "",
+
+                    profileImageUrl =
+                        userViewModel.user?.profileImageUrl
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -191,7 +198,6 @@ fun ProfileScreen(
 
             onConfirm = {
                 authViewModel.logout()
-                // showMessage( authViewModel.requestSuccsess, authViewModel.message )
                 showLogoutConfirmation = false
             },
 

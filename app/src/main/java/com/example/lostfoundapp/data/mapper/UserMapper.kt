@@ -14,7 +14,9 @@ fun UserDto.toUser(): User {
 
         email = email,
 
-        phone = phone
+        phone = phone,
+
+        profileImageUrl = picture
     )
 }
 
