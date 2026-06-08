@@ -74,9 +74,13 @@ fun RequestDetailScreen(
     var showRejectSheet by remember {
         mutableStateOf(false)
     }
+    val currentRequest =
+        requestsViewModel.requests.firstOrNull {
+            it.id == request.id
+        } ?: request
 
     val secondaryText =
-        when (request.status) {
+        when (currentRequest.status) {
             RequestStatus.APPROVED ->
                 "Toca para ver la información de contacto."
 
@@ -87,15 +91,16 @@ fun RequestDetailScreen(
         }
 
     val userName =
-        when (request.status) {
+        when (currentRequest.status) {
             RequestStatus.APPROVED ->
-                request.sender.name
+                currentRequest.sender.name
 
             RequestStatus.REJECTED ->
                 "Usuario anónimo"
 
             else -> "Usuario pendiente"
         }
+
 
     Box(
         modifier = Modifier
@@ -248,8 +253,8 @@ fun RequestDetailScreen(
                                 "Usuario",
                         userName = userName,
                         userImageRes =
-                            if (request.status == RequestStatus.APPROVED)
-                                request.sender.profileImageRes
+                            if (currentRequest.status == RequestStatus.APPROVED)
+                                currentRequest.sender.profileImageRes
                             else
                                 null,
                         userImageUrl =
@@ -259,7 +264,7 @@ fun RequestDetailScreen(
                                 null,
                         isAnonymous = false,
                         isContactVisible =
-                            request.status == RequestStatus.APPROVED,
+                            currentRequest.status == RequestStatus.APPROVED,
                         horizontalPadding = 0.dp,
                         secondaryText = secondaryText,
                         showAsCard = true,
@@ -269,7 +274,7 @@ fun RequestDetailScreen(
                     )
 
                     if (
-                        request.status != RequestStatus.PENDING
+                        currentRequest.status != RequestStatus.PENDING
                     ) {
 
                         Spacer(
@@ -277,7 +282,7 @@ fun RequestDetailScreen(
                         )
 
                         RequestStatusSection(
-                            status = request.status
+                            status = currentRequest.status
                         )
                     }
                 }
@@ -287,7 +292,7 @@ fun RequestDetailScreen(
                     Spacer(
                         modifier = Modifier.height(
                             if (
-                                request.status == RequestStatus.PENDING
+                                currentRequest.status == RequestStatus.PENDING
                             )
                                 72.dp
                             else
@@ -299,7 +304,7 @@ fun RequestDetailScreen(
         }
 
         if (
-            request.status == RequestStatus.PENDING
+            currentRequest.status == RequestStatus.PENDING
         ) {
 
             Row(
@@ -338,11 +343,11 @@ fun RequestDetailScreen(
         if (showContactSheet) {
 
             ContactInfoBottomSheet(
-                userName = request.sender.name,
-                userImageRes = request.sender.profileImageRes,
-                userImageUrl = request.sender.profileImageUrl,
-                email = request.sender.email,
-                phone = request.sender.phone,
+                userName = currentRequest.sender.name,
+                userImageRes = currentRequest.sender.profileImageRes,
+                userImageUrl = currentRequest.sender.profileImageUrl,
+                email = currentRequest.sender.email,
+                phone = currentRequest.sender.phone,
 
                 onDismiss = {
                     showContactSheet = false
