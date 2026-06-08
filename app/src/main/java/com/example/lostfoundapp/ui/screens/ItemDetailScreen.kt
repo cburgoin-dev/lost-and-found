@@ -28,7 +28,6 @@ import com.example.lostfoundapp.ui.components.UserInfoSection
 import com.example.lostfoundapp.ui.components.itemdetail.ReportPostBottomSheet
 import com.example.lostfoundapp.ui.theme.BorderGray
 import com.example.lostfoundapp.ui.theme.FoundActionCardForeground
-import com.example.lostfoundapp.ui.viewmodel.ItemDetailViewModel
 import com.example.lostfoundapp.ui.viewmodel.PostsViewModel
 import com.example.lostfoundapp.ui.viewmodel.RequestsViewModel
 
@@ -39,8 +38,6 @@ fun ItemDetailScreen(
     requestsViewModel: RequestsViewModel,
     onBackClick: () -> Unit
 ) {
-
-    val itemDetailViewModel: ItemDetailViewModel = viewModel()
 
     val context = LocalContext.current
 
@@ -55,6 +52,10 @@ fun ItemDetailScreen(
     var showReportSheet by remember {
         mutableStateOf(false)
     }
+
+    val currentPost =
+        postsViewModel.findPostById(itemPost.id)
+            ?: itemPost
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -121,7 +122,7 @@ fun ItemDetailScreen(
                     Spacer(modifier = Modifier.height(28.dp))
 
                     ItemDetailActionsRow(
-                        isSaved = postsViewModel.isSaved,
+                        isSaved = currentPost.isBookmarked,
                         isReported = postsViewModel.isReported,
 
                         onShareClick = {
@@ -131,7 +132,7 @@ fun ItemDetailScreen(
                         onSaveClick = {
 
                             val message =
-                                if(postsViewModel.isSaved)
+                                if(currentPost.isBookmarked)
                                     "Publicación eliminada de guardados"
                                 else
                                     "Publicación guardada"

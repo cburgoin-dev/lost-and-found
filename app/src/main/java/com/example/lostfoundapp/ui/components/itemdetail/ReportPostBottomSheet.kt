@@ -42,6 +42,16 @@ fun ReportPostBottomSheet(
     val focusManager =
         LocalFocusManager.current
 
+    LaunchedEffect(sheetState.currentValue) {
+
+        if(sheetState.currentValue == SheetValue.Hidden) {
+
+            focusManager.clearFocus()
+
+            keyboardController?.hide()
+        }
+    }
+
     ModalBottomSheet(
         onDismissRequest = {
 

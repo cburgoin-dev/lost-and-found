@@ -74,6 +74,9 @@ fun PostResponse.toItemPost(): ItemPost {
             !hidden_user,
 
         isMine =
-            yours
+            yours,
+
+        isBookmarked =
+            bookmarked
     )
 }

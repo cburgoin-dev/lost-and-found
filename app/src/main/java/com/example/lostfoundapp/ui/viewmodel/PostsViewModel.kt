@@ -27,6 +27,9 @@ class PostsViewModel(
     var myPosts by mutableStateOf<List<ItemPost>>(emptyList())
         private set
 
+    var bookmarkedPosts by mutableStateOf<List<ItemPost>>(emptyList())
+        private set
+
     var categories by mutableStateOf<List<Category>>(emptyList())
         private set
 
@@ -42,14 +45,26 @@ class PostsViewModel(
     var showPostCreatedMessage by mutableStateOf(false)
         private set
 
-    var isSaved by mutableStateOf(false)
-        private set
-
     var isReported by mutableStateOf(false)
         private set
 
     fun clearPostCreatedMessage() {
         showPostCreatedMessage = false
+    }
+
+    fun findPostById(
+        postId: Int
+    ): ItemPost? {
+
+        return posts.find {
+            it.id == postId
+        }
+            ?: myPosts.find {
+                it.id == postId
+            }
+            ?: bookmarkedPosts.find {
+                it.id == postId
+            }
     }
 
     fun loadPosts() {
@@ -185,6 +200,27 @@ class PostsViewModel(
         }
     }
 
+    fun loadBookmarks() {
+
+        viewModelScope.launch {
+
+            isLoading = true
+
+            postsRepository
+                .getBookmarks()
+                .onSuccess {
+
+                    bookmarkedPosts = it
+                }
+                .onFailure {
+
+                    errorMessage = it.message
+                }
+
+            isLoading = false
+        }
+    }
+
     fun toggleBookmark(
         postId: Int
     ) {
@@ -195,12 +231,41 @@ class PostsViewModel(
                 .toggleBookmark(postId)
                 .onSuccess {
 
-                    isSaved = !isSaved
+                    posts =
+                        updateBookmark(posts, postId)
+
+                    myPosts =
+                        updateBookmark(myPosts, postId)
+
+                    bookmarkedPosts =
+                        updateBookmark(myPosts, postId)
+
+                    loadBookmarks()
                 }
                 .onFailure {
 
                     errorMessage = it.message
                 }
+        }
+    }
+
+    private fun updateBookmark(
+        list: List<ItemPost>,
+        postId: Int
+    ): List<ItemPost> {
+
+        return list.map {
+
+            if(it.id == postId) {
+
+                it.copy(
+                    isBookmarked = !it.isBookmarked
+                )
+
+            } else {
+
+                it
+            }
         }
     }
 

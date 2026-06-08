@@ -195,6 +195,35 @@ class PostsRepository(
         }
     }
 
+    suspend fun getBookmarks(): Result<List<ItemPost>> {
+
+        return try {
+
+            val response =
+                api.getBookmarks()
+
+            if(response.isSuccessful) {
+
+                Result.success(
+                    response.body()
+                        ?.data
+                        ?.map { it.toItemPost() }
+                        ?: emptyList()
+                )
+
+            } else {
+
+                Result.failure(
+                    Exception("Error loading bookmarks")
+                )
+            }
+
+        } catch(e: Exception) {
+
+            Result.failure(e)
+        }
+    }
+
     suspend fun toggleBookmark(
         postId: Int
     ): Result<String> {

@@ -578,9 +578,13 @@ fun AppNavigation(
             Routes.SavedPosts.route
         ) {
 
+            LaunchedEffect(Unit) {
+                postsViewModel.loadBookmarks()
+            }
+
             PostsScreen(
                 title = "Guardadas",
-                posts = emptyList(),
+                posts = postsViewModel.bookmarkedPosts,
                 screenType = PostsScreenType.SAVED_POSTS,
 
                 onBackClick = {

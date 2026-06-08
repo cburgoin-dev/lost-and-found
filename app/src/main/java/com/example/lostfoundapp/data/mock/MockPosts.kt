@@ -21,6 +21,7 @@ val mockPosts = listOf(
         isAnonymous = false,
         isContactVisible = true,
         isMine = false,
+        isBookmarked = false,
     ),
 
     ItemPost(
@@ -37,7 +38,8 @@ val mockPosts = listOf(
         publisherPhone = null,
         isAnonymous = false,
         isContactVisible = true,
-        isMine = false
+        isMine = false,
+        isBookmarked = false,
     ),
 
     ItemPost(
@@ -54,7 +56,8 @@ val mockPosts = listOf(
         publisherPhone = null,
         isAnonymous = true,
         isContactVisible = false,
-        isMine = false
+        isMine = false,
+        isBookmarked = false,
     ),
 
     ItemPost(
@@ -71,6 +74,7 @@ val mockPosts = listOf(
         publisherPhone = null,
         isAnonymous = false,
         isContactVisible = true,
-        isMine = false
+        isMine = false,
+        isBookmarked = false,
     )
 )

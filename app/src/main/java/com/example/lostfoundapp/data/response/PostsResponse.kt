@@ -27,7 +27,9 @@ data class PostResponse(
 
     val picture: PictureResponse?,
 
-    val yours: Boolean
+    val yours: Boolean,
+
+    val bookmarked: Boolean
 )
 
 data class PostUserResponse(

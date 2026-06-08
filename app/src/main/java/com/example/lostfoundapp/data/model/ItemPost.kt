@@ -34,5 +34,7 @@ data class ItemPost(
 
     val isContactVisible: Boolean,
 
-    val isMine: Boolean
+    val isMine: Boolean,
+
+    val isBookmarked: Boolean
 )

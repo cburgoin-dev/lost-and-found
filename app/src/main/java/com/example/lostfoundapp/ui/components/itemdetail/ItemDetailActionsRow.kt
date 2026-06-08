@@ -72,7 +72,11 @@ fun ItemDetailActionsRow(
                     tint = FoundActionCardForeground
                 )
             },
-            text = "Guardar publicación",
+            text =
+            if(isSaved)
+                "Publicación guardada"
+            else
+                "Guardar publicación",
             onClick = onSaveClick
         )
 
@@ -90,7 +94,11 @@ fun ItemDetailActionsRow(
                     tint = FoundActionCardForeground
                 )
             },
-            text = "Reportar publicación",
+            text =
+                if(isReported)
+                    "Publicación reportada"
+                else
+                    "Reportar publicación",
             onClick = onReportClick
         )
     }
