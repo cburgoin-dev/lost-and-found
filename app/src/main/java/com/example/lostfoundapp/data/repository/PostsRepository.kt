@@ -5,7 +5,7 @@ import android.net.Uri
 
 import com.example.lostfoundapp.data.local.SessionManager
 import com.example.lostfoundapp.data.model.ItemPost
-import com.example.lostfoundapp.data.model.ReportType
+import com.example.lostfoundapp.data.model.PostType
 import com.example.lostfoundapp.data.remote.RetrofitInstance
 import com.example.lostfoundapp.data.mapper.toItemPost
 import com.example.lostfoundapp.utils.toRequestBodyText
@@ -90,7 +90,7 @@ class PostsRepository(
 
     suspend fun createPost(
         context: Context,
-        reportType: ReportType,
+        postType: PostType,
         objectName: String,
         description: String,
         locationId: Int,
@@ -115,7 +115,7 @@ class PostsRepository(
                 api.createPost(
 
                     type =
-                        if(reportType == ReportType.LOST)
+                        if(postType == PostType.LOST)
                             "Perdido".toRequestBodyText()
                         else
                             "Encontrado".toRequestBodyText(),

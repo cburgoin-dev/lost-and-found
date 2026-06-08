@@ -1,7 +1,7 @@
 package com.example.lostfoundapp.data.mapper
 
 import com.example.lostfoundapp.data.model.ItemPost
-import com.example.lostfoundapp.data.model.ReportType
+import com.example.lostfoundapp.data.model.PostType
 import com.example.lostfoundapp.data.response.PostResponse
 
 fun PostResponse.toItemPost(): ItemPost {
@@ -20,11 +20,11 @@ fun PostResponse.toItemPost(): ItemPost {
 
         date = incident_date,
 
-        reportType =
+        postType =
             if(type == "Perdido")
-                ReportType.LOST
+                PostType.LOST
             else
-                ReportType.FOUND,
+                PostType.FOUND,
 
         imageRes = null,
 
@@ -52,17 +52,20 @@ fun PostResponse.toItemPost(): ItemPost {
                 }
             },
 
-        reporterName =
+        publisherName =
             if(hidden_user)
                 "Usuario anónimo"
             else
                 user?.name ?: "Usuario",
 
-        reporterEmail =
+        publisherEmail =
             user?.email,
 
-        reporterPhone =
+        publisherPhone =
             user?.phone,
+
+        publisherImageUrl =
+            user?.picture,
 
         isAnonymous =
             hidden_user,

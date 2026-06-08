@@ -14,19 +14,21 @@ data class ItemPost(
 
     val date: String,
 
-    val reportType: ReportType,
+    val postType: PostType,
 
     val imageRes: Int? = null,
 
     val imageUrl: String? = null,
 
-    val reporterName: String,
+    val publisherName: String,
 
-    val reporterEmail: String?,
+    val publisherEmail: String?,
 
-    val reporterPhone: String?,
+    val publisherPhone: String?,
 
-    val reporterImageRes: Int? = null,
+    val publisherImageRes: Int? = null,
+
+    val publisherImageUrl: String? = null,
 
     val isAnonymous: Boolean,
 

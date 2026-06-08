@@ -16,7 +16,7 @@ import com.example.lostfoundapp.data.model.NotificationType
 import com.example.lostfoundapp.data.model.PostsScreenType
 
 import com.example.lostfoundapp.ui.screens.*
-import com.example.lostfoundapp.data.model.ReportType
+import com.example.lostfoundapp.data.model.PostType
 import com.example.lostfoundapp.data.model.Request
 import com.example.lostfoundapp.data.repository.CatalogRepository
 import com.example.lostfoundapp.data.repository.NotificationsRepository
@@ -277,7 +277,7 @@ fun AppNavigation(
         ) {
 
             ReportItemScreen(
-                reportType = ReportType.LOST,
+                postType = PostType.LOST,
 
                 postsViewModel = postsViewModel,
 
@@ -299,7 +299,7 @@ fun AppNavigation(
         ) {
 
             ReportItemScreen(
-                reportType = ReportType.FOUND,
+                postType = PostType.FOUND,
 
                 postsViewModel = postsViewModel,
 

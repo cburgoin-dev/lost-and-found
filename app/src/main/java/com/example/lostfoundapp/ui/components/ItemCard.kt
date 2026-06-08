@@ -1,9 +1,7 @@
 package com.example.lostfoundapp.ui.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,24 +19,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import coil.compose.AsyncImage
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 import com.example.lostfoundapp.R
-import com.example.lostfoundapp.data.mock.mockPosts
-import com.example.lostfoundapp.data.model.ItemPost
-import com.example.lostfoundapp.data.model.ReportType
 import com.example.lostfoundapp.ui.theme.DetailSecondaryText
-import com.example.lostfoundapp.ui.theme.FoundBadgeBackground
-import com.example.lostfoundapp.ui.theme.FoundBadgeText
-import com.example.lostfoundapp.ui.theme.LostBadgeBackground
-import com.example.lostfoundapp.ui.theme.LostBadgeText
 
 
 @Composable

@@ -2,7 +2,7 @@ package com.example.lostfoundapp.data.mock
 
 import com.example.lostfoundapp.R
 import com.example.lostfoundapp.data.model.ItemPost
-import com.example.lostfoundapp.data.model.ReportType
+import com.example.lostfoundapp.data.model.PostType
 
 val mockPosts = listOf(
 
@@ -13,11 +13,11 @@ val mockPosts = listOf(
         location = "Biblioteca Central",
         category = "Audífonos",
         date = "20 de mayo, 2026",
-        reportType = ReportType.LOST,
+        postType = PostType.LOST,
         imageRes = R.drawable.airpods_case,
-        reporterName = "anaUser",
-        reporterEmail = null,
-        reporterPhone = null,
+        publisherName = "anaUser",
+        publisherEmail = null,
+        publisherPhone = null,
         isAnonymous = false,
         isContactVisible = true,
         isMine = false,
@@ -30,11 +30,11 @@ val mockPosts = listOf(
         location = "Edificio A",
         category = "Documentos",
         date = "21 de mayo, 2026",
-        reportType = ReportType.FOUND,
+        postType = PostType.FOUND,
         imageRes = R.drawable.student_id,
-        reporterName = "carlosUser",
-        reporterEmail = null,
-        reporterPhone = null,
+        publisherName = "carlosUser",
+        publisherEmail = null,
+        publisherPhone = null,
         isAnonymous = false,
         isContactVisible = true,
         isMine = false
@@ -47,11 +47,11 @@ val mockPosts = listOf(
         location = "Gimnasio",
         date = "22 de mayo, 2026",
         category = "Mochilas",
-        reportType = ReportType.LOST,
+        postType = PostType.LOST,
         imageRes = R.drawable.backpack,
-        reporterName = "anonymousUser",
-        reporterEmail = null,
-        reporterPhone = null,
+        publisherName = "anonymousUser",
+        publisherEmail = null,
+        publisherPhone = null,
         isAnonymous = true,
         isContactVisible = false,
         isMine = false
@@ -64,11 +64,11 @@ val mockPosts = listOf(
         location = "Cafetería",
         date = "23 de mayo, 2026",
         category = "Botellas",
-        reportType = ReportType.FOUND,
+        postType = PostType.FOUND,
         imageRes = R.drawable.water_bottle,
-        reporterName = "sofiaUser",
-        reporterEmail = null,
-        reporterPhone = null,
+        publisherName = "sofiaUser",
+        publisherEmail = null,
+        publisherPhone = null,
         isAnonymous = false,
         isContactVisible = true,
         isMine = false

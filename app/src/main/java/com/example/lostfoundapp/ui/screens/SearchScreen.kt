@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 import com.example.lostfoundapp.data.model.ItemPost
-import com.example.lostfoundapp.data.model.ReportType
+import com.example.lostfoundapp.data.model.PostType
 
 import com.example.lostfoundapp.ui.components.AppBottomBar
 import com.example.lostfoundapp.ui.components.ItemCard
@@ -282,19 +282,19 @@ fun SearchScreen(
                                     time = item.date,
 
                                     status =
-                                        if(item.reportType == ReportType.LOST)
+                                        if(item.postType == PostType.LOST)
                                             "Perdido"
                                         else
                                             "Encontrado",
 
                                     statusBackground =
-                                        if(item.reportType == ReportType.LOST)
+                                        if(item.postType == PostType.LOST)
                                             LostBadgeBackground
                                         else
                                             FoundBadgeBackground,
 
                                     statusTextColor =
-                                        if(item.reportType == ReportType.LOST)
+                                        if(item.postType == PostType.LOST)
                                             LostBadgeText
                                         else
                                             FoundBadgeText,

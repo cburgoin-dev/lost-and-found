@@ -1,6 +1,6 @@
 package com.example.lostfoundapp.data.model
 
-enum class ReportType {
+enum class PostType {
     LOST,
     FOUND
 }

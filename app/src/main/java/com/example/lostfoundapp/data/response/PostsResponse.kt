@@ -38,7 +38,9 @@ data class PostUserResponse(
 
     val email: String?,
 
-    val phone: String?
+    val phone: String?,
+
+    val picture: String?
 )
 
 data class CategoryResponse(

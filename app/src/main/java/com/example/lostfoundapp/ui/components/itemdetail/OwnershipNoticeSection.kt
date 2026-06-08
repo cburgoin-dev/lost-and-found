@@ -14,13 +14,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.lostfoundapp.data.model.ReportType
+import com.example.lostfoundapp.data.model.PostType
 
 import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
 
 @Composable
 fun OwnershipNoticeSection(
-    reportType: ReportType
+    postType: PostType
 ) {
 
     Row(
@@ -48,13 +48,13 @@ fun OwnershipNoticeSection(
         Column {
 
             val title =
-                if(reportType == ReportType.FOUND)
+                if(postType == PostType.FOUND)
                     "Proceso de reclamación"
                 else
                     "Compartir información"
 
             val description =
-                if(reportType == ReportType.FOUND)
+                if(postType == PostType.FOUND)
                     "Si este objeto es tuyo, puedes enviar una solicitud de reclamación. El usuario que realizó el reporte deberá confirmar la propiedad."
                 else
                     "Si tienes información sobre este objeto, puedes contactar al usuario o enviar detalles que ayuden a localizarlo."

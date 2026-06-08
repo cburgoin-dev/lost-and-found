@@ -29,6 +29,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import android.widget.Toast
+import coil.compose.SubcomposeAsyncImage
 
 import com.example.lostfoundapp.ui.theme.DetailSecondaryText
 import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
@@ -39,6 +40,7 @@ import com.example.lostfoundapp.ui.theme.TextGray
 fun ContactInfoBottomSheet(
     userName: String,
     userImageRes: Int?,
+    userImageUrl: String?,
     email: String?,
     phone: String?,
     onDismiss: () -> Unit
@@ -70,36 +72,32 @@ fun ContactInfoBottomSheet(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            if (userImageRes != null) {
+            if (!userImageUrl.isNullOrBlank()) {
 
-                Image(
-                    painter = painterResource(userImageRes),
+                SubcomposeAsyncImage(
+
+                    model = userImageUrl,
+
                     contentDescription = null,
 
                     modifier = Modifier
                         .size(112.dp)
                         .clip(CircleShape),
 
-                    contentScale = ContentScale.Crop
+                    contentScale = ContentScale.Crop,
+
+                    loading = {
+                        ContactPlaceholder()
+                    },
+
+                    error = {
+                        ContactPlaceholder()
+                    }
                 )
+
             } else {
 
-                Box(
-                    modifier = Modifier
-                        .size(112.dp)
-                        .clip(CircleShape)
-                        .background(Color(0xFFF1F1F1)),
-
-                    contentAlignment = Alignment.Center
-                ) {
-
-                    Icon(
-                        imageVector = Icons.Outlined.Person,
-                        contentDescription = null,
-                        tint = TextGray,
-                        modifier = Modifier.size(52.dp)
-                    )
-                }
+                ContactPlaceholder()
             }
 
             Spacer(modifier = Modifier.height(18.dp))
@@ -209,6 +207,27 @@ private fun ContactInfoItem(
             contentDescription = null,
             tint = HomeHeaderBlue,
             modifier = Modifier.size(20.dp)
+        )
+    }
+}
+
+@Composable
+private fun ContactPlaceholder() {
+
+    Box(
+        modifier = Modifier
+            .size(112.dp)
+            .clip(CircleShape)
+            .background(Color(0xFFF1F1F1)),
+
+        contentAlignment = Alignment.Center
+    ) {
+
+        Icon(
+            imageVector = Icons.Outlined.Person,
+            contentDescription = null,
+            tint = TextGray,
+            modifier = Modifier.size(52.dp)
         )
     }
 }

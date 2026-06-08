@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.SubcomposeAsyncImage
 import com.example.lostfoundapp.ui.theme.DetailSecondaryText
 import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
 
@@ -33,6 +34,7 @@ fun UserInfoSection(
     title: String,
     userName: String,
     userImageRes: Int?,
+    userImageUrl: String?,
     isAnonymous: Boolean,
     isContactVisible: Boolean,
     horizontalPadding: Dp = 20.dp,
@@ -82,25 +84,34 @@ fun UserInfoSection(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            if(isAnonymous || userImageRes == null) {
+            if(isAnonymous) {
 
-                Box(
+                UserPlaceholder()
+
+            } else if (!userImageUrl.isNullOrBlank()) {
+
+                SubcomposeAsyncImage(
+
+                    model = userImageUrl,
+
+                    contentDescription = null,
+
                     modifier = Modifier
                         .size(54.dp)
-                        .clip(CircleShape)
-                        .background(Color(0xFFF1F1F1)),
+                        .clip(CircleShape),
 
-                    contentAlignment = Alignment.Center
-                ) {
+                    contentScale = ContentScale.Crop,
 
-                    Icon(
-                        imageVector = Icons.Outlined.Person,
-                        contentDescription = null,
-                        tint = TextGray,
-                        modifier = Modifier.size(28.dp)
-                    )
-                }
-            } else {
+                    loading = {
+                        UserPlaceholder()
+                    },
+
+                    error = {
+                        UserPlaceholder()
+                    }
+                )
+
+            } else if (userImageRes != null) {
 
                 Image(
                     painter = painterResource(userImageRes),
@@ -112,6 +123,10 @@ fun UserInfoSection(
 
                     contentScale = ContentScale.Crop
                 )
+
+            } else {
+
+                UserPlaceholder()
             }
 
             Spacer(modifier = Modifier.width(14.dp))
@@ -161,5 +176,25 @@ fun UserInfoSection(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun UserPlaceholder() {
+
+    Box(
+        modifier = Modifier
+            .size(54.dp)
+            .clip(CircleShape)
+            .background(Color(0xFFF1F1F1)),
+        contentAlignment = Alignment.Center
+    ) {
+
+        Icon(
+            imageVector = Icons.Outlined.Person,
+            contentDescription = null,
+            tint = TextGray,
+            modifier = Modifier.size(28.dp)
+        )
     }
 }

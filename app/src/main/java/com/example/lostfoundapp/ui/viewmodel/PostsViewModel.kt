@@ -10,7 +10,7 @@ import androidx.lifecycle.viewModelScope
 
 import com.example.lostfoundapp.data.model.Category
 import com.example.lostfoundapp.data.model.ItemPost
-import com.example.lostfoundapp.data.model.ReportType
+import com.example.lostfoundapp.data.model.PostType
 import com.example.lostfoundapp.data.model.Location
 import com.example.lostfoundapp.data.repository.CatalogRepository
 import com.example.lostfoundapp.data.repository.PostsRepository
@@ -94,7 +94,7 @@ class PostsViewModel(
     }
     fun createPost(
         context: Context,
-        reportType: ReportType,
+        postType: PostType,
         objectName: String,
         description: String,
         locationId: Int,
@@ -112,7 +112,7 @@ class PostsViewModel(
             postsRepository
                 .createPost(
                     context = context,
-                    reportType = reportType,
+                    postType = postType,
                     objectName = objectName,
                     description = description,
                     locationId = locationId,

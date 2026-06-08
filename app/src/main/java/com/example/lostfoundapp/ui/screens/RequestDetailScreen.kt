@@ -252,6 +252,11 @@ fun RequestDetailScreen(
                                 request.sender.profileImageRes
                             else
                                 null,
+                        userImageUrl =
+                            if (request.status == RequestStatus.APPROVED)
+                                request.sender.profileImageUrl
+                            else
+                                null,
                         isAnonymous = false,
                         isContactVisible =
                             request.status == RequestStatus.APPROVED,
@@ -335,6 +340,7 @@ fun RequestDetailScreen(
             ContactInfoBottomSheet(
                 userName = request.sender.name,
                 userImageRes = request.sender.profileImageRes,
+                userImageUrl = request.sender.profileImageUrl,
                 email = request.sender.email,
                 phone = request.sender.phone,
 

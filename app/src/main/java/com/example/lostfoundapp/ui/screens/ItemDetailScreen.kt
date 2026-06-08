@@ -6,24 +6,17 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Snackbar
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
-import com.example.lostfoundapp.data.mock.mockPosts
 import com.example.lostfoundapp.data.model.ItemPost
-import com.example.lostfoundapp.data.model.ReportType
+import com.example.lostfoundapp.data.model.PostType
 import com.example.lostfoundapp.ui.components.PrimaryButton
 import com.example.lostfoundapp.ui.components.itemdetail.CreateRequestBottomSheet
 import com.example.lostfoundapp.ui.components.ContactInfoBottomSheet
@@ -34,10 +27,8 @@ import com.example.lostfoundapp.ui.components.itemdetail.OwnershipNoticeSection
 import com.example.lostfoundapp.ui.components.UserInfoSection
 import com.example.lostfoundapp.ui.theme.BorderGray
 import com.example.lostfoundapp.ui.theme.FoundActionCardForeground
-import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
 import com.example.lostfoundapp.ui.viewmodel.ItemDetailViewModel
 import com.example.lostfoundapp.ui.viewmodel.RequestsViewModel
-import kotlinx.coroutines.launch
 
 @Composable
 fun ItemDetailScreen(
@@ -70,7 +61,7 @@ fun ItemDetailScreen(
 
                 ItemHeroSection(
                     imageUrl = itemPost.imageUrl,
-                    reportType = itemPost.reportType,
+                    postType = itemPost.postType,
                     onBackClick = onBackClick
                 )
             }
@@ -101,8 +92,9 @@ fun ItemDetailScreen(
 
                     UserInfoSection(
                         title = "Publicado por",
-                        userName = itemPost.reporterName,
-                        userImageRes = itemPost.reporterImageRes,
+                        userName = itemPost.publisherName,
+                        userImageRes = itemPost.publisherImageRes,
+                        userImageUrl = itemPost.publisherImageUrl,
                         isAnonymous = itemPost.isAnonymous,
                         isContactVisible = itemPost.isContactVisible,
                         horizontalPadding = 20.dp,
@@ -116,7 +108,7 @@ fun ItemDetailScreen(
                     Spacer(modifier = Modifier.height(28.dp))
 
                     OwnershipNoticeSection(
-                        reportType = itemPost.reportType
+                        postType = itemPost.postType
                     )
 
                     Spacer(modifier = Modifier.height(28.dp))
@@ -169,7 +161,7 @@ fun ItemDetailScreen(
 
             PrimaryButton(
                 text =
-                    if(itemPost.reportType == ReportType.LOST)
+                    if(itemPost.postType == PostType.LOST)
                         "Tengo información"
                     else
                         "Solicitar reclamación",
@@ -185,10 +177,11 @@ fun ItemDetailScreen(
         if (showContactSheet) {
 
             ContactInfoBottomSheet(
-                userName = itemPost.reporterName,
-                userImageRes = itemPost.reporterImageRes,
-                email = itemPost.reporterEmail,
-                phone = itemPost.reporterPhone,
+                userName = itemPost.publisherName,
+                userImageRes = itemPost.publisherImageRes,
+                userImageUrl = itemPost.publisherImageUrl,
+                email = itemPost.publisherEmail,
+                phone = itemPost.publisherPhone,
 
                 onDismiss = {
                     showContactSheet = false
@@ -201,7 +194,7 @@ fun ItemDetailScreen(
             CreateRequestBottomSheet(
                 postId = itemPost.id,
 
-                reportType = itemPost.reportType,
+                postType = itemPost.postType,
 
                 requestsViewModel = requestsViewModel,
 

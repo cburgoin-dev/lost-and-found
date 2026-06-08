@@ -17,11 +17,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.lostfoundapp.data.model.ItemPost
-import com.example.lostfoundapp.data.model.ReportType
-import com.example.lostfoundapp.ui.theme.DetailSecondaryText
+import com.example.lostfoundapp.data.model.PostType
 import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
-
-import com.example.lostfoundapp.ui.theme.TextGray
 
 @Composable
 fun ItemInfoSection(
@@ -29,13 +26,13 @@ fun ItemInfoSection(
 ) {
 
     val locationLabel =
-        if(itemPost.reportType == ReportType.FOUND)
+        if(itemPost.postType == PostType.FOUND)
             "Encontrado en"
         else
             "Última ubicación conocida"
 
     val dateLabel =
-        if(itemPost.reportType == ReportType.FOUND)
+        if(itemPost.postType == PostType.FOUND)
             "Fecha de hallazgo"
         else
             "Última vez visto"

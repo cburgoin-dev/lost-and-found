@@ -32,7 +32,7 @@ import com.example.lostfoundapp.ui.components.DateInput
 import com.example.lostfoundapp.ui.components.VisibilitySwitch
 import com.example.lostfoundapp.ui.components.BackButton
 import com.example.lostfoundapp.ui.components.SelectionDialog
-import com.example.lostfoundapp.data.model.ReportType
+import com.example.lostfoundapp.data.model.PostType
 import com.example.lostfoundapp.ui.components.PrimaryButton
 import com.example.lostfoundapp.ui.theme.FoundActionCardForeground
 import com.example.lostfoundapp.ui.theme.HomeHeaderBlue
@@ -41,7 +41,7 @@ import com.example.lostfoundapp.ui.viewmodel.PostsViewModel
 
 @Composable
 fun ReportItemScreen(
-    reportType: ReportType,
+    postType: PostType,
     postsViewModel: PostsViewModel,
     onBackClick: () -> Unit,
     onPostCreated: () -> Unit
@@ -307,7 +307,7 @@ fun ReportItemScreen(
                 DropdownInput(
                     text = location,
                     placeholder =
-                        if(reportType == ReportType.LOST)
+                        if(postType == PostType.LOST)
                             "Última ubicación conocida"
                         else
                             "Dónde lo encontraste",
@@ -399,7 +399,7 @@ fun ReportItemScreen(
                         else
                             "Crear publicación",
                     backgroundColor =
-                        if(reportType == ReportType.LOST)
+                        if(postType == PostType.LOST)
                             LostActionCardForeground
                         else
                             FoundActionCardForeground,
@@ -409,7 +409,7 @@ fun ReportItemScreen(
                         keyboardController?.hide()
 
                         imageError =
-                            reportType == ReportType.FOUND
+                            postType == PostType.FOUND
                                     && !hasImage
 
                         objectNameError =
@@ -419,7 +419,7 @@ fun ReportItemScreen(
                             description.isBlank()
 
                         locationError =
-                            reportType == ReportType.FOUND
+                            postType == PostType.FOUND
                                     && location.isBlank()
 
                         categoryError =
@@ -440,7 +440,7 @@ fun ReportItemScreen(
 
                             postsViewModel.createPost(
                                 context = context,
-                                reportType = reportType,
+                                postType = postType,
                                 objectName = objectName,
                                 description = description,
                                 locationId = locationId!!,

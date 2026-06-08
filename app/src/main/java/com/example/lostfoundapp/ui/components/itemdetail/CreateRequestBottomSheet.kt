@@ -17,7 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-import com.example.lostfoundapp.data.model.ReportType
+import com.example.lostfoundapp.data.model.PostType
 import com.example.lostfoundapp.ui.components.DescriptionInput
 import com.example.lostfoundapp.ui.components.PrimaryButton
 import com.example.lostfoundapp.ui.theme.DetailSecondaryText
@@ -27,19 +27,19 @@ import com.example.lostfoundapp.ui.viewmodel.RequestsViewModel
 @Composable
 fun CreateRequestBottomSheet(
     postId: Int,
-    reportType: ReportType,
+    postType: PostType,
     requestsViewModel: RequestsViewModel,
     onDismiss: () -> Unit
 ) {
 
     val title =
-        if(reportType == ReportType.LOST)
+        if(postType == PostType.LOST)
             "Compartir información"
         else
             "Solicitar reclamación"
 
     val description =
-        if(reportType == ReportType.LOST)
+        if(postType == PostType.LOST)
             "Comparte detalles útiles que puedan ayudar a localizar el objeto."
         else
             "Describe características del objeto para ayudar al usuario a verificar la propiedad."
@@ -57,25 +57,25 @@ fun CreateRequestBottomSheet(
     }
 
     val primaryLabel =
-        if(reportType == ReportType.LOST)
+        if(postType == PostType.LOST)
             "¿Dónde lo viste?"
         else
             "Describe características del objeto"
 
     val secondaryLabel =
-        if(reportType == ReportType.LOST)
+        if(postType == PostType.LOST)
             "Detalles adicionales (opcional)"
         else
             "Mensaje adicional (opcional)"
 
     val contactInfoText =
-        if (reportType == ReportType.LOST)
+        if (postType == PostType.LOST)
             "Tu información de contacto será compartida únicamente si el propietario aprueba esta información."
         else
             "Tu información de contacto será compartida únicamente si la solicitud es aprobada."
 
     val buttonText =
-        if(reportType == ReportType.LOST)
+        if(postType == PostType.LOST)
             "Enviar información"
         else
             "Enviar solicitud"
