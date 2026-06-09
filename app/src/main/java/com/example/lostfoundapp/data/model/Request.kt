@@ -16,7 +16,7 @@ data class Request(
 
     val description: String,
 
-    val additionalMessage: String? = " ",
+    val additionalMessage: String? = null,
 
     val status: RequestStatus,
 
