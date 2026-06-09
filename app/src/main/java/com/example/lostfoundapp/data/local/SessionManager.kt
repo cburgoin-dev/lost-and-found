@@ -29,6 +29,8 @@ class SessionManager(
         prefs.edit()
             .putString("token", token)
             .apply()
+
+        _isAuthenticated.value = true
     }
 
     fun hasToken(): Boolean{
