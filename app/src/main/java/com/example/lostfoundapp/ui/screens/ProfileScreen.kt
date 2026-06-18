@@ -111,6 +111,9 @@ fun ProfileScreen(
                     phone =
                         userViewModel.user?.phone ?: "",
 
+                    profileImageRes =
+                        userViewModel.user?.profileImageRes,
+
                     profileImageUrl =
                         userViewModel.user?.profileImageUrl
                 )

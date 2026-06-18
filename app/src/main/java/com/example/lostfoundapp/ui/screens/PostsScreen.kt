@@ -191,6 +191,7 @@ fun PostsScreen(
                             else
                                 FoundBadgeText,
 
+                        imageRes = item.imageRes,
                         imageUrl = item.imageUrl,
 
                         onClick = {

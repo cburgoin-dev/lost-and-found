@@ -1,10 +1,14 @@
 package com.example.lostfoundapp.data.repository;
 
-
 import com.example.lostfoundapp.data.local.SessionManager
 import com.example.lostfoundapp.data.model.Category;
 import com.example.lostfoundapp.data.model.Location;
 import com.example.lostfoundapp.data.remote.RetrofitInstance;
+
+import com.example.lostfoundapp.data.config.AppConfig
+import com.example.lostfoundapp.data.mock.categories
+import com.example.lostfoundapp.data.mock.locations
+
 class CatalogRepository(
     sessionManager: SessionManager
 ) {
@@ -14,6 +18,10 @@ class CatalogRepository(
             sessionManager
         )
     suspend fun getCategories(): Result<List<Category>> {
+
+        if (AppConfig.USE_MOCK_DATA) {
+            return Result.success(categories)
+        }
 
         return try {
 
@@ -43,6 +51,10 @@ class CatalogRepository(
     }
 
     suspend fun getLocations(): Result<List<Location>> {
+
+        if (AppConfig.USE_MOCK_DATA) {
+            return Result.success(locations)
+        }
 
         return try {
 

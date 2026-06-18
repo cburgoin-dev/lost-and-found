@@ -11,6 +11,9 @@ import com.example.lostfoundapp.data.mapper.toItemPost
 import com.example.lostfoundapp.utils.toRequestBodyText
 import com.example.lostfoundapp.utils.uriToMultipart
 
+import com.example.lostfoundapp.data.config.AppConfig
+import com.example.lostfoundapp.data.mock.MockStore
+
 class PostsRepository(
     sessionManager: SessionManager
 ) {
@@ -21,6 +24,10 @@ class PostsRepository(
         )
 
     suspend fun getPosts(): Result<List<ItemPost>> {
+
+        if (AppConfig.USE_MOCK_DATA) {
+            return Result.success(MockStore.posts)
+        }
 
         return try {
 
@@ -55,6 +62,53 @@ class PostsRepository(
         locationId: Int?,
         time: String?
     ): Result<List<ItemPost>> {
+
+        if (AppConfig.USE_MOCK_DATA) {
+
+            var filtered = MockStore.posts.toList()
+
+            categoryId?.let {
+                filtered = filtered.filter {
+                        post -> post.categoryId == it
+                }
+            }
+
+            locationId?.let {
+                filtered = filtered.filter {
+                        post -> post.locationId == it
+                }
+            }
+
+            time?.let { filter ->
+
+                filtered = when (filter) {
+
+                    "hoy" -> filtered.filter {
+
+                        it.createdAt.contains("min") ||
+                                it.createdAt.contains("hora")
+                    }
+
+                    "esta semana" -> filtered.filter {
+
+                        it.createdAt.contains("min") ||
+                                it.createdAt.contains("hora") ||
+                                it.createdAt.contains("día")
+                    }
+
+                    "este mes" -> filtered.filter {
+
+                        !it.createdAt.contains("mes")
+                    }
+
+                    "todo el tiempo" -> filtered
+
+                    else -> filtered
+                }
+            }
+
+            return Result.success(filtered)
+        }
 
         return try {
 
@@ -99,6 +153,15 @@ class PostsRepository(
         publicContact: Boolean,
         selectedImageUri: Uri?
     ): Result<Unit> {
+
+        if (AppConfig.USE_MOCK_DATA) {
+
+            return Result.failure(
+                Exception(
+                    "Esta función requiere conexión con el servidor."
+                )
+            )
+        }
 
         return try {
 
@@ -177,6 +240,15 @@ class PostsRepository(
         publicContact: Boolean,
         selectedImageUri: Uri?
     ): Result<ItemPost> {
+
+        if (AppConfig.USE_MOCK_DATA) {
+
+            return Result.failure(
+                Exception(
+                    "Esta función requiere conexión con el servidor."
+                )
+            )
+        }
 
         return try {
 
@@ -263,6 +335,15 @@ class PostsRepository(
         postId: Int
     ): Result<String> {
 
+        if (AppConfig.USE_MOCK_DATA) {
+
+            return Result.failure(
+                Exception(
+                    "Esta función requiere conexión con el servidor."
+                )
+            )
+        }
+
         return try {
 
             val response =
@@ -293,6 +374,15 @@ class PostsRepository(
 
     suspend fun getMyPosts(): Result<List<ItemPost>> {
 
+        if (AppConfig.USE_MOCK_DATA) {
+
+            return Result.success(
+                MockStore.posts.filter {
+                    it.isMine
+                }
+            )
+        }
+
         return try {
 
             val response =
@@ -322,6 +412,15 @@ class PostsRepository(
     }
 
     suspend fun getBookmarks(): Result<List<ItemPost>> {
+
+        if (AppConfig.USE_MOCK_DATA) {
+
+            return Result.success(
+                MockStore.posts.filter {
+                    it.isBookmarked
+                }
+            )
+        }
 
         return try {
 
@@ -354,6 +453,25 @@ class PostsRepository(
         postId: Int
     ): Result<String> {
 
+        if (AppConfig.USE_MOCK_DATA) {
+
+            val idx =
+                MockStore.posts.indexOfFirst {
+                    it.id == postId
+                }
+
+            if (idx != -1) {
+
+                MockStore.posts[idx] =
+                    MockStore.posts[idx].copy(
+                        isBookmarked =
+                            !MockStore.posts[idx].isBookmarked
+                    )
+            }
+
+            return Result.success("OK")
+        }
+
         return try {
 
             val response =
@@ -383,6 +501,11 @@ class PostsRepository(
         postId: Int,
         reason: String
     ): Result<String> {
+
+        if (AppConfig.USE_MOCK_DATA) {
+
+            return Result.success("")
+        }
 
         return try {
 
@@ -415,6 +538,15 @@ class PostsRepository(
     suspend fun completePost(
         postId: Int
     ): Result<String> {
+
+        if (AppConfig.USE_MOCK_DATA) {
+
+            return Result.failure(
+                Exception(
+                    "Esta función requiere conexión con el servidor."
+                )
+            )
+        }
 
         return try {
 

@@ -358,6 +358,7 @@ fun HomeScreen(
                                     LostBadgeText
                                 else
                                     FoundBadgeText,
+                            imageRes = item.imageRes,
                             imageUrl = item.imageUrl,
                             onClick = {
                                 onItemClick(item)

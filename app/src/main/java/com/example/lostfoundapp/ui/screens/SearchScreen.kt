@@ -316,6 +316,7 @@ fun SearchScreen(
                                         else
                                             FoundBadgeText,
 
+                                    imageRes = item.imageRes,
                                     imageUrl = item.imageUrl,
 
                                     onClick = {

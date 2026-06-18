@@ -1,5 +1,6 @@
 package com.example.lostfoundapp.ui.components.itemdetail
 
+import androidx.compose.foundation.Image
 import com.example.lostfoundapp.R
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -24,6 +25,7 @@ import com.example.lostfoundapp.ui.components.CircleIconButton
 
 @Composable
 fun ItemHeroSection(
+    imageRes: Int?,
     imageUrl: String?,
     postType: PostType,
     isMine: Boolean,
@@ -39,15 +41,26 @@ fun ItemHeroSection(
             .background(Color.White)
     ) {
 
-        AsyncImage(
-            model = imageUrl,
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize(),
+        if (imageRes != null) {
+            Image(
+                painter = painterResource(imageRes),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
+            )
 
-            placeholder = painterResource(R.drawable.airpods_case),
-            error = painterResource(R.drawable.airpods_case)
-        )
+        } else {
+
+            AsyncImage(
+                model = imageUrl,
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize(),
+
+                placeholder = painterResource(R.drawable.airpods_case),
+                error = painterResource(R.drawable.airpods_case)
+            )
+        }
 
         Row(
             modifier = Modifier

@@ -110,9 +110,16 @@ fun ActivityScreen(
 
             ActivityTabRow(
                 selectedTab = activityViewModel.selectedTab,
-                onTabSelected = {
+                onTabSelected = { newTab ->
 
-                    activityViewModel.selectTab(it)
+                    if (
+                        activityViewModel.selectedTab == "Notificaciones" && newTab != "Notificaciones"
+                    ) {
+
+                        notificationsViewModel.markAllNotificationsAsRead()
+                    }
+
+                    activityViewModel.selectTab(newTab)
                 },
                 modifier = Modifier.padding(horizontal = 24.dp)
             )

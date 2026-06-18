@@ -99,6 +99,7 @@ fun ItemDetailScreen(
             item {
 
                 ItemHeroSection(
+                    imageRes = currentPost.imageRes,
                     imageUrl = currentPost.imageUrl,
                     postType = currentPost.postType,
                     isMine = isOwner,

@@ -10,23 +10,23 @@ val mockRequests = listOf(
     Request(
         id = 1,
         requestType = RequestType.CLAIM,
-        itemName = "Mochila Negra",
-        itemImageRes = R.drawable.backpack,
-        sender = carlosUser,
-        description = "Mochila negra con llavero rojo",
-        additionalMessage = "Soy estudiante de Ingeniería",
+        itemName = "Credencial UABCS",
+        itemImageRes = R.drawable.student_id,
+        sender = anaUser,
+        description = "La credencial está a nombre de Ana Sofía Pérez. Puedo proporcionar mi matrícula para verificar la propiedad.",
+        additionalMessage = "Agradecería mucho recuperar este documento.",
         status = RequestStatus.PENDING,
-        createdAt = "Hace 10 min"
+        createdAt = "Hace 20 min"
     ),
 
     Request(
         id = 2,
         requestType = RequestType.INFORMATION,
-        itemName = "Credencial UABCS",
-        itemImageRes = R.drawable.student_id,
-        sender = anaUser,
-        description = "La vi en la biblioteca ADSKMADKMAFKASFMKSAFMFAMASFKSFMAMAKSFMKAFSKMASFMKASFKMASF",
-        additionalMessage = "",
+        itemName = "Mochila negra Samsonite",
+        itemImageRes = R.drawable.backpack,
+        sender = carlosUser,
+        description = "La vi cerca de las gradas del gimnasio después del entrenamiento.",
+        additionalMessage = "Parecía que nadie la había recogido todavía.",
         status = RequestStatus.PENDING,
         createdAt = "Hace 2 h"
     ),
@@ -34,11 +34,11 @@ val mockRequests = listOf(
     Request(
         id = 3,
         requestType = RequestType.CLAIM,
-        itemName = "AirPods Case",
-        itemImageRes = R.drawable.airpods_case,
+        itemName = "Calculadora científica Casio fx-991ES Plus",
+        itemImageRes = R.drawable.calculator_casio,
         sender = sofiaUser,
-        description = "Puedo identificar varios deetalles del estuche.",
-        additionalMessage = "",
+        description = "Puedo identificar una etiqueta con iniciales en la parte posterior.",
+        additionalMessage = "Gracias por mantener activa esta publicación.",
         status = RequestStatus.APPROVED,
         createdAt = "Hace 1 día"
     ),
@@ -46,23 +46,23 @@ val mockRequests = listOf(
     Request(
         id = 4,
         requestType = RequestType.CLAIM,
-        itemName = "Botella Térmica",
+        itemName = "Botella térmica gris",
         itemImageRes = R.drawable.water_bottle,
         sender = anaUser,
-        description = "Creo que esta botella me pertenece.",
-        additionalMessage = "",
+        description = "Pensé que era mi botella porque es muy parecida.",
+        additionalMessage = "Después revisé y encontré la mía.",
         status = RequestStatus.REJECTED,
-        createdAt = "Hace 3 días"
+        createdAt = "Hace 2 días"
     ),
 
     Request(
         id = 5,
         requestType = RequestType.INFORMATION,
-        itemName = "Mochila Negra",
-        itemImageRes = R.drawable.backpack,
+        itemName = "Memoria USB Kingston 64 GB",
+        itemImageRes = R.drawable.usb,
         sender = carlosUser,
-        description = "La vi cerca del gimnasio.",
-        additionalMessage = "Estaba junto a las gradas.",
+        description = "Pregunté en el laboratorio y comentaron que alguien la entregó al encargado.",
+        additionalMessage = "Tal vez puedas verificar con el personal.",
         status = RequestStatus.PENDING,
         createdAt = "Hace 5 h"
     ),
@@ -70,14 +70,12 @@ val mockRequests = listOf(
     Request(
         id = 6,
         requestType = RequestType.CLAIM,
-        itemName = "Laptop Lenovo ThinkPad T14 Gen 5 Color Negro",
-        itemImageRes = R.drawable.airpods_case,
+        itemName = "Lentes graduados en estuche negro",
+        itemImageRes = R.drawable.graduated_lenses,
         sender = sofiaUser,
-        description =
-            "Puedo describir la etiqueta del equipo y el fondo de pantalla.",
-        additionalMessage =
-            "También puedo proporcionar el número de serie parcial.",
+        description = "Puedo describir el color del estuche y la graduación aproximada.",
+        additionalMessage = "Son indispensables para mis clases.",
         status = RequestStatus.PENDING,
-        createdAt = "Hace 30 min"
+        createdAt = "Hace 45 min"
     )
 )

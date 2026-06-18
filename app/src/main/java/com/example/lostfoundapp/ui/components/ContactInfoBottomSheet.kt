@@ -72,32 +72,46 @@ fun ContactInfoBottomSheet(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            if (!userImageUrl.isNullOrBlank()) {
+            when {
 
-                SubcomposeAsyncImage(
+                userImageRes != null -> {
 
-                    model = userImageUrl,
+                    Image(
+                        painter = painterResource(id = userImageRes),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(112.dp)
+                            .clip(CircleShape),
+                        contentScale = ContentScale.Crop
+                    )
+                }
 
-                    contentDescription = null,
+                !userImageUrl.isNullOrBlank() -> {
 
-                    modifier = Modifier
-                        .size(112.dp)
-                        .clip(CircleShape),
+                    SubcomposeAsyncImage(
 
-                    contentScale = ContentScale.Crop,
+                        model = userImageUrl,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(112.dp)
+                            .clip(CircleShape),
 
-                    loading = {
-                        ContactPlaceholder()
-                    },
+                        contentScale = ContentScale.Crop,
 
-                    error = {
-                        ContactPlaceholder()
-                    }
-                )
+                        loading = {
+                            ContactPlaceholder()
+                        },
 
-            } else {
+                        error = {
+                            ContactPlaceholder()
+                        }
+                    )
+                }
 
-                ContactPlaceholder()
+                else -> {
+
+                    ContactPlaceholder()
+                }
             }
 
             Spacer(modifier = Modifier.height(18.dp))

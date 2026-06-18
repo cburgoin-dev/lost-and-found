@@ -6,6 +6,11 @@ import com.example.lostfoundapp.data.remote.RetrofitInstance
 import com.example.lostfoundapp.data.mapper.toRequest
 import com.example.lostfoundapp.utils.toRequestBodyText
 
+import com.example.lostfoundapp.data.config.AppConfig
+import com.example.lostfoundapp.data.mock.MockRequestStore
+import com.example.lostfoundapp.data.mock.mockRequests
+import com.example.lostfoundapp.data.model.RequestStatus
+
 class RequestsRepository(
     sessionManager: SessionManager
 ) {
@@ -16,6 +21,12 @@ class RequestsRepository(
         )
 
     suspend fun getRequests(): Result<List<Request>> {
+
+        if (AppConfig.USE_MOCK_DATA) {
+            return Result.success(
+                MockRequestStore.requests
+            )
+        }
 
         return try {
 
@@ -50,6 +61,10 @@ class RequestsRepository(
         content: String,
         message: String
     ): Result<Unit> {
+
+        if (AppConfig.USE_MOCK_DATA) {
+            return Result.success(Unit)
+        }
 
         return try {
 
@@ -91,6 +106,24 @@ class RequestsRepository(
         requestId: Int
     ): Result<Unit> {
 
+        if (AppConfig.USE_MOCK_DATA) {
+
+            val index =
+                MockRequestStore.requests.indexOfFirst {
+                    it.id == requestId
+                }
+
+            if (index != -1) {
+
+                MockRequestStore.requests[index] =
+                    MockRequestStore.requests[index].copy(
+                        status = RequestStatus.APPROVED
+                    )
+            }
+
+            return Result.success(Unit)
+        }
+
         return try {
 
             val response =
@@ -118,6 +151,24 @@ class RequestsRepository(
     suspend fun declineRequest(
         requestId: Int
     ): Result<Unit> {
+
+        if (AppConfig.USE_MOCK_DATA) {
+
+            val index =
+                MockRequestStore.requests.indexOfFirst {
+                    it.id == requestId
+                }
+
+            if (index != -1) {
+
+                MockRequestStore.requests[index] =
+                    MockRequestStore.requests[index].copy(
+                        status = RequestStatus.REJECTED
+                    )
+            }
+
+            return Result.success(Unit)
+        }
 
         return try {
 

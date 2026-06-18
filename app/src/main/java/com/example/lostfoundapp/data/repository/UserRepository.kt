@@ -9,6 +9,9 @@ import com.example.lostfoundapp.data.remote.RetrofitInstance
 import com.example.lostfoundapp.utils.toRequestBodyText
 import com.example.lostfoundapp.utils.uriToMultipart
 
+import com.example.lostfoundapp.data.config.AppConfig
+import com.example.lostfoundapp.data.mock.anaUser
+
 class UserRepository(
     sessionManager: SessionManager
 ) {
@@ -20,6 +23,10 @@ class UserRepository(
 
     suspend fun getUser():
         Result<User> {
+
+        if (AppConfig.USE_MOCK_DATA) {
+            return Result.success(anaUser)
+        }
 
         return try {
 
@@ -62,6 +69,16 @@ class UserRepository(
         phone: String,
         imageUri: Uri?
     ): Result<User> {
+
+        if (AppConfig.USE_MOCK_DATA) {
+
+            return Result.success(
+                anaUser.copy(
+                    name = name,
+                    phone = phone
+                )
+            )
+        }
 
         return try {
 

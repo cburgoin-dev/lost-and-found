@@ -1,5 +1,6 @@
 package com.example.lostfoundapp.ui.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -39,6 +40,7 @@ fun ItemCard(
     status: String,
     statusBackground: Color,
     statusTextColor: Color,
+    imageRes: Int?,
     imageUrl: String?,
     onClick: () -> Unit,
 ) {
@@ -74,13 +76,24 @@ fun ItemCard(
                 contentAlignment = Alignment.Center
             ) {
 
-                AsyncImage(
-                    model = imageUrl,
-                    contentDescription = null,
-                    placeholder = painterResource(R.drawable.airpods_case),
-                    error = painterResource(R.drawable.airpods_case),
-                    modifier = Modifier.size(72.dp)
-                )
+                if (imageRes != null) {
+
+                    Image(
+                        painter = painterResource(imageRes),
+                        contentDescription = null,
+                        modifier = Modifier.size(72.dp)
+                    )
+
+                } else {
+
+                    AsyncImage(
+                        model = imageUrl,
+                        contentDescription = null,
+                        placeholder = painterResource(R.drawable.airpods_case),
+                        error = painterResource(R.drawable.airpods_case),
+                        modifier = Modifier.size(72.dp)
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.width(14.dp))

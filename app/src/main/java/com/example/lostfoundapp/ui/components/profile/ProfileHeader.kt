@@ -1,5 +1,6 @@
 package com.example.lostfoundapp.ui.components.profile
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -38,6 +40,7 @@ fun ProfileHeader(
     userName: String,
     email: String,
     phone: String,
+    profileImageRes: Int?,
     profileImageUrl: String?
 ) {
 
@@ -56,41 +59,58 @@ fun ProfileHeader(
                 .padding(4.dp)
         ) {
 
-            if (!profileImageUrl.isNullOrBlank()) {
+            when {
 
-                SubcomposeAsyncImage(
+                profileImageRes != null -> {
 
-                    model = profileImageUrl,
+                    Image(
+                        painter = painterResource(id = profileImageRes),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(132.dp)
+                            .clip(CircleShape),
 
-                    contentDescription = null,
+                        contentScale = ContentScale.Crop
+                    )
+                }
 
-                    modifier = Modifier
-                        .size(132.dp)
-                        .clip(CircleShape),
+                !profileImageUrl.isNullOrBlank() -> {
 
-                    contentScale = ContentScale.Crop,
+                    SubcomposeAsyncImage(
 
-                    loading = {
-                        ProfilePlaceholder(
-                            size = 132.dp,
-                            iconSize = 64.dp,
-                        )
-                    },
+                        model = profileImageUrl,
 
-                    error = {
-                        ProfilePlaceholder(
-                            size = 132.dp,
-                            iconSize = 64.dp,
-                        )
-                    }
-                )
+                        contentDescription = null,
 
-            } else {
+                        modifier = Modifier
+                            .size(132.dp)
+                            .clip(CircleShape),
 
-                ProfilePlaceholder(
-                    size = 132.dp,
-                    iconSize = 64.dp,
-                )
+                        contentScale = ContentScale.Crop,
+
+                        loading = {
+                            ProfilePlaceholder(
+                                size = 132.dp,
+                                iconSize = 64.dp
+                            )
+                        },
+
+                        error = {
+                            ProfilePlaceholder(
+                                size = 132.dp,
+                                iconSize = 64.dp
+                            )
+                        }
+                    )
+                }
+
+                else -> {
+
+                    ProfilePlaceholder(
+                        size = 132.dp,
+                        iconSize = 64.dp
+                    )
+                }
             }
         }
 

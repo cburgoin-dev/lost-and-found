@@ -1,12 +1,13 @@
 package com.example.lostfoundapp.data.repository
 
-
 import com.example.lostfoundapp.data.local.SessionManager
 import com.example.lostfoundapp.data.response.ApiResult
 import com.example.lostfoundapp.data.remote.RetrofitInstance
 import com.example.lostfoundapp.utils.extractErrorMessage
 import retrofit2.HttpException
 import java.io.IOException
+
+import com.example.lostfoundapp.data.config.AppConfig
 
 class AuthRepository(
     private val sessionManager: SessionManager
@@ -17,6 +18,13 @@ class AuthRepository(
         )
 
     suspend fun logout() : Result<Unit> {
+
+        if (AppConfig.USE_MOCK_DATA) {
+
+            sessionManager.clearSession()
+
+            return Result.success(Unit)
+        }
 
         return try {
 
@@ -49,6 +57,13 @@ class AuthRepository(
         email: String,
         password: String
     ): Result<Unit> {
+
+        if (AppConfig.USE_MOCK_DATA) {
+
+            sessionManager.saveToken("mock-token")
+
+            return Result.success(Unit)
+        }
 
         return try {
 
@@ -97,6 +112,13 @@ class AuthRepository(
         password: String,
         phone: String
     ): Result<Unit> {
+
+        if (AppConfig.USE_MOCK_DATA) {
+
+            sessionManager.saveToken("mock-token")
+
+            return Result.success(Unit)
+        }
 
         return try {
 

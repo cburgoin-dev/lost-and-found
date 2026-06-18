@@ -5,7 +5,7 @@ import com.example.lostfoundapp.data.model.User
 
 val anaUser = User(
     id = 1,
-    name = "Ana Sofía Perez",
+    name = "Ana Sofía Pérez",
     profileImageRes = R.drawable.ana_profile,
     email = "ana.sofia@uabcs.mx",
     phone = "612 123 4567"
