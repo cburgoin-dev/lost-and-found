@@ -40,7 +40,13 @@ Download the latest Android version from the Releases section.
 
 The screenshots below showcase the portfolio version of the application.
 
-<!-- Add the same screenshots used in the portfolio -->
+| Login | Home | Item Details |
+|---|---|---|
+| ![](screenshots/lost-found-01.jpeg) | ![](screenshots/lost-found-02.jpeg) | ![](screenshots/lost-found-03.jpeg) |
+
+| Activity | Profile | Claims |
+|---|---|---|
+| ![](screenshots/lost-found-04.jpeg) | ![](screenshots/lost-found-05.jpeg) | ![](screenshots/lost-found-06.jpeg) |
 
 ---
 
